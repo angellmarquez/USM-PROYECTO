@@ -30,6 +30,22 @@
       left: 0;
       z-index: 1000;
       box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      margin-right: 18px;
+      vertical-align: middle;
+      transition: color 0.2s;
+    }
+    .back-btn:hover {
+      color: #ccc;
     }
     .password-container {
       text-align: center;
@@ -72,10 +88,60 @@
     .password-container button:hover {
       background-color: #333;
     }
+    .back-btn-floating {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 1100;
+      background: #111;
+      border: none;
+      color: #fff;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      padding: 0;
+    }
+    .back-btn-floating:hover {
+      background: #333;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+      transform: scale(1.07);
+    }
+    .arrow-back svg {
+      display: block;
+    }
+    @media (max-width: 600px) {
+      .back-btn-floating {
+        bottom: 16px;
+        right: 12px;
+        width: 44px;
+        height: 44px;
+      }
+      .arrow-back svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="header">USM</div>
+  <div class="header">
+    USM
+  </div>
+  <!-- Botón flotante con nuevo diseño y más abajo -->
+  <button class="back-btn-floating" onclick="window.location.href='login.html'" title="Volver">
+    <span class="arrow-back">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="13" fill="#111" stroke="#fff" stroke-width="2"/>
+        <polyline points="16,9 10,14 16,19" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </button>
   <div class="password-container">
     <h1>Ingresa tu contraseña</h1>
     <form id="password-form">

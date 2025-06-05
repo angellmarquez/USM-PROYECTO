@@ -2,103 +2,119 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>rutas</title>
+  <title>Rutas Transporte</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap');
+
     html, body {
-      width: 100%;
-      min-width: 0;
-      max-width: 100vw;
-      overflow-x: hidden;
-      background: #f7f7fa;
-      font-family: 'Roboto', Arial, sans-serif;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      font-family: 'Inter', Arial, sans-serif;
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      overflow-x: hidden; /* Evita el scroll horizontal */
     }
+
     .barra-superior {
-      width: 100%;
+      width: 100vw;
       background: #111;
       color: #fff;
-      padding: 40px 0 24px 0;
+      padding: 36px 0 18px 0;
       text-align: center;
       box-sizing: border-box;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: none;
     }
     .barra-superior h1 {
       margin: 0;
-      font-size: 3.5rem;
+      font-size: 3.2rem; /* Más grande */
       font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: 2px;
+      color: #fff;
     }
     .barra-superior p {
-      margin: 10px 0 0 0;
-      font-size: 1.15rem;
+      margin: 12px 0 0 0;
+      font-size: 1.5rem; /* Más grande */
       color: #e0e0e0;
-      font-weight: 400;
-      font-family: 'Roboto', Arial, sans-serif;
+      font-weight: 500;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    .scroll-area {
+      width: calc(100vw - 80px);
+      margin-left: 155px; /* Mueve los cuadros un poco a la derecha (antes 80px) */
+      height: calc(100vh - 100px);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 40px 0 40px 0;
+      background: #fff;
+      box-sizing: border-box;
     }
     .contenedor-panel {
-      width: 80%;
-      max-width: 1200px;
-      margin: 40px 0 0 auto;
+      width: 100%;
+      max-width: 1200px;           /* Más ancho hacia la derecha */
       display: flex;
       flex-direction: column;
-      gap: 32px;
-      justify-content: flex-end;
+      gap: 28px;
+      align-items: center;
+      justify-content: flex-start;
       box-sizing: border-box;
+      padding: 0;
     }
     .config-panel {
       width: 100%;
-      background: #e2e2e6;
-      border-radius: 18px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
-      border: 1px solid #ccccd5;
-      padding: 48px 60px;
-      transition: 
-        box-shadow 0.35s cubic-bezier(.4,2,.6,1),
-        background 0.35s,
-        transform 0.2s;
-      min-width: 0;
-      margin-bottom: 0;
+      max-width: 1200px;           /* Más ancho hacia la derecha */
+      min-height: 160px;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10); /* Sombra más notoria */
+      border: none;
+      padding: 36px 38px 22px 38px;
+      transition: box-shadow 0.25s, background 0.25s, transform 0.18s;
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
       user-select: none;
       box-sizing: border-box;
+      position: relative;
     }
-    .config-panel.active {
-      box-shadow: 0 20px 64px rgba(0,0,0,0.22);
-      background: #d4d4db;
-      border-color: #b3b3b8;
+    .config-panel:hover, .config-panel.active {
+      box-shadow: 0 16px 48px 0 rgba(0,0,0,0.22), 0 2px 12px 0 rgba(0,0,0,0.13);
+      background: #f7f7f7;
+      transform: translateY(-2px) scale(1.01);
     }
     .titulo {
-      font-size: 3.2rem;
+      font-size: 2.7rem; /* Mucho más grande */
+      min-height: 56px;
       font-family: 'Montserrat', Arial, sans-serif;
       font-weight: 900;
-      color: #23233a;
-      letter-spacing: 4px;
+      color: #111;
+      letter-spacing: 2px;
       margin-bottom: 0;
       text-align: center;
       width: 100%;
-      transition: opacity 0.2s;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.08);
       text-transform: uppercase;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 110px;
-      cursor: pointer;
       user-select: none;
     }
     .config-panel .info {
       display: none;
       flex-direction: column;
-      gap: 22px;
-      margin-top: 10px;
-      font-size: 1.45rem;
-      color: #23233a;
+      gap: 18px;
+      margin-top: 18px;
+      font-size: 1.45rem; /* Más grande */
+      color: #232323;
       width: 100%;
       align-items: center;
       animation: fadeIn 0.3s;
@@ -107,23 +123,30 @@
       max-height: 0;
       transition: opacity 0.3s, max-height 0.3s;
       overflow: hidden;
+      font-family: 'Inter', Arial, sans-serif;
     }
     .config-panel.active .info {
       display: flex;
       opacity: 1;
-      max-height: 500px;
+      max-height: 400px;
       transition: opacity 0.3s, max-height 0.5s;
+      padding-bottom: 10px;
     }
     .info-item {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 24px;
-      padding: 12px 0;
-      border-bottom: 1px solid #d8d8dd;
+      gap: 18px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ececec;
       width: 100%;
-      font-size: 1.35rem;
+      font-size: 1.35rem; /* Más grande */
       text-align: center;
+      font-family: 'Inter', Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: #222;
+      background: transparent;
     }
     .info-item:last-child {
       border-bottom: none;
@@ -136,69 +159,135 @@
       from { opacity: 0; transform: translateY(10px);}
       to { opacity: 1; transform: translateY(0);}
     }
-    @media (max-width: 1200px) {
-      .contenedor-panel {
-        width: 98%;
-        max-width: 100vw;
-      }
-      .config-panel {
-        max-width: 100%;
-        padding: 24px 8px;
-      }
-      .info-item {
-        width: 98%;
-        font-size: 1.1rem;
-      }
+    .botones-ruta {
+      display: flex;
+      flex-direction: row;
+      gap: 18px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 14px;
+      width: 100%;
     }
-    @media (max-width: 700px) {
-      .contenedor-panel {
-        width: 100%;
-        margin: 20px 0 0 0;
-        max-width: 100vw;
-      }
-      .config-panel {
-        padding: 12px 2vw;
-      }
-      .titulo {
-        font-size: 2rem;
-        min-height: 60px;
-      }
-      .info {
-        font-size: 1.1rem;
-      }
-      .info-item {
-        font-size: 1rem;
-        gap: 10px;
-      }
-    }
-    /* Estilo para el botón */
-    .como-llegar-btn {
-      margin-top: 18px;
-      padding: 10px 24px;
-      background: #05A357;
+    .como-llegar-btn, .confirmar-asistencia-btn {
+      padding: 16px 36px;
+      background: #111;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
+      border-radius: 10px;
+      font-size: 1.25em;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
-    }
-    .como-llegar-btn:hover {
-      background: #04824a;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      outline: none;
+      letter-spacing: 1px;
     }
     .confirmar-asistencia-btn {
-      margin-top: 18px;
-      padding: 10px 24px;
-      background: #1976d2; /* Azul */
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: #e0e0e0;
+      color: #111;
+    }
+    .como-llegar-btn:hover {
+      background: #222;
+      transform: scale(1.04);
     }
     .confirmar-asistencia-btn:hover {
-      background: #1251a3;
+      background: #bdbdbd;
+      color: #111;
+      transform: scale(1.04);
+    }
+    @media (max-width: 900px) {
+      .contenedor-panel {
+        gap: 14px;
+        padding: 0 1vw;
+      }
+      .config-panel {
+        padding: 18px 8px 8px 8px;
+        min-height: 90px;
+        max-width: 99vw;
+      }
+      .titulo {
+        font-size: 1.7rem;
+        min-height: 40px;
+      }
+      .config-panel .info {
+        font-size: 1.15rem;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .info-item {
+        font-size: 1.1rem;
+        gap: 10px;
+        padding: 7px 0;
+      }
+      .botones-ruta {
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .como-llegar-btn, .confirmar-asistencia-btn {
+        font-size: 1em;
+        padding: 10px 18px;
+      }
+    }
+    @media (max-width: 600px) {
+      .barra-superior {
+        padding: 18px 0 10px 0;
+      }
+      .barra-superior h1 {
+        font-size: 1.2rem;
+      }
+      .scroll-area {
+        padding-top: 6px;
+        margin-left: 4px;
+      }
+      .contenedor-panel {
+        gap: 6px;
+        padding: 0 2vw;
+        align-items: stretch;
+      }
+      .config-panel {
+        padding: 10px 2vw 0 2vw;
+        min-height: 60px;
+        max-width: 100vw;
+      }
+      .titulo {
+        font-size: 1.2rem;
+        min-height: 28px;
+      }
+      .config-panel .info {
+        font-size: 0.98rem;
+      }
+      .info-item {
+        font-size: 0.98rem;
+        gap: 6px;
+      }
+      .botones-ruta {
+        gap: 6px;
+        margin-top: 6px;
+      }
+      .como-llegar-btn, .confirmar-asistencia-btn {
+        font-size: 0.98em;
+        padding: 7px 10px;
+      }
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;    /* Centra horizontalmente */
+      justify-content: center;/* Centra verticalmente */
+      width: 80px; /* o el valor real de tu sidebar */
+      min-width: 80px;
+      max-width: 80px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      z-index: 100;
+      padding: 0;
+    }
+    .sidebar > * {
+      margin-bottom: 24px;    /* Espaciado entre elementos */
     }
   </style>
 </head>
@@ -207,8 +296,10 @@
     <h1>Rutas Transporte</h1>
     <p>Consulta la información de la ruta y sus detalles.</p>
   </div>
-  <div class="contenedor-panel" id="contenedor-panel">
-    <!-- Aquí se cargarán las rutas dinámicamente -->
+  <div class="scroll-area">
+    <div class="contenedor-panel" id="contenedor-panel">
+      <!-- Aquí se cargarán las rutas dinámicamente -->
+    </div>
   </div>
   <script>
     fetch('https://usm-proyecto.onrender.com/api/rutas')
@@ -271,10 +362,9 @@
               leida: false
             });
             localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
-            // Ya NO redirige a notifications.html
           });
         });
       });
   </script>
-</body>
+</html>
 </html>

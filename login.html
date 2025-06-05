@@ -198,10 +198,25 @@
         width: 0;
       }
     }
+
+    .scroll-area {
+      width: 100vw;
+      height: calc(100vh - 80px);
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      overflow-y: auto;
+      padding-top: 24px;
+      padding-bottom: 24px;
+      box-sizing: border-box;
+      margin-left: 80px; /* <-- Más pequeño el espacio */
+    }
   </style>
 </head>
 <body>
-  <div class="header">USM</div>
+  <div class="header">
+    <a href="index.html" class="usm-logo-link" style="color:inherit;text-decoration:none;">USM</a>
+  </div>
   <div class="login-container">
     <h1>¿Cuál es tu número de teléfono o correo?</h1>
     <form id="login-form" action="verificacion_usuario.html" method="GET">
@@ -223,15 +238,6 @@
       <button type="submit">Continuar</button>
     </form>
     <div class="loading-bar" id="loading-bar"></div>
-    <div class="divider">o</div>
-    <div class="social-login">
-      <button>
-        <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google"> Continuar con Google
-      </button>
-      <button>
-        <img src="https://img.icons8.com/color/48/000000/instagram-new--v1.png" alt="Instagram"> Continuar con Instagram
-      </button>
-    </div>
     <p class="footer-text">
       Al continuar, aceptas recibir llamadas, mensajes de WhatsApp o SMS, incluidos mensajes automáticos, de nuestra parte y de nuestras afiliadas.
     </p>
