@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>rutas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap');
+    html, body {
+      width: 100%;
+      min-width: 0;
+      max-width: 100vw;
+      overflow-x: hidden;
+      background: #f7f7fa;
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .barra-superior {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      padding: 40px 0 24px 0;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .barra-superior h1 {
+      margin: 0;
+      font-size: 3.5rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+    .barra-superior p {
+      margin: 10px 0 0 0;
+      font-size: 1.15rem;
+      color: #e0e0e0;
+      font-weight: 400;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+    .contenedor-panel {
+      width: 80%;
+      max-width: 1200px;
+      margin: 40px 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      justify-content: flex-end;
+      box-sizing: border-box;
+    }
+    .config-panel {
+      width: 100%;
+      background: #e2e2e6;
+      border-radius: 18px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+      border: 1px solid #ccccd5;
+      padding: 48px 60px;
+      transition: 
+        box-shadow 0.35s cubic-bezier(.4,2,.6,1),
+        background 0.35s,
+        transform 0.2s;
+      min-width: 0;
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    .config-panel.active {
+      box-shadow: 0 20px 64px rgba(0,0,0,0.22);
+      background: #d4d4db;
+      border-color: #b3b3b8;
+    }
+    .titulo {
+      font-size: 3.2rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 900;
+      color: #23233a;
+      letter-spacing: 4px;
+      margin-bottom: 0;
+      text-align: center;
+      width: 100%;
+      transition: opacity 0.2s;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 110px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .config-panel .info {
+      display: none;
+      flex-direction: column;
+      gap: 22px;
+      margin-top: 10px;
+      font-size: 1.45rem;
+      color: #23233a;
+      width: 100%;
+      align-items: center;
+      animation: fadeIn 0.3s;
+      justify-content: center;
+      opacity: 0;
+      max-height: 0;
+      transition: opacity 0.3s, max-height 0.3s;
+      overflow: hidden;
+    }
+    .config-panel.active .info {
+      display: flex;
+      opacity: 1;
+      max-height: 500px;
+      transition: opacity 0.3s, max-height 0.5s;
+    }
+    .info-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      padding: 12px 0;
+      border-bottom: 1px solid #d8d8dd;
+      width: 100%;
+      font-size: 1.35rem;
+      text-align: center;
+    }
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    .info-label, .info-value {
+      text-align: center;
+      width: 50%;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    @media (max-width: 1200px) {
+      .contenedor-panel {
+        width: 98%;
+        max-width: 100vw;
+      }
+      .config-panel {
+        max-width: 100%;
+        padding: 24px 8px;
+      }
+      .info-item {
+        width: 98%;
+        font-size: 1.1rem;
+      }
+    }
+    @media (max-width: 700px) {
+      .contenedor-panel {
+        width: 100%;
+        margin: 20px 0 0 0;
+        max-width: 100vw;
+      }
+      .config-panel {
+        padding: 12px 2vw;
+      }
+      .titulo {
+        font-size: 2rem;
+        min-height: 60px;
+      }
+      .info {
+        font-size: 1.1rem;
+      }
+      .info-item {
+        font-size: 1rem;
+        gap: 10px;
+      }
+    }
+    /* Estilo para el botón */
+    .como-llegar-btn {
+      margin-top: 18px;
+      padding: 10px 24px;
+      background: #05A357;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .como-llegar-btn:hover {
+      background: #04824a;
+    }
+    .confirmar-asistencia-btn {
+      margin-top: 18px;
+      padding: 10px 24px;
+      background: #1976d2; /* Azul */
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .confirmar-asistencia-btn:hover {
+      background: #1251a3;
+    }
+  </style>
+</head>
+<body>
+  <div class="barra-superior">
+    <h1>Rutas Transporte</h1>
+    <p>Consulta la información de la ruta y sus detalles.</p>
+  </div>
+  <div class="contenedor-panel" id="contenedor-panel">
+    <!-- Aquí se cargarán las rutas dinámicamente -->
+  </div>
+  <script>
+    fetch('https://usm-dlku.onrender.com/api/rutas')
+      .then(res => res.json())
+      .then(rutas => {
+        const contenedor = document.getElementById('contenedor-panel');
+        contenedor.innerHTML = '';
+        rutas.forEach((ruta, idx) => {
+          const panel = document.createElement('div');
+          panel.className = 'config-panel';
+          panel.innerHTML = `
+            <div class="titulo">${ruta.nombre}</div>
+            <div class="info">
+              <div class="info-item">
+                <span class="info-label">Precio:</span>
+                <span class="info-value">${ruta.precio}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Hora de salida:</span>
+                <span class="info-value">${ruta.hora_salida}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Hasta qué hora trabajan:</span>
+                <span class="info-value">${ruta.hora_fin}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Ubicación:</span>
+                <span class="info-value">${ruta.ubicacion}</span>
+              </div>
+              <button class="como-llegar-btn" id="como-llegar-ruta-${idx}">Cómo llegar</button>
+              <button class="confirmar-asistencia-btn" id="confirmar-asistencia-${idx}">Confirmar asistencia</button>
+            </div>
+          `;
+          contenedor.appendChild(panel);
+
+          // Evento para mostrar/ocultar info
+          panel.addEventListener('click', function(e) {
+            if (panel.classList.contains('active')) {
+              panel.classList.remove('active');
+            } else {
+              document.querySelectorAll('.config-panel').forEach(p => p.classList.remove('active'));
+              panel.classList.add('active');
+            }
+          });
+
+          // Evento para el botón "Cómo llegar"
+          panel.querySelector('.como-llegar-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Guarda nombre y coordenadas de la estación
+            localStorage.setItem('showRouteTo', JSON.stringify({
+              nombre: ruta.nombre,
+              lat: ruta.lat,
+              lng: ruta.lng
+            }));
+            window.location.href = 'mapa.html';
+          });
+
+          // Evento para el botón "Confirmar asistencia"
+          panel.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
+            notificaciones.push({
+              mensaje: `🚌 Confirmación de ingreso enviada para la estación ${ruta.nombre}.<br>¡Buen viaje! Si tienes dudas, acércate al personal de la estación.`,
+              fecha: new Date().toLocaleString(),
+              leida: false
+            });
+            localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+            // Ya NO redirige a notifications.html
+          });
+        });
+      });
+  </script>
+</body>
+</html>

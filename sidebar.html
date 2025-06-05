@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar</title>
+    <link rel="stylesheet" href="sidebarstyle.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="header">
+            <div class="menu-btn" id="menu-btn">
+                <i class='bx bxs-chevron-left'></i>
+            </div>
+            <div class="brand">
+                <img src="brand/brand-light.svg" alt="logo">
+                <span>USM</span>
+            </div>
+        </div>
+        <div class="menu-container">
+            <div class="search">
+                <i class='bx bx-search'></i>
+                <input type="search" placeholder="search">
+            </div>
+            <ul class="menu">
+                <li class="menu-item menu-item-static">
+                    <a href="#" class="menu-link" data-page="mapa.html" id="mapa-link">
+                        <i class='bx bx-map'></i>
+                        <span>Map</span>
+                    </a>
+                </li>
+                <li class="menu-item menu-item-static">
+                    <a href="#" class="menu-link" data-page="dashboard.html" id="dashboard-link">
+                        <i class='bx bx-bar-chart-alt-2'></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item menu-item-dropdown">
+                    <a href="#" class="menu-link" data-page="car.html" id="car-link">
+                        <i class='bx bx-car'></i>
+                        <span>Car</span>
+                        <i class='bx bx-chevron-down'></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="#" class="sub-menu-link" data-page="shared-ride.html">shared ride</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item menu-item-dropdown">
+                    <a href="#" class="menu-link" data-page="bus.html" id="bus-link">
+                        <i class='bx bx-bus'></i>
+                        <span>Bus</span>
+                        <i class='bx bx-chevron-down'></i>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="#" class="sub-menu-link" data-page="routes.html">routes</a></li>
+                    </ul>
+                </li>
+                <!-- Se ha eliminado el menú File y sus submenús -->
+            </ul>
+        </div>
+        <div class="footer">
+            <ul class="menu">
+                <li class="menu-item menu-item-static">
+                    <a href="#" class="menu-link" data-page="notifications.html" id="notification-link">
+                        <i class='bx bx-bell'></i>
+                        <span>Notification</span>
+                    </a>
+                </li>
+                <li class="menu-item menu-item-static">
+                    <a href="#" class="menu-link" data-page="settings.html" id="setting-link">
+                        <i class='bx bx-cog'></i>
+                        <span>Setting</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="user">
+                <div class="user-img">
+                    <img id="sidebar-avatar" src="user_img.png" alt="user">
+                </div>
+                <div class="user-data">
+                    <span class="name" id="sidebar-username">Cargando...</span>
+                </div>
+                <div class="user-icon">
+                    <i class='bx bx-log-out'></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="main-content">
+        <iframe src="mapa.html" style="width:100%;height:100vh;border:none;" id="main-iframe"></iframe>
+    </div>
+    <script src="script_sidebar.js"></script>
+    <script>
+      // Cambia todas las URLs de la API de localhost a tu dominio público
+
+// Obtener el nombre real del usuario desde la base de datos vía API
+fetch('https://usm-dlku.onrender.com/user-info', {
+  credentials: 'include'
+})
+  .then(res => res.json())
+  .then(data => {
+    const sidebarName = document.getElementById('sidebar-username');
+    if (data.nombre) {
+      sidebarName.textContent = data.nombre.split(' ')[0];
+    } else {
+      sidebarName.textContent = 'Usuario';
+    }
+    // Si tienes avatar:
+    const sidebarAvatar = document.getElementById('sidebar-avatar');
+    if (sidebarAvatar) {
+      if (data.avatar_url && data.avatar_url.trim() !== "") {
+        sidebarAvatar.src = data.avatar_url;
+      } else {
+        sidebarAvatar.src = "user_img.png";
+      }
+    }
+  })
+  .catch(() => {
+    const sidebarName = document.getElementById('sidebar-username');
+    if (sidebarName) sidebarName.textContent = 'Usuario';
+    const sidebarAvatar = document.getElementById('sidebar-avatar');
+    if (sidebarAvatar) sidebarAvatar.src = "user_img.png";
+  });
+
+document.querySelector('.user-icon').addEventListener('click', async () => {
+  await fetch('https://usm-dlku.onrender.com/logout', {
+    method: 'POST',
+    credentials: 'include'
+  });
+  window.location.href = 'index.html'; // Cambiado de 'login.html' a 'index.html'
+});
+
+      // Punto verde sobre la campana si hay notificaciones sin leer
+      function actualizarPuntoNotificacion() {
+        const notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
+        const hayNoLeidas = notificaciones.some(n => n.leida === false);
+        let punto = document.getElementById('notification-dot');
+        const notificationLink = document.getElementById('notification-link');
+        if (!notificationLink) return;
+        const bellIcon = notificationLink.querySelector('i');
+
+        if (!punto) {
+          punto = document.createElement('span');
+          punto.id = 'notification-dot';
+          punto.style.position = 'absolute';
+          punto.style.top = '6px';
+          punto.style.right = '16px';
+          punto.style.width = '12px';
+          punto.style.height = '12px';
+          punto.style.background = '#27ae60'; // Verde
+          punto.style.borderRadius = '50%';
+          punto.style.display = 'none';
+          punto.style.zIndex = '10';
+          bellIcon.style.position = 'relative';
+          bellIcon.parentNode.style.position = 'relative';
+          bellIcon.parentNode.appendChild(punto);
+        }
+        punto.style.display = hayNoLeidas ? 'block' : 'none';
+      }
+
+      // Actualizar al cargar y cuando cambie el storage
+      actualizarPuntoNotificacion();
+      window.addEventListener('storage', actualizarPuntoNotificacion);
+
+      // Al abrir notificaciones, quitar el punto después de un pequeño delay
+      document.addEventListener('DOMContentLoaded', () => {
+        const notificationLink = document.getElementById('notification-link');
+        const mainIframe = document.getElementById('main-iframe');
+        if (notificationLink && mainIframe) {
+          notificationLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            mainIframe.src = 'notifications.html';
+            setTimeout(actualizarPuntoNotificacion, 700);
+          });
+        }
+      });
+    </script>
+</body>
+</html>

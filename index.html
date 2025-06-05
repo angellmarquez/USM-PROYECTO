@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicia sesión para acceder a tu cuenta | Uber</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: #fff;
+            color: #111;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: #000;
+            color: #fff;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .navbar .logo {
+            font-weight: bold;
+            font-size: 2em;
+            letter-spacing: 1px;
+        }
+        .navbar nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 18px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .navbar .actions {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .actions span,
+        .navbar .actions a {
+            color: #fff;
+            margin-left: 18px;
+            font-size: 1.1em;
+            text-decoration: none;
+        }
+        .navbar .actions button {
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 22px;
+            padding: 8px 24px;
+            margin-left: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        .hero {
+            background: #f6f6f6;
+            padding: 70px 0 0 0;
+            min-height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 92%;
+            max-width: 1300px;
+        }
+        .hero-text {
+            font-size: 3.2em;
+            font-weight: 700;
+            max-width: 500px;
+            line-height: 1.1;
+        }
+        .hero-img {
+            width: 600px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            background: #fff;
+            padding: 56px 0 56px 0;
+        }
+        .option {
+            text-align: left;
+            font-size: 2em;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+            max-width: 440px;
+            border-bottom: 2.5px solid #111;
+            margin: 0 18px;
+            padding-bottom: 28px;
+            transition: border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .option:hover {
+            border-color: #333;
+        }
+        .option-arrow {
+            display: inline-block;
+            width: 48px;
+            height: 48px;
+            overflow: hidden;
+            position: relative;
+        }
+        .option-arrow svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: none;
+        }
+        .option-arrow:hover svg {
+            animation: arrow-loop 0.6s cubic-bezier(.4,1.5,.6,1) 1;
+        }
+        @keyframes arrow-loop {
+            0% {
+                left: 0;
+                opacity: 1;
+            }
+            50% {
+                left: 60px;
+                opacity: 0;
+            }
+            51% {
+                left: -60px;
+                opacity: 0;
+            }
+            100% {
+                left: 0;
+                opacity: 1;
+            }
+        }
+        .footer {
+            background: #111;
+            color: #fff;
+            padding: 160px 0 80px 0;
+            font-size: 1.1em;
+            min-height: 500px;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-section {
+            margin: 18px 0;
+            min-width: 200px;
+        }
+        .footer-section h4 {
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-section ul li {
+            margin-bottom: 7px;
+        }
+        .footer-section ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .footer-bottom {
+            text-align: center;
+            margin-top: 60px;
+            color: #aaa;
+            font-size: 1em;
+        }
+        .footer-icons {
+            margin-top: 20px;
+        }
+        .footer-icons img {
+            width: 150px;
+            margin-right: 12px;
+        }
+        .footer-social {
+            margin-top: 28px;
+        }
+        .footer-social a {
+            color: #fff;
+            margin-right: 24px;
+            font-size: 1.7em;
+            text-decoration: none;
+        }
+        @media (max-width: 900px) {
+            .hero-content {
+                flex-direction: column;
+                gap: 0;
+            }
+            .hero-img {
+                margin-top: 32px;
+                width: 90vw;
+                height: 180px;
+            }
+            .options {
+                flex-direction: column;
+                gap: 24px;
+                align-items: center;
+            }
+            .option {
+                max-width: 90vw;
+            }
+            .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 24px;
+            }
+            .footer {
+                padding: 100px 0 100px 0;
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">USM</div>
+        <nav>
+            <!-- Enlaces eliminados: Viaja, Reservar, Quiénes somos, ES, Ayuda -->
+        </nav>
+        <div class="actions">
+            <button type="button" onclick="window.location.href='login.html'">Iniciar</button>
+        </div>
+    </div>
+    <div class="hero">
+        <div class="hero-content">
+            <div>
+                <div class="hero-text">Inicia sesión para<br> acceder a tu cuenta</div>
+            </div>
+            <div class="hero-img">
+                <img src="index.svg" alt="Ilustración" style="width:100%;height:100%;object-fit:contain;display:block;">
+            </div>
+        </div>
+    </div>
+    <div class="options">
+        <div class="option">
+            Socio conductor
+            <span class="option-arrow">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M16 24h16" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M28 16l8 8-8 8" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </div>
+        <div class="option">
+            Usuario
+            <span class="option-arrow">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M16 24h16" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M28 16l8 8-8 8" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>USM</h4>
+                <ul>
+                    <li><a href="#">Visita el Centro de ayuda</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Compañía</h4>
+                <ul>
+                    <li><a href="#">Sala de prensa</a></li>
+                    <li><a href="#">Inversionistas</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Productos</h4>
+                <ul>
+                    <li><a href="#">Comida</a></li>
+                    <li><a href="#">USM Freight</a></li>
+                    <li><a href="#">USM Health</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Ciudadanía global</h4>
+            </div>
+            <div class="footer-section">
+                <h4>Viajes</h4>
+                <ul>
+                    <li><a href="#">Reserva</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-content" style="justify-content: flex-start;">
+            <div class="footer-icons">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>⨁ Español (Internacional)</span> &nbsp; | &nbsp; <span>📍 Caracas venezuela</span><br>
+            © 2025 usm mobil Technologies, Inc. &nbsp; | &nbsp; Privacidad &nbsp; | &nbsp; Accesibilidad &nbsp; | &nbsp; Términos
+        </div>
+    </div>
+</body>
+</html>
