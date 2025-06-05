@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, session
+from flask_cors import CORS
 from pymongo import MongoClient
 from flask_mail import Mail, Message
 import random
@@ -8,11 +9,8 @@ from bson import ObjectId
 from flask import send_from_directory
 
 app = Flask(__name__)
-app.secret_key = 'TU_SECRETO_AQUI'
-
-# Configuración para cookies cross-origin seguras
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_SECURE'] = True
+app.secret_key = 'TU_SECRETO_AQUI'  # Cambia esto por una clave secreta segura
+CORS(app, supports_credentials=True)
 
 # Configuración de Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'

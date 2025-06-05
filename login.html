@@ -318,7 +318,7 @@
       try {
         let response;
         if (inputTypeValue === 'email') {
-          response = await fetch('https://usm-dlku.onrender.com/check-user', {
+          response = await fetch('https://usm-proyecto.onrender.com/check-user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: emailValue }),
@@ -326,7 +326,7 @@
           });
         } else if (inputTypeValue === 'phone') {
           phoneValue = normalizePhone(phoneValue);
-          response = await fetch('https://usm-dlku.onrender.com/check-user', {
+          response = await fetch('https://usm-proyecto.onrender.com/check-user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone: phoneValue }),
@@ -352,13 +352,13 @@
             // Usuario nuevo, inicia registro (envía código)
             let sendCodeResponse;
             if (inputTypeValue === 'email') {
-              sendCodeResponse = await fetch('https://usm-dlku.onrender.com/send-code', {
+              sendCodeResponse = await fetch('https://usm-proyecto.onrender.com/send-code', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: emailValue })
               });
             } else {
-              sendCodeResponse = await fetch('https://usm-dlku.onrender.com/send-code', {
+              sendCodeResponse = await fetch('https://usm-proyecto.onrender.com/send-code', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone: phoneValue })

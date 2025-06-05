@@ -354,7 +354,7 @@
       };
 
       try {
-        const response = await fetch('https://usm-dlku.onrender.com/register', {
+        const response = await fetch('https://usm-proyecto.onrender.com/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
@@ -373,7 +373,7 @@
               loginBody.telefono = telefono;
             }
 
-            const loginRes = await fetch('https://usm-dlku.onrender.com/login', {
+            const loginRes = await fetch('https://usm-proyecto.onrender.com/login', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               credentials: 'include',

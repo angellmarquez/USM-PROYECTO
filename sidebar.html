@@ -92,10 +92,8 @@
     </div>
     <script src="script_sidebar.js"></script>
     <script>
-      // Cambia todas las URLs de la API de localhost a tu dominio público
-
-// Obtener el nombre real del usuario desde la base de datos vía API
-fetch('https://usm-dlku.onrender.com/user-info', {
+      // Obtener el nombre real del usuario desde la base de datos vía API
+      fetch('https://usm-proyecto.onrender.com/user-info', {
   credentials: 'include'
 })
   .then(res => res.json())
@@ -123,13 +121,13 @@ fetch('https://usm-dlku.onrender.com/user-info', {
     if (sidebarAvatar) sidebarAvatar.src = "user_img.png";
   });
 
-document.querySelector('.user-icon').addEventListener('click', async () => {
-  await fetch('https://usm-dlku.onrender.com/logout', {
-    method: 'POST',
-    credentials: 'include'
-  });
-  window.location.href = 'index.html'; // Cambiado de 'login.html' a 'index.html'
-});
+      document.querySelector('.user-icon').addEventListener('click', async () => {
+        await fetch('https://usm-proyecto.onrender.com/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        window.location.href = 'index.html'; // Cambiado de 'login.html' a 'index.html'
+      });
 
       // Punto verde sobre la campana si hay notificaciones sin leer
       function actualizarPuntoNotificacion() {

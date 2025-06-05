@@ -128,7 +128,7 @@
     });
 
     // Cargar datos del usuario en los campos del formulario (incluyendo "Sobre mí")
-    fetch('https://usm-dlku.onrender.com/user-info', {
+    fetch('https://usm-proyecto.onrender.com/user-info', {
       credentials: 'include'
     })
       .then(res => res.json())
@@ -193,7 +193,7 @@
             // Guardar el cambio en la base de datos
             let campo = input.id === 'aboutMe' ? 'about' : input.id;
             const valor = input.value;
-            fetch('https://usm-dlku.onrender.com/update-user', {
+            fetch('https://usm-proyecto.onrender.com/update-user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

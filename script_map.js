@@ -284,7 +284,7 @@ const laCaliforniaMarker = new mapboxgl.Marker(laCaliforniaEl)
   .addTo(map);
 
 // Cargar rutas y crear marcadores dinámicos desde la base de datos
-fetch('https://usm-dlku.onrender.com/api/rutas')
+fetch('https://usm-proyecto.onrender.com/api/rutas')
   .then(res => res.json())
   .then(rutas => {
     rutas.forEach(ruta => {
@@ -384,12 +384,6 @@ function trazarRuta(origen, destino) {
         layout: { 'line-join': 'round', 'line-cap': 'round' },
         paint: { 'line-color': '#05A357', 'line-width': 6 }
       });
-      // Centra el mapa en la ubicación del usuario
-      map.flyTo({
-        center: origen,
-        zoom: 14,
-        speed: 1.2
-      });
       // Ajusta el mapa para mostrar toda la ruta
       const coordinates = route.coordinates;
       const bounds = coordinates.reduce(function(bounds, coord) {
@@ -400,16 +394,20 @@ function trazarRuta(origen, destino) {
 }
 
 // --- BLOQUE PARA TRAZAR LA RUTA DESDE LA UBICACIÓN DEL USUARIO ---
-const destinoData = localStorage.getItem('showRouteTo');
-if (destinoData) {
-  const destino = JSON.parse(destinoData);
-  if (destino.lat && destino.lng) {
-    geolocateControl.once('geolocate', (e) => {
-      const origen = [e.coords.longitude, e.coords.latitude];
-      const destinoCoord = [parseFloat(destino.lng), parseFloat(destino.lat)];
-      trazarRuta(origen, destinoCoord);
-      localStorage.removeItem('showRouteTo');
+const destinoNombre = localStorage.getItem('showRouteTo');
+if (destinoNombre) {
+  fetch('https://usm-proyecto.onrender.com/api/rutas')
+    .then(res => res.json())
+    .then(rutas => {
+      const destino = rutas.find(r => r.nombre === destinoNombre);
+      if (destino && destino.lat && destino.lng) {
+        geolocateControl.once('geolocate', (e) => {
+          const origen = [e.coords.longitude, e.coords.latitude];
+          const destinoCoord = [parseFloat(destino.lng), parseFloat(destino.lat)];
+          trazarRuta(origen, destinoCoord);
+          localStorage.removeItem('showRouteTo');
+        });
+        geolocateControl.trigger();
+      }
     });
-    geolocateControl.trigger();
-  }
 }

@@ -211,7 +211,7 @@
     <!-- Aquí se cargarán las rutas dinámicamente -->
   </div>
   <script>
-    fetch('https://usm-dlku.onrender.com/api/rutas')
+    fetch('https://usm-proyecto.onrender.com/api/rutas')
       .then(res => res.json())
       .then(rutas => {
         const contenedor = document.getElementById('contenedor-panel');
@@ -257,12 +257,7 @@
           // Evento para el botón "Cómo llegar"
           panel.querySelector('.como-llegar-btn').addEventListener('click', function(e) {
             e.stopPropagation();
-            // Guarda nombre y coordenadas de la estación
-            localStorage.setItem('showRouteTo', JSON.stringify({
-              nombre: ruta.nombre,
-              lat: ruta.lat,
-              lng: ruta.lng
-            }));
+            localStorage.setItem('showRouteTo', ruta.nombre);
             window.location.href = 'mapa.html';
           });
 
