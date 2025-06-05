@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from pymongo import MongoClient
 from flask_mail import Mail, Message
+from flask_session import Session
 import random
 import requests
 import os
@@ -11,6 +12,15 @@ from flask import send_from_directory
 app = Flask(__name__)
 app.secret_key = 'TU_SECRETO_AQUI'  # Cambia esto por una clave secreta segura
 CORS(app, supports_credentials=True)
+
+# Cambia la configuración de sesión:
+app.config['SESSION_TYPE'] = 'mongodb'
+app.config['SESSION_MONGODB'] = MongoClient("mongodb+srv://angel:30906629@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
+app.config['SESSION_MONGODB_DB'] = 'USM'
+app.config['SESSION_MONGODB_COLLECT'] = 'sessions'
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True
+Session(app)
 
 # Configuración de Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
