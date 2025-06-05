@@ -463,17 +463,107 @@ body {
     overflow: hidden;
 }
 
-/* Opcional: oscurece el contenido cuando la sidebar está abierta en móvil */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 80vw;
-        min-width: 180px;
-        max-width: 320px;
-    }
-    .sidebar.collapsed {
-        width: 0;
-    }
-    #main-content {
-        width: 100vw;
-    }
+/* Sidebar compacta en móviles */
+@media (max-width: 700px) {
+  .sidebar {
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    transition: width 0.2s;
+    overflow-x: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.06);
+  }
+  .sidebar .brand span,
+  .sidebar .user-data,
+  .sidebar .search input,
+  .sidebar .menu-link span,
+  .sidebar .footer .menu-link span {
+    display: none !important;
+  }
+  .sidebar .brand img {
+    width: 32px;
+    height: 32px;
+  }
+  .sidebar .menu-link i {
+    font-size: 1.7em;
+    margin: 0 auto;
+    display: block;
+  }
+  .sidebar .user-img img {
+    width: 32px;
+    height: 32px;
+  }
+  .sidebar .user-icon {
+    margin: 0 auto;
+    display: block;
+    font-size: 1.5em;
+  }
+  .sidebar .footer {
+    padding: 0;
+  }
+  .sidebar .header {
+    padding: 0;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .sidebar .menu-btn {
+    position: absolute;
+    right: -18px; /* Hace que sobresalga 18px fuera de la sidebar */
+    top: 12px;
+    z-index: 101;
+    background: #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    transition: right 0.2s;
+  }
+}
+
+/* Sidebar expandida en móvil */
+@media (max-width: 700px) {
+  .sidebar:not(.collapsed) {
+    width: 210px !important;
+    min-width: 210px !important;
+    max-width: 210px !important;
+  }
+  .sidebar:not(.collapsed) .brand span,
+  .sidebar:not(.collapsed) .user-data,
+  .sidebar:not(.collapsed) .search input,
+  .sidebar:not(.collapsed) .menu-link span,
+  .sidebar:not(.collapsed) .footer .menu-link span {
+    display: inline-block !important;
+  }
+  .sidebar:not(.collapsed) .header {
+    justify-content: flex-start;
+    padding-left: 12px;
+  }
+  .sidebar:not(.collapsed) .menu-btn {
+    right: -18px; /* Mantiene el botón sobresaliendo igual */
+    left: auto;
+  }
+}
+
+/* Asegura que el main-content no quede debajo de la sidebar en móvil */
+@media (max-width: 700px) {
+  #main-content {
+    margin-left: 56px;
+    transition: margin-left 0.2s;
+  }
+  .sidebar:not(.collapsed) ~ #main-content {
+    margin-left: 210px;
+  }
 }

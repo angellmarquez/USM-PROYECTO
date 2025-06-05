@@ -45,6 +45,28 @@ let userMarker = null;
 // Activar automáticamente la geolocalización al cargar el mapa
 map.on('load', () => {
   geolocateControl.trigger();
+
+  // --- BLOQUE PARA TRAZAR LA RUTA DESDE LA UBICACIÓN DEL USUARIO ---
+  const destinoNombre = localStorage.getItem('showRouteTo');
+  if (destinoNombre) {
+    fetch('https://usm-proyecto.onrender.com/api/rutas')
+      .then(res => res.json())
+      .then(rutas => {
+        const destino = rutas.find(r => r.nombre === destinoNombre);
+        if (destino && destino.lat && destino.lng) {
+          // Definir el callback
+          const onGeolocate = (e) => {
+            const origen = [e.coords.longitude, e.coords.latitude];
+            const destinoCoord = [parseFloat(destino.lng), parseFloat(destino.lat)];
+            trazarRuta(origen, destinoCoord);
+            localStorage.removeItem('showRouteTo');
+            geolocateControl.off('geolocate', onGeolocate); // Quitar el listener
+          };
+          geolocateControl.on('geolocate', onGeolocate);
+          geolocateControl.trigger();
+        }
+      });
+  }
 });
 
 // Siempre que cambie la ubicación del usuario, actualiza el marcador azul
@@ -401,12 +423,15 @@ if (destinoNombre) {
     .then(rutas => {
       const destino = rutas.find(r => r.nombre === destinoNombre);
       if (destino && destino.lat && destino.lng) {
-        geolocateControl.once('geolocate', (e) => {
+        // Definir el callback
+        const onGeolocate = (e) => {
           const origen = [e.coords.longitude, e.coords.latitude];
           const destinoCoord = [parseFloat(destino.lng), parseFloat(destino.lat)];
           trazarRuta(origen, destinoCoord);
           localStorage.removeItem('showRouteTo');
-        });
+          geolocateControl.off('geolocate', onGeolocate); // Quitar el listener
+        };
+        geolocateControl.on('geolocate', onGeolocate);
         geolocateControl.trigger();
       }
     });
