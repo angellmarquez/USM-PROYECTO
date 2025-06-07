@@ -303,8 +303,10 @@ def get_rutas():
     rutas = list(db.rutas.find({}, {'_id': 0}))
     return jsonify(rutas)
 
-@app.route('/check-user', methods=['POST'])
+@app.route('/check-user', methods=['POST', 'OPTIONS'])
 def check_user():
+    if request.method == 'OPTIONS':
+        return '', 200
     data = request.json
     email = data.get('email')
     phone = data.get('phone')
