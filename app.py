@@ -11,7 +11,7 @@ from flask import send_from_directory
 
 app = Flask(__name__)
 app.secret_key = 'TU_SECRETO_AQUI'  # Cambia esto por una clave secreta segura
-CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500", "http://localhost:5500"])
+CORS(app, supports_credentials=True)
 
 # Cambia la configuración de sesión:
 app.config['SESSION_TYPE'] = 'mongodb'
@@ -303,10 +303,8 @@ def get_rutas():
     rutas = list(db.rutas.find({}, {'_id': 0}))
     return jsonify(rutas)
 
-@app.route('/check-user', methods=['POST', 'OPTIONS'])
+@app.route('/check-user', methods=['POST'])
 def check_user():
-    if request.method == 'OPTIONS':
-        return '', 200
     data = request.json
     email = data.get('email')
     phone = data.get('phone')
@@ -317,40 +315,6 @@ def check_user():
         phone = normalize_phone(phone)
         user = users_collection.find_one({'telefono': phone})
     return jsonify({'exists': bool(user)})
-
-@app.route('/conductor-login', methods=['POST', 'OPTIONS'])
-def conductor_login():
-    if request.method == 'OPTIONS':
-        return '', 200
-    data = request.json
-    codigo = data.get('codigo')
-    conductor = db.conductores.find_one({'codigo': codigo})
-    if conductor:
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "error": "Código incorrecto"}), 401
-
-@app.route('/conductor-ubicacion', methods=['POST'])
-def actualizar_ubicacion_conductor():
-    data = request.json
-    codigo = data.get('codigo')
-    lat = data.get('lat')
-    lng = data.get('lng')
-    if not codigo or lat is None or lng is None:
-        return jsonify({'success': False, 'error': 'Datos incompletos'}), 400
-    result = db.conductores.update_one(
-        {'codigo': codigo},
-        {'$set': {'ubicacion.lat': lat, 'ubicacion.lng': lng}}
-    )
-    if result.matched_count:
-        return jsonify({'success': True})
-    else:
-        return jsonify({'success': False, 'error': 'Conductor no encontrado'}), 404
-
-@app.route('/conductores-ubicaciones', methods=['GET'])
-def obtener_ubicaciones_conductores():
-    conductores = list(db.conductores.find({}, {'_id': 0, 'nombre': 1, 'codigo': 1, 'ubicacion': 1}))
-    return jsonify({'conductores': conductores})
 
 if __name__ == '__main__':
     app.run(debug=True)
