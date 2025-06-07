@@ -436,3 +436,57 @@ if (destinoNombre) {
       }
     });
 }
+
+// --- BLOQUE PARA MOSTRAR CONDUCTORES EN TIEMPO REAL ---
+let conductorMarkers = {};
+
+async function actualizarConductoresEnMapa() {
+  try {
+    const res = await fetch('/conductores-ubicaciones');
+    const data = await res.json();
+    // Elimina marcadores antiguos que ya no están
+    Object.keys(conductorMarkers).forEach(codigo => {
+      if (!data.conductores.some(c => c.codigo === codigo)) {
+        conductorMarkers[codigo].remove();
+        delete conductorMarkers[codigo];
+      }
+    });
+    // Agrega o actualiza marcadores de conductores
+    const miCodigo = localStorage.getItem('conductorCodigo');
+    data.conductores.forEach(conductor => {
+      if (
+        conductor.ubicacion &&
+        conductor.ubicacion.lat !== null &&
+        conductor.ubicacion.lng !== null
+      ) {
+        let color = (conductor.codigo === miCodigo) ? 'green' : 'red';
+        // Si ya existe el marcador, actualízalo
+        if (conductorMarkers[conductor.codigo]) {
+          conductorMarkers[conductor.codigo].setLngLat([
+            conductor.ubicacion.lng,
+            conductor.ubicacion.lat
+          ]);
+        } else {
+          const el = document.createElement('div');
+          el.className = 'custom-marker';
+          el.style.backgroundColor = color;
+          el.style.width = '22px';
+          el.style.height = '22px';
+          el.style.borderRadius = '50%';
+          el.style.border = '2px solid #fff';
+          el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+          conductorMarkers[conductor.codigo] = new mapboxgl.Marker(el)
+            .setLngLat([conductor.ubicacion.lng, conductor.ubicacion.lat])
+            .setPopup(new mapboxgl.Popup().setText(`Conductor: ${conductor.nombre || conductor.codigo}`))
+            .addTo(map);
+        }
+      }
+    });
+  } catch (e) {
+    // Puedes manejar errores aquí si lo deseas
+  }
+}
+
+// Actualiza la ubicación de los conductores cada 3 segundos
+setInterval(actualizarConductoresEnMapa, 3000);
+actualizarConductoresEnMapa(); // Llama una vez al cargar

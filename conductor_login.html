@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ingreso de Conductor</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    .container { max-width: 400px; margin: 80px auto; background: #fff; padding: 32px; border-radius: 12px; box-shadow: 0 2px 8px #0002; }
+    input { width: 100%; padding: 12px; margin: 12px 0; font-size: 18px; }
+    button { width: 100%; padding: 12px; background: #05A357; color: #fff; border: none; font-size: 18px; border-radius: 6px; }
+    .error { color: red; margin-top: 10px; }
+    .loading { color: #05A357; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Ingreso de Conductor</h2>
+    <input type="text" id="codigo" maxlength="5" placeholder="Código de conductor">
+    <button id="ingresar">Ingresar</button>
+    <div class="loading" id="loading" style="display:none;">Cargando...</div>
+    <div class="error" id="error"></div>
+  </div>
+  <script>
+    document.getElementById('ingresar').onclick = async function() {
+      const codigo = document.getElementById('codigo').value.trim().toUpperCase();
+      const errorDiv = document.getElementById('error');
+      const loadingDiv = document.getElementById('loading');
+      errorDiv.textContent = '';
+      loadingDiv.style.display = 'block';
+      if (codigo.length !== 5) {
+        loadingDiv.style.display = 'none';
+        errorDiv.textContent = 'El código debe tener 5 caracteres.';
+        return;
+      }
+      try {
+        const res = await fetch('https://usm-proyecto.onrender.com/conductor-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ codigo })
+        });
+        const data = await res.json();
+        loadingDiv.style.display = 'none';
+        if (data.success) {
+          localStorage.setItem('conductorCodigo', codigo);
+          // Iniciar envío de ubicación en tiempo real
+          if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function(position) {
+              fetch('https://usm-proyecto.onrender.com/conductor-ubicacion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  codigo: codigo,
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                })
+              });
+            }, null, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
+          }
+          window.location.href = 'sidebar.html';
+        } else {
+          errorDiv.textContent = data.error || 'Código incorrecto';
+        }
+      } catch (e) {
+        loadingDiv.style.display = 'none';
+        errorDiv.textContent = 'Error de conexión. Intenta de nuevo.';
+      }
+    };
+  </script>
+</body>
+</html>
