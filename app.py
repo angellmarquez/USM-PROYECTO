@@ -11,7 +11,7 @@ from flask import send_from_directory
 
 app = Flask(__name__)
 app.secret_key = 'TU_SECRETO_AQUI'  # Cambia esto por una clave secreta segura
-CORS(app)
+CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5500", "http://localhost:5500"])
 
 # Cambia la configuración de sesión:
 app.config['SESSION_TYPE'] = 'mongodb'
