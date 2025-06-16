@@ -2,36 +2,46 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Configurar Perfil de Usuario</title>
+    <title>Configuración de Perfil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        html, body {
-            max-width: 100vw;
-            overflow-x: hidden;
-            background: #f7f8fa;
+        :root {
+            --main-bg: #f6f6fa;
+            --main-dark: #23223a;
+            --main-purple: #7c3aed;
+            --main-purple-dark: #5b21b6;
+            --main-gray: #e0e0e0;
+            --main-white: #fff;
+            --shadow: 0 4px 24px 0 rgba(124,58,237,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.07);
+            --radius: 20px;
         }
-        body {
-            color: #23272a;
-            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+        html, body {
             margin: 0;
             padding: 0;
+            background: var(--main-bg);
+            font-family: 'Inter', Arial, sans-serif;
+            color: var(--main-dark);
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         .hero {
             width: 100vw;
-            background: #111;
+            background: linear-gradient(90deg, var(--main-purple-dark) 0%, var(--main-purple) 100%);
             color: #fff;
-            padding: 60px 0 40px 0;
+            padding: 56px 0 36px 0;
             text-align: center;
-            box-shadow: 0 4px 24px #0002;
+            box-shadow: 0 4px 24px #7c3aed22;
         }
         .hero-title {
-            font-size: 2.8em;
-            font-weight: 800;
-            margin-bottom: 10px;
+            font-size: 2.7em;
+            font-weight: 900;
+            margin-bottom: 8px;
             letter-spacing: -1px;
             font-family: 'Montserrat', Arial, sans-serif;
         }
         .hero-desc {
-            font-size: 1.3em;
+            font-size: 1.18em;
             font-weight: 400;
             color: #e0e0e0;
         }
@@ -40,81 +50,108 @@
             flex-direction: row;
             max-width: 1100px;
             margin: 40px auto 0 auto;
-            gap: 48px;
+            gap: 40px;
             align-items: flex-start;
             padding: 0 24px;
         }
         .preview-card {
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px #0002;
-            padding: 32px 24px;
-            min-width: 220px;
-            max-width: 280px;
+            background: var(--main-white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 36px 24px 28px 24px;
+            min-width: 270px;
+            max-width: 340px;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 0;
-            border-top: 8px solid #111;
+            border-top: 7px solid var(--main-purple);
             transition: border-color 0.2s, box-shadow 0.2s;
+            position: relative;
         }
         .preview-card:hover {
-            box-shadow: 0 8px 32px #0005;
-            border-top: 8px solid #23272a;
+            box-shadow: 0 8px 32px #7c3aed33;
+            border-top: 7px solid var(--main-purple-dark);
         }
         .preview-avatar {
-            width: 64px;
-            height: 64px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background: #fff;
             object-fit: cover;
-            margin-bottom: 14px;
-            box-shadow: 0 2px 8px #0001;
-            border: 3px solid #111;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px #7c3aed22;
+            border: 5px solid var(--main-purple);
+            transition: border 0.2s;
+            position: relative;
+        }
+        .avatar-upload-btn {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--main-purple);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #7c3aed22;
+            transition: background 0.2s;
+        }
+        .avatar-upload-btn:hover {
+            background: var(--main-purple-dark);
         }
         .preview-name {
-            font-size: 1.2em;
-            font-weight: 700;
+            font-size: 1.35em;
+            font-weight: 800;
             margin-bottom: 2px;
             text-align: center;
             letter-spacing: 0.5px;
+            color: var(--main-purple-dark);
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         .preview-about {
             color: #555;
-            font-size: 1em;
+            font-size: 1.05em;
             text-align: center;
             margin-bottom: 8px;
-            max-width: 180px;
+            max-width: 200px;
             word-break: break-word;
         }
         .form-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            gap: 28px;
         }
         .section {
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 2px 12px #0001;
-            padding: 32px 28px;
+            background: var(--main-white);
+            border-radius: var(--radius);
+            box-shadow: 0 2px 12px #7c3aed11;
+            padding: 28px 24px;
             margin-bottom: 0;
             width: 100%;
             transition: box-shadow 0.2s;
         }
         .section:hover {
-            box-shadow: 0 6px 24px #0003;
+            box-shadow: 0 6px 24px #7c3aed22;
         }
         .section-title {
-            font-size: 1.25em;
+            font-size: 1.15em;
             font-weight: bold;
-            margin-bottom: 18px;
-            color: #23272a;
+            margin-bottom: 16px;
+            color: var(--main-purple-dark);
             letter-spacing: -0.5px;
             font-family: 'Montserrat', Arial, sans-serif;
         }
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -126,26 +163,27 @@
             font-size: 1.05em;
             letter-spacing: -0.5px;
             font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--main-purple-dark);
         }
         input[type="text"], input[type="email"], input[type="tel"], textarea {
-            width: 60%;
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: 1.5px solid #23272a;
+            width: 70%;
+            padding: 14px 16px;
+            border-radius: 9px;
+            border: 1.5px solid var(--main-purple-dark);
             background: #fafafa;
-            color: #23272a;
-            font-size: 1.08em;
+            color: var(--main-dark);
+            font-size: 1.13em;
             margin-bottom: 2px;
             resize: none;
             transition: border 0.2s, box-shadow 0.2s;
             font-family: 'Segoe UI', Arial, sans-serif;
-            box-shadow: 0 1px 4px #0001;
+            box-shadow: 0 1px 4px #7c3aed11;
         }
         input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, textarea:focus {
-            border: 1.5px solid #111;
+            border: 1.5px solid var(--main-purple);
             outline: none;
             background: #fff;
-            box-shadow: 0 2px 8px #0002;
+            box-shadow: 0 2px 8px #7c3aed22;
         }
         input[readonly], textarea[readonly] {
             background: #e0e0e0;
@@ -156,32 +194,33 @@
             display: none;
         }
         .btn {
-            background: #111;
+            background: var(--main-purple);
             color: #fff;
             border: none;
             border-radius: 8px;
-            padding: 10px 22px;
+            padding: 12px 28px;
             cursor: pointer;
             margin-right: 10px;
-            font-size: 1em;
+            font-size: 1.08em;
             font-weight: 600;
             margin-top: 8px;
-            transition: background 0.2s, box-shadow 0.2s, color 0.2s;
-            box-shadow: 0 2px 8px #0001;
+            transition: background 0.2s, box-shadow 0.2s, color 0.2s, border 0.2s;
+            box-shadow: 0 2px 8px #7c3aed11;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         .btn:hover {
             background: #fff;
-            color: #111;
-            border: 1.5px solid #111;
-            box-shadow: 0 4px 16px #0002;
+            color: var(--main-purple-dark);
+            border: 1.5px solid var(--main-purple-dark);
+            box-shadow: 0 4px 16px #7c3aed22;
         }
         .btn-secondary {
-            background: #e0e0e0;
-            color: #23272a;
+            background: #ececf3;
+            color: var(--main-purple-dark);
             box-shadow: none;
         }
         .btn-secondary:hover {
-            background: #111;
+            background: var(--main-purple-dark);
             color: #fff;
         }
         .btn-danger {
@@ -190,10 +229,9 @@
         }
         .about-desc {
             color: #888;
-            font-size: 0.95em;
+            font-size: 0.97em;
             margin-bottom: 8px;
         }
-        /* Botón X */
         #closeBtn {
             position:fixed;
             top:24px;
@@ -213,6 +251,40 @@
             color: #e53935;
             text-shadow: 0 2px 8px #e5393555;
         }
+        /* Agrega esto para las pestañas */
+        .settings-tabs {
+            display: flex;
+            gap: 12px;
+            margin: 32px auto 0 auto;
+            justify-content: center;
+        }
+        .settings-tab-btn {
+            background: #ececf3;
+            color: #5b21b6;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 12px 32px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        .settings-tab-btn.active {
+            background: var(--main-purple);
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .settings-tabs {
+                flex-direction: column;
+                gap: 0;
+            }
+            .settings-tab-btn {
+                border-radius: 8px 8px 0 0;
+                width: 100%;
+                margin-bottom: 2px;
+            }
+        }
         @media (max-width: 900px) {
             .main-flex { flex-direction: column; align-items: stretch; }
             .preview-card { margin: 0 auto 32px auto; max-width: 98vw; }
@@ -222,8 +294,167 @@
             .main-flex { flex-direction: column; align-items: stretch; }
             .preview-card { width: 100%; max-width: 100%; min-width: 0; margin-bottom: 24px; box-sizing: border-box; }
             .form-container { padding: 0; }
-            .section { padding: 18px 8px; }
+            .section { padding: 14px 4px; }
             #closeBtn { top: 10px; right: 10px; font-size: 1.6em; }
+            .preview-avatar { width: 80px; height: 80px; }
+            .avatar-upload-btn { width: 28px; height: 28px; font-size: 1.1em; top: 70px; }
+        }
+        .preview-card, .section {
+            animation: fadeInUp 0.7s;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .horario-container {
+            max-width: 800px;
+            margin: 40px auto 0 auto;
+            padding: 32px 24px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px 0 rgba(124,58,237,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.07);
+        }
+        .horario-title {
+            color: #5b21b6;
+            text-align: center;
+            margin-bottom: 28px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-size: 2em;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        .horario-form {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .horario-form label {
+            font-weight: 600;
+            color: #5b21b6;
+            font-size: 1.08em;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .horario-form select {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 1.5px solid #7c3aed;
+            background: #f6f6fa;
+            color: #23223a;
+            font-size: 1.08em;
+            font-family: 'Inter', Arial, sans-serif;
+            box-shadow: 0 1px 4px #7c3aed11;
+            transition: border 0.2s;
+            margin-top: 2px;
+        }
+        .horario-form select:focus {
+            border: 1.5px solid #5b21b6;
+            outline: none;
+            background: #fff;
+        }
+        .horario-btn {
+            padding: 12px 32px;
+            font-size: 1.12em;
+            font-weight: 700;
+            border-radius: 8px;
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            box-shadow: 0 2px 8px #7c3aed22;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            margin-top: 18px;
+        }
+        .horario-btn:hover {
+            background: #fff;
+            color: #5b21b6;
+            border: 1.5px solid #5b21b6;
+        }
+        .horario-table-wrap {
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #7c3aed11;
+            background: #fff;
+        }
+        .horario-table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            font-size: 1.05em;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 0 auto;
+            table-layout: fixed;
+        }
+        .horario-table th, .horario-table td {
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            vertical-align: middle;
+            width: 90px;
+            height: 48px;
+            max-width: 100px;
+            min-width: 70px;
+            font-size: 0.98em;
+            padding: 0;
+        }
+        .horario-table th {
+            background: #ede9fe;
+            color: #7c3aed;
+            font-weight: 700;
+            font-size: 1.08em;
+            letter-spacing: 0.5px;
+            height: 50px;
+            border-top: none;
+        }
+        .horario-table .hora {
+            background: #f6f6fa;
+            font-weight: 600;
+            color: #23223a;
+            font-size: 1.01em;
+            min-width: 80px;
+            max-width: 90px;
+            width: 90px;
+            border-left: none;
+        }
+        .horario-table tr.alt {
+            background: #f8faff;
+        }
+        .horario-table tr:hover td {
+            background: #f3e8ff;
+            transition: background 0.2s;
+        }
+        .horario-table th:first-child, .horario-table td:first-child {
+            border-left: none;
+        }
+        .horario-table th:last-child, .horario-table td:last-child {
+            border-right: none;
+        }
+        .horario-table tr:last-child td {
+            border-bottom: none;
+        }
+        .horario-hint {
+            color: #888;
+            font-size: 0.97em;
+            text-align: center;
+            margin-top: 18px;
+        }
+        @media (max-width: 900px) {
+            .horario-table th, .horario-table td { font-size: 0.93em; min-width: 50px; max-width: 70px; }
+            .horario-table .hora { min-width: 60px; max-width: 70px; }
+            .horario-container { padding: 12px 2vw; }
+        }
+        @media (max-width: 600px) {
+            .horario-title { font-size: 1.2em; }
+            .horario-form { gap: 8px; }
+            .horario-btn { padding: 8px 12px; font-size: 1em; }
         }
     </style>
 </head>
@@ -233,84 +464,153 @@
         <div class="hero-title">Configuración de tu Perfil</div>
         <div class="hero-desc">Personaliza tu información y visualiza cómo se verá tu perfil público.</div>
     </div>
-    <div class="main-flex">
-        <div>
-            <div class="preview-card">
-                <img class="preview-avatar" id="miniAvatar" src="user_img.png" alt="Avatar" style="background:#fff;">
-                <div class="preview-name" id="miniNombre"></div>
-                <div class="preview-about" id="miniAbout"></div>
+    <!-- PESTAÑAS -->
+    <div class="settings-tabs">
+        <button class="settings-tab-btn active" id="tab-personal" onclick="mostrarTab('personal')">Información personal</button>
+        <button class="settings-tab-btn" id="tab-horario" onclick="mostrarTab('horario')">Horario</button>
+    </div>
+    <!-- CONTENIDO DE LAS PESTAÑAS -->
+    <div id="tab-content-personal">
+        <div class="main-flex">
+            <div>
+                <div class="preview-card">
+                    <img class="preview-avatar" id="miniAvatar" src="user_img.png" alt="Avatar">
+                    <button class="avatar-upload-btn" id="changeAvatarBtn" title="Cambiar avatar">&#9998;</button>
+                    <div class="preview-name" id="miniNombre"></div>
+                    <div class="preview-about" id="miniAbout"></div>
+                    <button class="btn btn-secondary" id="removeAvatarBtn" style="margin-top:10px;">Eliminar avatar</button>
+                </div>
+            </div>
+            <div class="form-container">
+                <div class="section">
+                    <div class="section-title">Información personal</div>
+                    <div class="form-group">
+                        <label for="nombre" style="flex:1;">Nombre</label>
+                        <input type="text" id="nombre" style="flex:2;">
+                        <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido" style="flex:1;">Apellido</label>
+                        <input type="text" id="apellido" style="flex:2;">
+                        <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono" style="flex:1;">Número de Teléfono</label>
+                        <input type="tel" id="telefono" style="flex:2;">
+                        <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="correo" style="flex:1;">Correo Electrónico</label>
+                        <input type="email" id="correo" style="flex:2;">
+                        <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">Datos académicos</div>
+                    <div class="form-group">
+                        <label for="facultad" style="flex:1;">Facultad</label>
+                        <input type="text" id="facultad" style="flex:2; background:#e0e0e0; color:#888; cursor:not-allowed;" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="carrera" style="flex:1;">Carrera</label>
+                        <input type="text" id="carrera" style="flex:2; background:#e0e0e0; color:#888; cursor:not-allowed;" readonly>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">Dirección</div>
+                    <div class="form-group">
+                        <label for="direccion" style="flex:1;">Dirección</label>
+                        <input type="text" id="direccion" style="flex:2;" readonly>
+                        <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">Sobre mí</div>
+                    <div class="form-group">
+                        <label for="aboutMe" style="flex:1;">Sobre Mí</label>
+                        <textarea id="aboutMe" maxlength="60" rows="3" placeholder="Cuéntanos sobre ti..." style="flex:2;"></textarea>
+                        <button class="btn btn-secondary" style="padding:4px 12px;font-size:0.95em;align-self:flex-start;" onclick="editarCampo(this)">Editar</button>
+                    </div>
+                    <div class="about-desc">Puedes usar Markdown y los enlaces que quieras.</div>
+                </div>
             </div>
         </div>
-        <div class="form-container">
-            <div class="section">
-                <div class="section-title">Avatar</div>
-                <input type="file" id="avatarInput" accept="image/*" style="display:none;">
-                <img class="avatar" id="avatarPreview" src="user_img.png" alt="Avatar" style="margin-bottom:10px;width:60px;height:60px;">
-                <br>
-                <button class="btn" id="changeAvatarBtn">Cambiar avatar</button>
-                <button class="btn btn-secondary" id="removeAvatarBtn">Eliminar avatar</button>
+        <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+    </div>
+    <div id="tab-content-horario" style="display:none;">
+        <div class="horario-container">
+            <h2 class="horario-title">Horario semanal</h2>
+            <form id="horario-form" class="horario-form">
+                <label>
+                    <span>Hora de entrada:</span>
+                    <select id="hora-entrada" required></select>
+                </label>
+                <label>
+                    <span>Hora de salida:</span>
+                    <select id="hora-salida" required></select>
+                </label>
+                <button type="submit" class="btn horario-btn">Generar horario</button>
+            </form>
+            <div class="horario-table-wrap">
+                <table class="horario-table" id="tabla-horario">
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miércoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                            <th>Sábado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filas generadas por JS -->
+                    </tbody>
+                </table>
             </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="nombre" style="flex:1;">Nombre</label>
-                    <input type="text" id="nombre" style="flex:2;">
-                    <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="apellido" style="flex:1;">Apellido</label>
-                    <input type="text" id="apellido" style="flex:2;">
-                    <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="telefono" style="flex:1;">Número de Teléfono</label>
-                    <input type="tel" id="telefono" style="flex:2;">
-                    <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="correo" style="flex:1;">Correo Electrónico</label>
-                    <input type="email" id="correo" style="flex:2;">
-                    <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="facultad" style="flex:1;">Facultad</label>
-                    <input type="text" id="facultad" style="flex:2; background:#e0e0e0; color:#888; cursor:not-allowed;" readonly>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="carrera" style="flex:1;">Carrera</label>
-                    <input type="text" id="carrera" style="flex:2; background:#e0e0e0; color:#888; cursor:not-allowed;" readonly>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="direccion" style="flex:1;">Dirección</label>
-                    <input type="text" id="direccion" style="flex:2;" readonly>
-                    <button class="btn btn-secondary editar-btn" onclick="editarCampo(this)">Editar</button>
-                </div>
-            </div>
-            <div class="section">
-                <div class="form-group" style="display:flex;align-items:center;gap:10px;">
-                    <label for="aboutMe" style="flex:1;">Sobre Mí</label>
-                    <textarea id="aboutMe" maxlength="60" rows="3" placeholder="Cuéntanos sobre ti..." style="flex:2;"></textarea>
-                    <button class="btn btn-secondary" style="padding:4px 12px;font-size:0.95em;align-self:flex-start;" onclick="editarCampo(this)">Editar</button>
-                </div>
-                <div class="about-desc">Puedes usar Markdown y los enlaces que quieras.</div>
-            </div>
+            <p class="horario-hint">
+                Selecciona tu hora de entrada y salida para ver tu horario.
+            </p>
         </div>
     </div>
+    <div class="encuesta-parada" style="margin:32px auto 0 auto; max-width:500px; background:#f8faff; border-radius:12px; box-shadow:0 1px 6px #7c3aed11; padding:24px;">
+        <form id="form-parada">
+            <label for="parada-bus" style="font-weight:700; color:#5b21b6; font-size:1.13em; display:block; margin-bottom:12px;">
+                Generalmente, ¿qué parada de autobús usa?
+            </label>
+            <select id="parada-bus" name="parada-bus" required style="width:100%; padding:12px; border-radius:8px; border:1.5px solid #7c3aed; font-size:1.08em; background:#fff;">
+                <option value="" disabled selected>Seleccione una parada...</option>
+            </select>
+            <button type="submit" class="btn" style="margin-top:18px; padding:10px 28px; background:#7c3aed; color:#fff; border:none; border-radius:8px; font-weight:700; font-size:1.08em; cursor:pointer;">
+                Enviar respuesta
+            </button>
+            <div id="encuesta-msg" style="margin-top:12px; color:#22a06b; font-weight:600;"></div>
+        </form>
+    </div>
     <script>
+    // PESTAÑAS
+    function mostrarTab(tab) {
+        document.getElementById('tab-personal').classList.remove('active');
+        document.getElementById('tab-horario').classList.remove('active');
+        document.getElementById('tab-content-personal').style.display = 'none';
+        document.getElementById('tab-content-horario').style.display = 'none';
+        if(tab === 'personal') {
+            document.getElementById('tab-personal').classList.add('active');
+            document.getElementById('tab-content-personal').style.display = '';
+        } else {
+            document.getElementById('tab-horario').classList.add('active');
+            document.getElementById('tab-content-horario').style.display = '';
+        }
+    }
+
     // Botón X para volver a la sidebar
     document.getElementById('closeBtn').addEventListener('click', function() {
-        window.location.href = 'sidebar.html';
+        if (window.parent !== window && window.parent.document.getElementById('main-iframe')) {
+            window.parent.document.getElementById('main-iframe').src = 'mapa.html';
+        } else {
+            window.location.href = 'sidebar.html';
+        }
     });
 
     // Cargar datos del usuario en los campos del formulario (incluyendo "Sobre mí")
@@ -329,8 +629,7 @@
         document.getElementById('aboutMe').value = data.about || '';
         document.getElementById('miniNombre').textContent = data.nombre || '';
         document.getElementById('miniAbout').textContent = data.about || '';
-        if (data.avatar_url && document.getElementById('avatarPreview')) {
-          document.getElementById('avatarPreview').src = data.avatar_url;
+        if (data.avatar_url && document.getElementById('miniAvatar')) {
           document.getElementById('miniAvatar').src = data.avatar_url;
         }
         // Todos los campos editables readonly al cargar
@@ -343,11 +642,9 @@
     // Cambia el color de la X según el fondo
     function actualizarColorX() {
         const closeBtn = document.getElementById('closeBtn');
-        // Calcula la posición del botón respecto al hero (fondo negro)
         const hero = document.querySelector('.hero');
         const heroRect = hero.getBoundingClientRect();
         const btnRect = closeBtn.getBoundingClientRect();
-        // Si la X está sobre el hero (fondo negro)
         if (btnRect.top < heroRect.bottom) {
             closeBtn.style.color = '#fff';
         } else {
@@ -388,7 +685,6 @@
               .then(data => {
                 if (campo === 'nombre') {
                     document.getElementById('miniNombre').textContent = valor;
-                    // Actualiza también en la sidebar si existe
                     if (window.parent && window.parent.document.getElementById('sidebar-username')) {
                         window.parent.document.getElementById('sidebar-username').textContent = valor;
                     }
@@ -397,7 +693,6 @@
                     document.getElementById('miniAbout').textContent = valor;
                 }
                 if (campo === 'direccion') {
-                    // Si tienes dirección en la sidebar, actualízala aquí igual
                     if (window.parent && window.parent.document.getElementById('sidebar-direccion')) {
                         window.parent.document.getElementById('sidebar-direccion').textContent = valor;
                     }
@@ -405,6 +700,260 @@
               });
         }
     }
+
+    // Avatar: cambiar y eliminar
+    document.getElementById('changeAvatarBtn').onclick = function() {
+        document.getElementById('avatarInput').click();
+    };
+    document.getElementById('avatarInput').onchange = function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            document.getElementById('miniAvatar').src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+        // Aquí puedes agregar la lógica para subir el avatar al servidor si lo deseas
+    };
+    document.getElementById('removeAvatarBtn').onclick = function() {
+        document.getElementById('miniAvatar').src = 'user_img.png';
+        // Aquí puedes agregar la lógica para eliminar el avatar en el servidor si lo deseas
+    };
+
+    const INTERVALO_MIN = 45; // minutos
+    const HORA_MIN = 7; // 7:00 AM
+    const HORA_MAX = 19; // 7:00 PM
+
+    function pad(n) { return n < 10 ? '0'+n : n; }
+    function to12h(h, m) {
+        let suf = h >= 12 ? 'PM' : 'AM';
+        let h12 = h % 12;
+        if (h12 === 0) h12 = 12;
+        return `${pad(h12)}:${pad(m)}${suf}`;
+    }
+
+    // Genera las opciones de hora para los selectores
+    function generarOpcionesHoras() {
+        const entrada = document.getElementById('hora-entrada');
+        const salida = document.getElementById('hora-salida');
+        entrada.innerHTML = '';
+        salida.innerHTML = '';
+        let opciones = [];
+        for (let h = HORA_MIN; h < HORA_MAX; h++) {
+            opciones.push({h, m:0});
+            opciones.push({h, m:45});
+        }
+        opciones.push({h:HORA_MAX, m:0});
+        opciones.forEach(opt => {
+            let val = `${pad(opt.h)}:${pad(opt.m)}`;
+            let label = to12h(opt.h, opt.m);
+            let o1 = document.createElement('option');
+            o1.value = val;
+            o1.textContent = label;
+            entrada.appendChild(o1.cloneNode(true));
+            salida.appendChild(o1);
+        });
+        // Valores por defecto
+        entrada.selectedIndex = 0;
+        salida.selectedIndex = opciones.length-1;
+        actualizarOpcionesSalida();
+    }
+
+    // Actualiza las opciones de salida según la entrada seleccionada
+    function actualizarOpcionesSalida() {
+        const entrada = document.getElementById('hora-entrada');
+        const salida = document.getElementById('hora-salida');
+        let entradaVal = entrada.value;
+        let [h1, m1] = entradaVal.split(':').map(Number);
+        let start = h1*60 + m1;
+        let foundValid = false;
+        for (let i = 0; i < salida.options.length; i++) {
+            let [h2, m2] = salida.options[i].value.split(':').map(Number);
+            let end = h2*60 + m2;
+            if (end > start) {
+                salida.options[i].disabled = false;
+                if (!foundValid) {
+                    salida.selectedIndex = i;
+                    foundValid = true;
+                }
+            } else {
+                salida.options[i].disabled = true;
+            }
+        }
+    }
+
+    // Evento para actualizar las opciones de salida cuando cambia la entrada
+    document.getElementById('hora-entrada').addEventListener('change', actualizarOpcionesSalida);
+
+    generarOpcionesHoras();
+
+    // --- CELDAS EDITABLES ---
+    let horarioData = {}; // Guarda el contenido de cada celda
+
+    function generarTablaHorario(horaIni, horaFin) {
+        const tbody = document.querySelector('#tabla-horario tbody');
+        tbody.innerHTML = '';
+        let [h1, m1] = horaIni.split(':').map(Number);
+        let [h2, m2] = horaFin.split(':').map(Number);
+        let start = h1*60 + m1;
+        let end = h2*60 + m2;
+        if (end <= start) return;
+        let alt = false;
+        let dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+        let fila = 0;
+        for (let t = start; t < end; t += INTERVALO_MIN, fila++) {
+            let hIni = Math.floor(t/60), mIni = t%60;
+            let hFin = Math.floor((t+INTERVALO_MIN)/60), mFin = (t+INTERVALO_MIN)%60;
+            if (t+INTERVALO_MIN > end) break;
+            let horaTxt = `${to12h(hIni, mIni)} - ${to12h(hFin, mFin)}`;
+            let tr = document.createElement('tr');
+            if (alt) tr.className = 'alt';
+            alt = !alt;
+            let tdHora = document.createElement('td');
+            tdHora.className = 'hora';
+            tdHora.textContent = horaTxt;
+            tr.appendChild(tdHora);
+            for (let d=0; d<6; d++) {
+                let td = document.createElement('td');
+                td.style.cursor = 'pointer';
+                td.dataset.fila = fila;
+                td.dataset.dia = d;
+                let key = `${fila}-${d}`;
+                td.innerHTML = horarioData[key] || '';
+                td.onclick = function() {
+                    editarCeldaHorario(td, key);
+                };
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+    }
+
+    // Permite editar la celda y guardar varias líneas
+    function editarCeldaHorario(td, key) {
+        if (td.querySelector('textarea')) return; // Ya está editando
+        let valor = td.innerHTML.replace(/<br\s*\/?>/gi, '\n');
+        td.innerHTML = '';
+        let textarea = document.createElement('textarea');
+        textarea.style.width = '95%';
+        textarea.style.height = '40px';
+        textarea.style.resize = 'vertical';
+        textarea.style.fontSize = '1em';
+        textarea.style.fontFamily = 'inherit';
+        textarea.value = valor;
+        td.appendChild(textarea);
+        textarea.focus();
+
+        textarea.onkeydown = function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                guardarCeldaHorario(td, textarea, key);
+            }
+        };
+        textarea.onblur = function() {
+            guardarCeldaHorario(td, textarea, key);
+        };
+    }
+
+    function guardarCeldaHorario(td, textarea, key) {
+        let val = textarea.value.trim();
+        horarioData[key] = val ? val.replace(/\n/g, '<br>') : '';
+        td.innerHTML = horarioData[key];
+        td.onclick = function() {
+            editarCeldaHorario(td, key);
+        };
+    }
+
+    // Agrega un mensaje de error debajo del formulario
+    const form = document.getElementById('horario-form');
+    let errorMsg = document.createElement('div');
+    errorMsg.id = 'horario-error';
+    errorMsg.style.color = '#e53935';
+    errorMsg.style.fontWeight = '600';
+    errorMsg.style.margin = '10px 0 0 0';
+    errorMsg.style.textAlign = 'center';
+    form.parentNode.insertBefore(errorMsg, form.nextSibling);
+
+    // Evento del formulario con validación
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        let entrada = document.getElementById('hora-entrada').value;
+        let salida = document.getElementById('hora-salida').value;
+        // Validación: la salida debe ser mayor que la entrada
+        let [h1, m1] = entrada.split(':').map(Number);
+        let [h2, m2] = salida.split(':').map(Number);
+        let start = h1*60 + m1;
+        let end = h2*60 + m2;
+        if (end <= start) {
+            errorMsg.textContent = 'La hora de salida debe ser mayor que la hora de entrada.';
+            return;
+        } else {
+            errorMsg.textContent = '';
+        }
+        horarioData = {}; // Limpia los datos al generar nuevo horario
+        generarTablaHorario(entrada, salida);
+    });
+
+    // Genera la tabla inicial
+    window.addEventListener('DOMContentLoaded', ()=>{
+        let entrada = document.getElementById('hora-entrada').value;
+        let salida = document.getElementById('hora-salida').value;
+        generarTablaHorario(entrada, salida);
+    });
+
+    // Llenar las opciones de parada con las paradas de la API de rutas
+    fetch('https://usm-proyecto.onrender.com/api/rutas')
+      .then(res => res.json())
+      .then(rutas => {
+        const paradasSet = new Set();
+        rutas.forEach(ruta => {
+          if (ruta.nombre) paradasSet.add(ruta.nombre.trim());
+        });
+        const paradaSelect = document.getElementById('parada-bus');
+        // Elimina las opciones previas (excepto la de "Seleccione una parada...")
+        paradaSelect.innerHTML = '<option value="" disabled selected>Seleccione una parada...</option>';
+        // Agrega las paradas de la API
+        Array.from(paradasSet).sort().forEach(parada => {
+          const opt = document.createElement('option');
+          opt.value = parada;
+          opt.textContent = parada;
+          paradaSelect.appendChild(opt);
+        });
+        // Opción "Otra"
+        const optOtra = document.createElement('option');
+        optOtra.value = "Otra";
+        optOtra.textContent = "Otra";
+        paradaSelect.appendChild(optOtra);
+
+        // Una vez cargadas las opciones, selecciona la parada guardada si existe
+        fetch('https://usm-proyecto.onrender.com/user-info', {
+          credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.parada_bus) {
+            paradaSelect.value = data.parada_bus;
+          }
+        });
+      });
+
+    document.getElementById('form-parada').addEventListener('submit', function(e){
+        e.preventDefault();
+        const parada = document.getElementById('parada-bus').value;
+        fetch('https://usm-proyecto.onrender.com/update-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ parada_bus: parada })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('encuesta-msg').textContent = '¡Gracias por tu respuesta!';
+        })
+        .catch(() => {
+            document.getElementById('encuesta-msg').textContent = 'Error al guardar la respuesta.';
+        });
+    });
     </script>
 </body>
 </html>

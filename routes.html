@@ -3,298 +3,365 @@
 <head>
   <meta charset="UTF-8">
   <title>Rutas Transporte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap');
-
+    :root {
+      --main-blue: #2563eb;
+      --main-blue-dark: #1e40af;
+      --main-bg: #f6f8fb;
+      --panel-bg: #fff;
+      --panel-shadow: 0 4px 24px 0 rgba(37,99,235,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.07);
+      --panel-radius: 18px;
+      --text-main: #23223a;
+      --text-muted: #7c7c8a;
+      --divider: #e5eaf2;
+      --btn-bg: var(--main-blue);
+      --btn-bg-hover: var(--main-blue-dark);
+      --btn-text: #fff;
+      --btn-radius: 10px;
+      --arrow-blue: #2563eb;
+      --circle-bg: #e0eaff;
+    }
     html, body {
-      width: 100vw;
-      height: 100vh;
-      background: #fff;
-      font-family: 'Inter', Arial, sans-serif;
       margin: 0;
       padding: 0;
+      background: var(--main-bg);
+      font-family: 'Inter', Arial, sans-serif;
+      color: var(--text-main);
+      min-height: 100vh;
       box-sizing: border-box;
-      overflow-x: hidden; /* Evita el scroll horizontal */
+      overflow-x: hidden;
     }
-
+    body {
+      overflow-x: hidden;
+    }
     .barra-superior {
-      width: 100vw;
-      background: #111;
-      color: #fff;
-      padding: 36px 0 18px 0;
-      text-align: center;
-      box-sizing: border-box;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-      position: sticky;
+      width: 100%;
+      background: #fff;
+      color: var(--main-blue);
+      padding: 0;
+      box-shadow: 0 2px 12px rgba(37,99,235,0.07);
+      position: fixed; /* Cambiado de sticky a fixed */
       top: 0;
-      z-index: 10;
-      border-bottom: none;
+      left: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--divider);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 70px;
+      gap: 16px;
     }
-    .barra-superior h1 {
-      margin: 0;
-      font-size: 3.2rem; /* Más grande */
+    .nav-azul {
+      background: none;
+      color: var(--main-blue-dark);
       font-family: 'Montserrat', Arial, sans-serif;
       font-weight: 900;
-      letter-spacing: 2px;
+      font-size: 2.1rem;
+      letter-spacing: 1.5px;
+      padding: 0;
+      margin-left: 300px; /* Puedes ajustar este valor para moverlo horizontalmente */
+      flex-shrink: 0;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    .nav-opciones {
+      display: flex;
+      gap: 10px;
+      margin-right: 32px;
+    }
+    .nav-opciones a {
+      color: var(--main-blue-dark);
+      text-decoration: none;
+      font-weight: 700;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.08em;
+      padding: 10px 18px;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-opciones a:hover,
+    .nav-opciones a.active {
+      background: var(--main-blue);
       color: #fff;
     }
-    .barra-superior p {
-      margin: 12px 0 0 0;
-      font-size: 1.5rem; /* Más grande */
-      color: #e0e0e0;
-      font-weight: 500;
-      font-family: 'Inter', Arial, sans-serif;
+    .menu-dropdown {
+      display: none;
     }
+    @media (max-width: 900px) {
+      .nav-azul {
+        font-size: 1.2rem;
+        padding: 8px 16px;
+        margin-left: 8px;
+      }
+      .nav-opciones {
+        gap: 4px;
+        margin-right: 8px;
+      }
+      .nav-opciones a {
+        font-size: 0.98em;
+        padding: 7px 10px;
+      }
+    }
+    @media (max-width: 600px) {
+      .nav-azul {
+        font-size: 1rem;
+        padding: 6px 8px;
+        margin-left: 4px;
+      }
+      .nav-opciones {
+        display: none;
+      }
+      .menu-dropdown {
+        display: block;
+        margin-right: 8px;
+      }
+    }
+    /* Resto del CSS igual que antes */
     .scroll-area {
-      width: calc(100vw - 80px);
-      margin-left: 155px; /* Mueve los cuadros un poco a la derecha (antes 80px) */
-      height: calc(100vh - 100px);
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 40px 0 40px 0;
-      background: #fff;
+      padding: 110px 0 40px 0; /* <--- Cambia el 40px por 110px o el alto real de tu nav */
+      background: var(--main-bg);
+      min-height: 80vh;
       box-sizing: border-box;
     }
     .contenedor-panel {
       width: 100%;
-      max-width: 1200px;           /* Más ancho hacia la derecha */
+      max-width: 700px;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 22px;
       align-items: center;
       justify-content: flex-start;
       box-sizing: border-box;
-      padding: 0;
+      padding: 0 12px;
     }
     .config-panel {
       width: 100%;
-      max-width: 1200px;           /* Más ancho hacia la derecha */
-      min-height: 160px;
-      background: #fff;
-      border-radius: 22px;
-      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10); /* Sombra más notoria */
+      background: var(--panel-bg);
+      border-radius: var(--panel-radius);
+      box-shadow: var(--panel-shadow);
       border: none;
-      padding: 36px 38px 22px 38px;
+      padding: 0;
       transition: box-shadow 0.25s, background 0.25s, transform 0.18s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       cursor: pointer;
       user-select: none;
       box-sizing: border-box;
       position: relative;
+      overflow: hidden;
+    }
+    .config-panel:not(:last-child) {
+      margin-bottom: 0;
     }
     .config-panel:hover, .config-panel.active {
-      box-shadow: 0 16px 48px 0 rgba(0,0,0,0.22), 0 2px 12px 0 rgba(0,0,0,0.13);
-      background: #f7f7f7;
+      box-shadow: 0 8px 32px 0 rgba(37,99,235,0.13), 0 2px 12px 0 rgba(0,0,0,0.10);
+      background: #f0f6ff;
       transform: translateY(-2px) scale(1.01);
     }
-    .titulo {
-      font-size: 2.7rem; /* Mucho más grande */
-      min-height: 56px;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: 900;
-      color: #111;
-      letter-spacing: 2px;
-      margin-bottom: 0;
-      text-align: center;
-      width: 100%;
-      text-transform: uppercase;
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 28px 22px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .panel-header .icon-circle {
+      background: var(--circle-bg);
+      color: var(--main-blue-dark);
+      font-weight: 700;
+      font-size: 1.15rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      user-select: none;
+      margin-right: 16px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.10);
     }
-    .config-panel .info {
-      display: none;
-      flex-direction: column;
-      gap: 18px;
-      margin-top: 18px;
-      font-size: 1.45rem; /* Más grande */
-      color: #232323;
-      width: 100%;
+    .panel-header .titulo {
+      font-size: 1.18rem;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 800;
+      color: var(--main-blue-dark);
+      letter-spacing: 1px;
+      flex: 1;
+      text-align: left;
+      margin: 0;
+      display: flex;
       align-items: center;
-      animation: fadeIn 0.3s;
-      justify-content: center;
+      gap: 10px;
+    }
+    .panel-header .arrow {
+      font-size: 1.5rem;
+      color: var(--main-blue);
+      transition: transform 0.3s;
+      margin-left: 18px;
+    }
+    .config-panel.active .panel-header .arrow {
+      transform: rotate(90deg);
+    }
+    .info {
+      display: grid;
+      grid-template-rows: 0fr;
       opacity: 0;
-      max-height: 0;
-      transition: opacity 0.3s, max-height 0.3s;
-      overflow: hidden;
-      font-family: 'Inter', Arial, sans-serif;
+      transition: grid-template-rows 0.4s, opacity 0.3s;
+      background: #f0f6ff;
+      padding: 0 28px;
     }
     .config-panel.active .info {
-      display: flex;
+      grid-template-rows: 1fr;
       opacity: 1;
-      max-height: 400px;
-      transition: opacity 0.3s, max-height 0.5s;
-      padding-bottom: 10px;
+      padding-bottom: 20px;
+    }
+    .info-content {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 1.05rem;
+      color: var(--text-main);
+      width: 100%;
+      align-items: flex-start;
+      animation: fadeIn 0.3s;
+      justify-content: center;
     }
     .info-item {
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 18px;
-      padding: 10px 0;
-      border-bottom: 1px solid #ececec;
-      width: 100%;
-      font-size: 1.35rem; /* Más grande */
-      text-align: center;
-      font-family: 'Inter', Arial, sans-serif;
+      gap: 12px;
+      font-size: 1.03rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
-      color: #222;
+      color: var(--main-blue-dark);
       background: transparent;
     }
-    .info-item:last-child {
-      border-bottom: none;
-    }
-    .info-label, .info-value {
-      text-align: center;
-      width: 50%;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px);}
-      to { opacity: 1; transform: translateY(0);}
+    .info-label {
+      min-width: 120px;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 1.01rem;
     }
     .botones-ruta {
       display: flex;
       flex-direction: row;
-      gap: 18px;
-      justify-content: center;
-      align-items: center;
+      gap: 12px;
       margin-top: 14px;
       width: 100%;
     }
     .como-llegar-btn, .confirmar-asistencia-btn {
-      padding: 16px 36px;
-      background: #111;
-      color: #fff;
+      padding: 10px 22px;
+      background: var(--btn-bg);
+      color: var(--btn-text);
       border: none;
-      border-radius: 10px;
-      font-size: 1.25em;
+      border-radius: var(--btn-radius);
+      font-size: 1em;
       font-family: 'Montserrat', Arial, sans-serif;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: background 0.18s, transform 0.13s;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.06);
       outline: none;
       letter-spacing: 1px;
     }
-    .confirmar-asistencia-btn {
-      background: #e0e0e0;
-      color: #111;
-    }
     .como-llegar-btn:hover {
-      background: #222;
+      background: var(--btn-bg-hover);
       transform: scale(1.04);
     }
+    .confirmar-asistencia-btn {
+      background: #e5eaf2;
+      color: var(--main-blue-dark);
+    }
     .confirmar-asistencia-btn:hover {
-      background: #bdbdbd;
-      color: #111;
+      background: #c7d7f7;
+      color: var(--main-blue);
       transform: scale(1.04);
     }
     @media (max-width: 900px) {
       .contenedor-panel {
-        gap: 14px;
-        padding: 0 1vw;
+        gap: 12px;
+        padding: 0 2vw;
       }
-      .config-panel {
-        padding: 18px 8px 8px 8px;
-        min-height: 90px;
-        max-width: 99vw;
+      .panel-header {
+        padding: 14px 8px 14px 8px;
       }
-      .titulo {
-        font-size: 1.7rem;
-        min-height: 40px;
-      }
-      .config-panel .info {
-        font-size: 1.15rem;
-        gap: 10px;
-        margin-top: 10px;
-      }
-      .info-item {
-        font-size: 1.1rem;
-        gap: 10px;
-        padding: 7px 0;
-      }
-      .botones-ruta {
-        gap: 10px;
-        margin-top: 10px;
-      }
-      .como-llegar-btn, .confirmar-asistencia-btn {
-        font-size: 1em;
-        padding: 10px 18px;
+      .info, .config-panel.active .info {
+        padding: 0 8px;
       }
     }
     @media (max-width: 600px) {
-      .barra-superior {
-        padding: 18px 0 10px 0;
-      }
-      .barra-superior h1 {
-        font-size: 1.2rem;
+      .barra-superior .titulo {
+        margin-left: 8px;
+        font-size: 1.1rem;
       }
       .scroll-area {
-        padding-top: 6px;
-        margin-left: 4px;
+        padding-top: 4px;
       }
       .contenedor-panel {
         gap: 6px;
         padding: 0 2vw;
-        align-items: stretch;
       }
-      .config-panel {
-        padding: 10px 2vw 0 2vw;
-        min-height: 60px;
-        max-width: 100vw;
+      .panel-header {
+        padding: 8px 4px 8px 4px;
       }
-      .titulo {
-        font-size: 1.2rem;
-        min-height: 28px;
+      .panel-header .icon-circle {
+        width: 24px;
+        height: 24px;
+        font-size: 0.95rem;
+        margin-right: 6px;
       }
-      .config-panel .info {
+      .panel-header .titulo {
         font-size: 0.98rem;
       }
-      .info-item {
-        font-size: 0.98rem;
-        gap: 6px;
+      .info-content {
+        font-size: 0.92rem;
       }
       .botones-ruta {
         gap: 6px;
         margin-top: 6px;
       }
       .como-llegar-btn, .confirmar-asistencia-btn {
-        font-size: 0.98em;
-        padding: 7px 10px;
+        font-size: 0.93em;
+        padding: 6px 8px;
       }
     }
-
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;    /* Centra horizontalmente */
-      justify-content: center;/* Centra verticalmente */
-      width: 80px; /* o el valor real de tu sidebar */
-      min-width: 80px;
-      max-width: 80px;
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100vh;
-      z-index: 100;
-      padding: 0;
-    }
-    .sidebar > * {
-      margin-bottom: 24px;    /* Espaciado entre elementos */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
   <div class="barra-superior">
-    <h1>Rutas Transporte</h1>
-    <p>Consulta la información de la ruta y sus detalles.</p>
+    <div class="nav-azul">
+      RUTAS
+    </div>
+    <nav class="nav-opciones" id="navOpciones">
+      <a href="#" onclick="filtrarRutas('urbanas');return false;">Rutas urbanas</a>
+      <a href="#" onclick="filtrarRutas('baruta');return false;">Baruta</a>
+      <a href="#" onclick="filtrarRutas('la_guaira');return false;">La Guaira</a>
+      <a href="#" onclick="filtrarRutas('guarenas');return false;">Guarenas Guatire</a>
+      <a href="#" onclick="filtrarRutas('los_teques');return false;">Los Teques</a>
+    </nav>
+    <div class="menu-dropdown" id="menuDropdown">
+      <button class="menu-btn" id="menuBtn">
+        Opciones
+        <span class="arrow">&#9660;</span>
+      </button>
+      <div class="menu-dropdown-content" id="menuDropdownContent">
+        <a href="#" onclick="filtrarRutas('urbanas');return false;">Rutas urbanas</a>
+        <a href="#" onclick="filtrarRutas('baruta');return false;">Baruta</a>
+        <a href="#" onclick="filtrarRutas('la_guaira');return false;">La Guaira</a>
+        <a href="#" onclick="filtrarRutas('guarenas');return false;">Guarenas Guatire</a>
+        <a href="#" onclick="filtrarRutas('los_teques');return false;">Los Teques</a>
+      </div>
+    </div>
   </div>
   <div class="scroll-area">
     <div class="contenedor-panel" id="contenedor-panel">
@@ -302,69 +369,223 @@
     </div>
   </div>
   <script>
-    fetch('https://usm-proyecto.onrender.com/api/rutas')
-      .then(res => res.json())
-      .then(rutas => {
-        const contenedor = document.getElementById('contenedor-panel');
-        contenedor.innerHTML = '';
-        rutas.forEach((ruta, idx) => {
-          const panel = document.createElement('div');
-          panel.className = 'config-panel';
-          panel.innerHTML = `
-            <div class="titulo">${ruta.nombre}</div>
-            <div class="info">
+    // Dropdown menu para móvil
+    const menuDropdown = document.getElementById('menuDropdown');
+    const menuBtn = document.getElementById('menuBtn');
+    menuBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      menuDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', function() {
+      menuDropdown.classList.remove('open');
+    });
+
+    // Filtro de rutas (puedes adaptar la lógica según tu API)
+    let rutasGlobal = [];
+    function filtrarRutas(tipo) {
+      let rutasFiltradas = rutasGlobal;
+      switch(tipo) {
+        case 'urbanas':
+          rutasFiltradas = rutasGlobal.filter(r =>
+            r.nombre.toLowerCase().includes('california') ||
+            r.nombre.toLowerCase().includes('plaza')
+          );
+          break;
+        case 'baruta':
+          rutasFiltradas = rutasGlobal.filter(r => r.nombre.toLowerCase().includes('concresa'));
+          break;
+        case 'la_guaira':
+          rutasFiltradas = rutasGlobal.filter(r => r.nombre.toLowerCase().includes('guaira'));
+          break;
+        case 'guarenas':
+          rutasFiltradas = rutasGlobal.filter(r => r.nombre.toLowerCase().includes('guarenas') || r.nombre.toLowerCase().includes('guatire'));
+          break;
+        case 'los_teques':
+          rutasFiltradas = rutasGlobal.filter(r => r.nombre.toLowerCase().includes('teques'));
+          break;
+      }
+      renderizarRutas(rutasFiltradas);
+    }
+
+    const coloresParadas = [
+      '#2563eb', // Azul
+      '#eab308', // Amarillo
+      '#10b981', // Verde
+      '#ef4444', // Rojo
+      '#a21caf', // Morado
+      '#f97316', // Naranja
+      '#0ea5e9', // Celeste
+      '#f43f5e', // Rosado
+      '#22d3ee', // Turquesa
+      '#64748b'  // Gris
+    ];
+
+    // Asignar número único a cada parada por nombre
+    let mapaNumerosParadas = {};
+    let mapaColoresParadas = {};
+    function asignarNumerosYColores(rutas) {
+      let contador = 1;
+      rutas.forEach(ruta => {
+        let nombre = ruta.nombre.trim().toLowerCase();
+        if (!mapaNumerosParadas[nombre]) {
+          mapaNumerosParadas[nombre] = contador++;
+        }
+      });
+      // Asignar color por número
+      Object.entries(mapaNumerosParadas).forEach(([nombre, num]) => {
+        mapaColoresParadas[nombre] = coloresParadas[(num - 1) % coloresParadas.length];
+      });
+    }
+
+    function renderizarRutas(rutas) {
+      const contenedor = document.getElementById('contenedor-panel');
+      contenedor.innerHTML = '';
+      rutas.forEach((ruta, idx) => {
+        let nombreParada = ruta.nombre.trim().toLowerCase();
+        let num = mapaNumerosParadas[nombreParada];
+        let color = mapaColoresParadas[nombreParada];
+        let origen = ruta.nombre.trim();
+        let destino = "USM";
+
+        // Panel: Parada -> USM
+        const panelIda = document.createElement('div');
+        panelIda.className = 'config-panel';
+        panelIda.innerHTML = `
+          <div class="panel-header">
+            <span class="icon-circle" style="background:${color}; color:#fff;">${num}</span>
+            <span class="titulo">
+              <span style="font-weight:700">${origen}</span>
+              <span style="margin: 0 10px; color: var(--arrow-blue); font-size:1.3em;">&#8594;</span>
+              <span style="font-weight:700">${destino}</span>
+            </span>
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="info">
+            <div class="info-content">
               <div class="info-item">
                 <span class="info-label">Precio:</span>
-                <span class="info-value">${ruta.precio}</span>
+                <span>${ruta.precio}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">Hora de salida:</span>
-                <span class="info-value">${ruta.hora_salida}</span>
+                <span>${ruta.hora_salida}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">Hasta qué hora trabajan:</span>
-                <span class="info-value">${ruta.hora_fin}</span>
+                <span>${ruta.hora_fin}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">Ubicación:</span>
-                <span class="info-value">${ruta.ubicacion}</span>
+                <span>${ruta.ubicacion}</span>
               </div>
-              <button class="como-llegar-btn" id="como-llegar-ruta-${idx}">Cómo llegar</button>
-              <button class="confirmar-asistencia-btn" id="confirmar-asistencia-${idx}">Confirmar asistencia</button>
+              <div class="botones-ruta">
+                <button class="como-llegar-btn" id="como-llegar-ruta-${idx}-ida">Cómo llegar</button>
+                <button class="confirmar-asistencia-btn" id="confirmar-asistencia-${idx}-ida">Confirmar asistencia</button>
+              </div>
             </div>
-          `;
-          contenedor.appendChild(panel);
+          </div>
+        `;
+        contenedor.appendChild(panelIda);
 
-          // Evento para mostrar/ocultar info
-          panel.addEventListener('click', function(e) {
-            if (panel.classList.contains('active')) {
-              panel.classList.remove('active');
-            } else {
-              document.querySelectorAll('.config-panel').forEach(p => p.classList.remove('active'));
-              panel.classList.add('active');
-            }
-          });
+        // Panel: USM -> Parada
+        const panelVuelta = document.createElement('div');
+        panelVuelta.className = 'config-panel';
+        panelVuelta.innerHTML = `
+          <div class="panel-header">
+            <span class="icon-circle" style="background:${color}; color:#fff;">${num}</span>
+            <span class="titulo">
+              <span style="font-weight:700">${destino}</span>
+              <span style="margin: 0 10px; color: var(--arrow-blue); font-size:1.3em;">&#8594;</span>
+              <span style="font-weight:700">${origen}</span>
+            </span>
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="info">
+            <div class="info-content">
+              <div class="info-item">
+                <span class="info-label">Precio:</span>
+                <span>${ruta.precio}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Hora de salida:</span>
+                <span>${ruta.hora_salida}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Hasta qué hora trabajan:</span>
+                <span>${ruta.hora_fin}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Ubicación:</span>
+                <span>${ruta.ubicacion}</span>
+              </div>
+              <div class="botones-ruta">
+                <button class="como-llegar-btn" id="como-llegar-ruta-${idx}-vuelta">Cómo llegar</button>
+                <button class="confirmar-asistencia-btn" id="confirmar-asistencia-${idx}-vuelta">Confirmar asistencia</button>
+              </div>
+            </div>
+          </div>
+        `;
+        contenedor.appendChild(panelVuelta);
 
-          // Evento para el botón "Cómo llegar"
-          panel.querySelector('.como-llegar-btn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            localStorage.setItem('showRouteTo', ruta.nombre);
-            window.location.href = 'mapa.html';
+        // Eventos para panelIda
+        panelIda.querySelector('.panel-header').addEventListener('click', function(e) {
+          if (panelIda.classList.contains('active')) {
+            panelIda.classList.remove('active');
+          } else {
+            document.querySelectorAll('.config-panel').forEach(p => p.classList.remove('active'));
+            panelIda.classList.add('active');
+          }
+        });
+        panelIda.querySelector('.como-llegar-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          localStorage.setItem('showRouteTo', origen);
+          window.location.href = 'mapa.html';
+        });
+        panelIda.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          const notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
+          notificaciones.push({
+            mensaje: `🚌 Confirmación de ingreso enviada para la estación ${origen}.<br>¡Buen viaje! Si tienes dudas, acércate al personal de la estación.`,
+            fecha: new Date().toLocaleString(),
+            leida: false
           });
+          localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+        });
 
-          // Evento para el botón "Confirmar asistencia"
-          panel.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
-            notificaciones.push({
-              mensaje: `🚌 Confirmación de ingreso enviada para la estación ${ruta.nombre}.<br>¡Buen viaje! Si tienes dudas, acércate al personal de la estación.`,
-              fecha: new Date().toLocaleString(),
-              leida: false
-            });
-            localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+        // Eventos para panelVuelta
+        panelVuelta.querySelector('.panel-header').addEventListener('click', function(e) {
+          if (panelVuelta.classList.contains('active')) {
+            panelVuelta.classList.remove('active');
+          } else {
+            document.querySelectorAll('.config-panel').forEach(p => p.classList.remove('active'));
+            panelVuelta.classList.add('active');
+          }
+        });
+        panelVuelta.querySelector('.como-llegar-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          localStorage.setItem('showRouteTo', destino);
+          window.location.href = 'mapa.html';
+        });
+        panelVuelta.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          const notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
+          notificaciones.push({
+            mensaje: `🚌 Confirmación de ingreso enviada para la estación ${destino}.<br>¡Buen viaje! Si tienes dudas, acércate al personal de la estación.`,
+            fecha: new Date().toLocaleString(),
+            leida: false
           });
+          localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
         });
       });
+    }
+
+    fetch('https://usm-proyecto.onrender.com/api/rutas')
+      .then(res => res.json())
+      .then(rutas => {
+        rutasGlobal = rutas;
+        asignarNumerosYColores(rutasGlobal); // <--- NUEVO
+        renderizarRutas(rutas);
+      });
   </script>
-</html>
+</body>
 </html>

@@ -63,15 +63,31 @@ document.getElementById('menu-btn').addEventListener('click', function() {
     }
 });
 
-const sidebar = document.getElementById('sidebar');
-const mainIframe = document.getElementById('main-iframe');
+function actualizarSidebarSegunPagina() {
+    const mainIframe = document.getElementById('main-iframe');
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    try {
+        const iframeUrl = mainIframe.contentWindow.location.pathname;
+        if (iframeUrl.endsWith('settings.html')) {
+            // Oculta la sidebar y el botón de minimizar
+            sidebar.style.display = 'none';
+            menuBtn.style.display = 'none';
+        } else if (iframeUrl.endsWith('routes.html')) {
+            // Sidebar expandida, no colapsable, sin botón
+            sidebar.style.display = '';
+            sidebar.classList.remove('collapsed');
+            menuBtn.style.display = 'none';
+        } else {
+            // Sidebar visible y colapsable normalmente
+            sidebar.style.display = '';
+            menuBtn.style.display = '';
+        }
+    } catch (e) {
+        // Por si hay error de cross-origin, no hacer nada
+    }
+}
 
-mainIframe.addEventListener('load', function () {
-  // Verifica si la página cargada es settings.html
-  const currentPage = mainIframe.contentWindow.location.pathname;
-  if (currentPage.endsWith('settings.html')) {
-    sidebar.style.display = 'none';
-  } else {
-    sidebar.style.display = '';
-  }
-});
+// Ejecutar al cargar y cada vez que cambie la página del iframe
+document.getElementById('main-iframe').addEventListener('load', actualizarSidebarSegunPagina);
+window.addEventListener('DOMContentLoaded', actualizarSidebarSegunPagina);

@@ -207,7 +207,8 @@ def user_info():
         'facultad': user.get('facultad', ''),
         'carrera': user.get('carrera', ''),
         'direccion': user.get('direccion', ''),
-        'about': user.get('about', '')
+        'about': user.get('about', ''),
+        'parada_bus': user.get('parada_bus', '')  # <--- AGREGADO
     })
 
 @app.route('/check-password', methods=['POST'])
@@ -244,7 +245,7 @@ def update_user():
         return jsonify({'error': 'Usuario no encontrado'}), 404
 
     data = request.json
-    campos_permitidos = ['nombre', 'apellido', 'facultad', 'carrera', 'direccion', 'telefono', 'email', 'about']
+    campos_permitidos = ['nombre', 'apellido', 'facultad', 'carrera', 'direccion', 'telefono', 'email', 'about', 'parada_bus']  # <--- AGREGADO parada_bus
     update_data = {k: v for k, v in data.items() if k in campos_permitidos}
     if not update_data:
         return jsonify({'error': 'Nada para actualizar'}), 400
