@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de Sesión</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #fff;
+    }
+
+    .header {
+      background-color: #000;
+      color: #fff;
+      padding: 20px 40px;
+      width: 100%;
+      text-align: left;
+      font-size: 28px;
+      font-weight: bold;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-sizing: border-box;
+    }
+
+    .login-container {
+      text-align: center;
+      width: 100%;
+      max-width: 350px;
+      margin-top: 100px;
+    }
+
+    .login-container h1 {
+      font-family: 'Roboto', sans-serif;
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .phone-input-container {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .phone-input-container select {
+      width: 20%;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .phone-input-container input {
+      width: 70%;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      transition: all 0.3s ease;
+    }
+
+    .email-input {
+      display: block;
+      width: 90%;
+      padding: 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      transition: all 0.3s ease;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 15px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .login-container button:hover {
+      background-color: #333;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .divider:not(:empty)::before {
+      margin-right: 10px;
+    }
+
+    .divider:not(:empty)::after {
+      margin-left: 10px;
+    }
+
+    .social-login {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .social-login button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: #f5f5f5;
+      color: #000;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .social-login button img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      color: #666;
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    .loading-bar {
+      display: none;
+      margin-top: 20px;
+      width: 100%;
+      height: 5px;
+      background-color: #ccc;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loading-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background-color: #000;
+      animation: loading 2s infinite;
+    }
+
+    @keyframes loading {
+      0% {
+        width: 0;
+      }
+      50% {
+        width: 100%;
+      }
+      100% {
+        width: 0;
+      }
+    }
+
+    .scroll-area {
+      width: 100vw;
+      height: calc(100vh - 80px);
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      overflow-y: auto;
+      padding-top: 24px;
+      padding-bottom: 24px;
+      box-sizing: border-box;
+      margin-left: 80px; /* <-- Más pequeño el espacio */
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="index.html" class="usm-logo-link" style="color:inherit;text-decoration:none;">USM</a>
+  </div>
+  <div class="login-container">
+    <h1>¿Cuál es tu número de teléfono o correo?</h1>
+    <form id="login-form" action="/templates/verificacion_usuario.html" method="GET">
+      <!-- Cuadro para correo electrónico -->
+      <input type="text" id="email-input" class="email-input" name="email" placeholder="Introduce tu correo electrónico o número de teléfono">
+
+      <!-- Contenedor para número de teléfono -->
+      <div class="phone-input-container" id="phone-input-container" style="display: none;">
+        <select id="country-code" name="country-code">
+          <option value="+58">VE</option>
+        </select>
+        <input type="text" id="phone-number" name="phone" placeholder="Introduce tu número de teléfono">
+      </div>
+
+      <!-- Campo oculto para indicar si es correo o teléfono -->
+      <input type="hidden" id="input-type" name="input-type" value="">
+
+      <p class="error-message" id="error-message">Por favor introduce un correo válido o número de teléfono</p>
+      <button type="submit">Continuar</button>
+    </form>
+    <div class="loading-bar" id="loading-bar"></div>
+    <p class="footer-text">
+      Al continuar, aceptas recibir llamadas, mensajes de WhatsApp o SMS, incluidos mensajes automáticos, de nuestra parte y de nuestras afiliadas.
+    </p>
+  </div>
+  <script>
+    const emailInput = document.getElementById('email-input');
+    const phoneInputContainer = document.getElementById('phone-input-container');
+    const phoneNumberInput = document.getElementById('phone-number');
+    const inputType = document.getElementById('input-type');
+    const errorMessage = document.getElementById('error-message');
+    const loadingBar = document.getElementById('loading-bar');
+    const countryCode = '+58 ';
+
+    // --- Normalizador de teléfono ---
+    function normalizePhone(phone) {
+      let normalized = phone.replace(/\s|-/g, '');
+      if (normalized.startsWith('+58')) {
+        normalized = normalized.slice(3);
+      }
+      if (normalized.startsWith('0')) {
+        normalized = normalized.slice(1);
+      }
+      return normalized;
+    }
+
+    emailInput.addEventListener('input', function () {
+      const value = emailInput.value.trim();
+
+      // Detectar si el usuario está ingresando un número de teléfono
+      if (/^\d{4,}$/.test(value.replace(/^0/, ''))) {
+        emailInput.style.display = 'none';
+        phoneInputContainer.style.display = 'flex';
+        phoneNumberInput.value = countryCode + value.replace(/^0/, '');
+        inputType.value = 'phone';
+        errorMessage.style.display = 'none';
+      } else if (value === '') {
+        emailInput.style.display = 'block';
+        phoneInputContainer.style.display = 'none';
+        phoneNumberInput.value = '';
+        inputType.value = '';
+        errorMessage.style.display = 'none';
+      } else if (/\S+@\S+\.\S+/.test(value)) {
+        inputType.value = 'email';
+        errorMessage.style.display = 'none';
+      } else {
+        inputType.value = '';
+        errorMessage.style.display = 'block';
+      }
+    });
+
+    phoneNumberInput.addEventListener('input', function () {
+      let value = phoneNumberInput.value.replace(countryCode, '').replace(/-/g, '');
+
+      if (value.length > 3) {
+        value = value.slice(0, 3) + '-' + value.slice(3);
+      }
+
+      phoneNumberInput.value = countryCode + value;
+
+      if (value === '') {
+        emailInput.style.display = 'block';
+        phoneInputContainer.style.display = 'none';
+        emailInput.value = '';
+        inputType.value = '';
+      }
+    });
+
+    const form = document.getElementById('login-form');
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const emailValue = emailInput.value.trim();
+      let phoneValue = phoneNumberInput.value.trim();
+      const inputTypeValue = inputType.value;
+
+      if (!inputTypeValue) {
+        errorMessage.textContent = 'Por favor, introduce un correo válido o número de teléfono.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      loadingBar.style.display = 'block';
+
+      try {
+        let response;
+        if (inputTypeValue === 'email') {
+          response = await fetch('https://usm-proyecto.onrender.com/check-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: emailValue }),
+            credentials: 'include'
+          });
+        } else if (inputTypeValue === 'phone') {
+          phoneValue = normalizePhone(phoneValue);
+          response = await fetch('https://usm-proyecto.onrender.com/check-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone: phoneValue }),
+            credentials: 'include'
+          });
+        }
+
+        loadingBar.style.display = 'none';
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.exists) {
+            // Usuario registrado, pide contraseña
+            if (inputTypeValue === 'email') {
+              localStorage.setItem('email', emailValue);
+              localStorage.removeItem('telefono');
+            } else {
+              localStorage.setItem('telefono', phoneValue);
+              localStorage.removeItem('email');
+            }
+            window.location.href = 'contrasena.html';
+          } else {
+            // Usuario nuevo, inicia registro (envía código)
+            let sendCodeResponse;
+            if (inputTypeValue === 'email') {
+              sendCodeResponse = await fetch('https://usm-proyecto.onrender.com/send-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: emailValue })
+              });
+            } else {
+              sendCodeResponse = await fetch('https://usm-proyecto.onrender.com/send-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: phoneValue })
+              });
+            }
+            if (sendCodeResponse.ok) {
+              if (inputTypeValue === 'email') {
+                localStorage.setItem('email', emailValue);
+                localStorage.removeItem('telefono');
+              } else {
+                localStorage.setItem('telefono', phoneValue);
+                localStorage.removeItem('email');
+              }
+              window.location.href = '/templates/verificacion_usuario.html';
+            } else {
+              const errorData = await sendCodeResponse.json();
+              alert('Error: ' + errorData.error);
+            }
+          }
+        } else {
+          const errorData = await response.json();
+          alert('Error: ' + errorData.error);
+        }
+      } catch (error) {
+        console.error('Error en el login:', error);
+        alert('Error al conectar con el servidor.');
+      } finally {
+        loadingBar.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

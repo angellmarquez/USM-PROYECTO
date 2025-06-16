@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.info-panel {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 1;
+  max-width: 300px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.info-panel.hidden {
+  transform: translateX(-110%);
+}
+
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.toggle-button:hover {
+  background: #2874a6;
+}
+
+.mapboxgl-ctrl-geolocate {
+  background-color: #3498db;
+  color: white;
+}
+
+.welcome-message {
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+}
+
+.custom-marker {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: 2px solid white; /* Opcional: borde blanco */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Opcional: sombra */
+}
+
+.animated-popup .mapboxgl-popup-content {
+  animation: popup-fade-in 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes popup-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

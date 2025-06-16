@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajes en coche | USM Carpool</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            background: #fff;
+            color: #234;
+            width: 100vw;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        .main-layout {
+            display: flex;
+            width: 100vw;
+            min-height: 100vh;
+            background: #f7fafd;
+            overflow-x: hidden;
+        }
+        /* Sidebar minimizada: solo espacio, sin contenido */
+        .sidebar {
+            width: 70px;
+            min-width: 70px;
+            background: transparent;
+            flex-shrink: 0;
+        }
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            width: 100%;
+        }
+        .navbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+        .navbar-inner {
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            height: 100%;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #00b0b9;
+            letter-spacing: 1px;
+        }
+        .nav-logo i {
+            font-size: 2rem;
+            margin-right: 8px;
+        }
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-user .publish-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            color: #00b0b9;
+            font-weight: 600;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            font-size: 1rem;
+            box-shadow: none;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+        .nav-user .publish-btn i {
+            font-size: 1.2rem;
+            color: #00b0b9;
+            margin-right: 2px;
+            padding: 0;
+            background: none;
+        }
+        .nav-user .publish-btn span {
+            font-family: 'Poppins', Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00b0b9;
+            letter-spacing: 0.01em;
+        }
+        .nav-user .publish-btn:hover,
+        .nav-user .publish-btn:focus {
+            color: #007a80;
+        }
+        .nav-user .publish-btn:hover i,
+        .nav-user .publish-btn:focus i {
+            color: #007a80;
+        }
+        .nav-user .publish-btn:hover span,
+        .nav-user .publish-btn:focus span {
+            color: #007a80;
+        }
+        .page-content {
+            padding-top: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            background: url('/usmcar.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-title {
+            color: #fff;
+            font-size: 3.2rem; /* Aumentado el tamaño */
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            z-index: 2;
+            text-align: center;
+            padding: 0 10px;
+        }
+        @media (max-width: 900px) {
+            .hero-title {
+                font-size: 2rem; /* Más grande en móvil también */
+            }
+        }
+        @media (max-width: 600px) {
+            .hero-title {
+                font-size: 1.3rem;
+                padding: 0 2px;
+            }
+        }
+        .search-box {
+            position: relative;
+            left: 0;
+            bottom: 0;
+            transform: none;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            gap: 18px;
+            min-width: 0;
+            max-width: 900px;
+            margin: -38px auto 32px auto;
+            z-index: 3;
+            width: 90vw;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .search-field {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 10px;
+            border-right: 1px solid #e0e0e0;
+        }
+        .search-field:last-child {
+            border-right: none;
+        }
+        .search-field input, .search-field select {
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: transparent;
+            min-width: 70px;
+            max-width: 120px;
+        }
+        .search-btn {
+            background: #00b0b9;
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: 12px 28px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-left: 8px;
+        }
+        .search-btn:hover {
+            background: #007a80;
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin: 0 0 40px 0;
+            padding: 0 10px;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1100px;
+        }
+        .feature {
+            max-width: 340px;
+            min-width: 220px;
+            flex: 1 1 260px;
+            text-align: center;
+            margin: 0 8px;
+        }
+        .feature i {
+            font-size: 2.2rem;
+            color: #00b0b9;
+            margin-bottom: 10px;
+        }
+        .feature-title {
+            font-weight: 700;
+            color: #007a80;
+            margin-bottom: 6px;
+            font-size: 1.08rem;
+        }
+        .feature-desc {
+            color: #456;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .info-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            padding: 28px 18px 22px 18px;
+            border: 1px solid #e6f2f5;
+            transition: box-shadow 0.2s, transform 0.2s;
+            margin-bottom: 16px;
+        }
+        .info-card:hover {
+            box-shadow: 0 8px 28px rgba(0,176,185,0.12);
+            transform: translateY(-4px) scale(1.03);
+            border-color: #b2e6ea;
+        }
+        @media (max-width: 1100px) {
+            .features {
+                gap: 18px;
+                padding: 0 2vw 30px 2vw;
+            }
+            .feature {
+                min-width: 180px;
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+            .navbar-inner {
+                padding: 0 8px;
+                gap: 6px;
+            }
+            .hero {
+                height: 140px;
+            }
+            .hero-title {
+                font-size: 2rem; /* Más grande en móvil también */
+            }
+            .search-box {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                min-width: 0;
+                width: 98vw;
+                max-width: 98vw;
+                margin: -28px auto 24px auto;
+                padding: 12px 6px;
+            }
+            .search-field {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 8px 0;
+                justify-content: flex-start;
+            }
+            .search-field:last-child {
+                border-bottom: none;
+            }
+            .features {
+                flex-direction: column;
+                align-items: center;
+                gap: 22px;
+                margin-top: 0;
+                padding: 0 2vw 20px 2vw;
+            }
+            .feature {
+                width: 100%;
+                min-width: 0;
+                max-width: 400px;
+            }
+        }
+        @media (max-width: 600px) {
+            .navbar-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+                padding: 8px 2px;
+                gap: 2px;
+            }
+            .hero {
+                height: 90px;
+            }
+            .hero-title {
+                font-size: 1.3rem;
+                padding: 0 2px;
+            }
+            .search-box {
+                margin: -18px auto 16px auto;
+                padding: 8px 2px;
+            }
+            .info-card {
+                padding: 14px 4px 12px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+  <div class="main-layout">
+    <div class="sidebar"></div>
+    <div class="main-content">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="navbar-inner">
+          <div class="nav-logo">
+            <i class='bx bxs-car'></i> USM Carpool
+          </div>
+          <div class="nav-user">
+            <a href="/publicar.html" class="publish-btn">
+              <i class='bx bx-plus-circle' style="font-size:2rem;"></i>
+              <span style="font-size:1.25rem; font-weight:700;">Publicar viaje</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+      <div class="page-content">
+        <div class="hero">
+            <div class="hero-title">Precios bajos que te llevan lejos</div>
+        </div>
+        <form class="search-box">
+            <div class="search-field">
+                <i class='bx bx-radio-circle'></i>
+                <input type="text" placeholder="De" required>
+            </div>
+            <div class="search-field">
+                <i class='bx bx-radio-circle'></i>
+                <input type="text" placeholder="A" required>
+            </div>
+            <div class="search-field">
+                <i class='bx bx-calendar'></i>
+                <input type="date" value="" required>
+            </div>
+            <div class="search-field">
+                <i class='bx bx-user'></i>
+                <select>
+                    <option>1 pasajero</option>
+                    <option>2 pasajeros</option>
+                    <option>3 pasajeros</option>
+                    <option>4 pasajeros</option>
+                </select>
+            </div>
+            <button class="search-btn" type="submit">Buscar</button>
+        </form>
+        <div class="features">
+            <div class="feature info-card">
+                <i class='bx bxs-car'></i>
+                <div class="feature-title">Encuentra los mejores viajes</div>
+                <div class="feature-desc">
+                    Nuestra comunidad de usuarios está en todas partes. Vayas donde vayas, encuentra el viaje perfecto con salida y llegada en los puntos más cercanos.
+                </div>
+            </div>
+            <div class="feature info-card">
+                <i class='bx bx-shield-quarter'></i>
+                <div class="feature-title">Viaja seguro y tranquilo</div>
+                <div class="feature-desc">
+                    Para nosotros es muy importante conocer a nuestros usuarios. Por eso, examinamos atentamente las opiniones y los perfiles para que sepas con quién viajas. Reserva tu próximo viaje con total seguridad y tranquilidad.
+                </div>
+            </div>
+            <div class="feature info-card">
+                <i class='bx bx-bolt-circle'></i>
+                <div class="feature-title">¡Busca, elige y a viajar!</div>
+                <div class="feature-desc">
+                    Reservar un viaje es más fácil que nunca. Gracias a nuestra sencilla aplicación y potente tecnología, podrás reservar un viaje cerca de ti en minutos.
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
