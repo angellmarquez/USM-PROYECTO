@@ -32,7 +32,7 @@ app.config['MAIL_DEFAULT_SENDER'] = 'tu_correo@gmail.com'
 
 mail = Mail(app)
 
-client = MongoClient("mongodb+srv://angel:30906629@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
+client = MongoClient("mongodb+srv://angel:angelito01@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
 db = client.get_database("USM")
 users_collection = db.usuarios
 
