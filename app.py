@@ -15,7 +15,7 @@ CORS(app, supports_credentials=True)
 
 # Cambia la configuración de sesión:
 app.config['SESSION_TYPE'] = 'mongodb'
-app.config['SESSION_MONGODB'] = MongoClient("mongodb+srv://angel:angelito01@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
+app.config['SESSION_MONGODB'] = MongoClient("mongodb+srv://angel:30906629@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
 app.config['SESSION_MONGODB_DB'] = 'USM'
 app.config['SESSION_MONGODB_COLLECT'] = 'sessions'
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
@@ -32,10 +32,9 @@ app.config['MAIL_DEFAULT_SENDER'] = 'tu_correo@gmail.com'
 
 mail = Mail(app)
 
-client = MongoClient("mongodb+srv://angel:angelito01@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
+client = MongoClient("mongodb+srv://angel:30906629@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
 db = client.get_database("USM")
 users_collection = db.usuarios
-viajes_collection = db.viajes
 
 FACULTADES = {
     "ingenieria-arquitectura": [
@@ -316,33 +315,6 @@ def check_user():
         phone = normalize_phone(phone)
         user = users_collection.find_one({'telefono': phone})
     return jsonify({'exists': bool(user)})
-
-@app.route('/api/publicar_viaje', methods=['POST'])
-def publicar_viaje():
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({'error': 'No autenticado'}), 401
-
-    user = users_collection.find_one({'_id': ObjectId(user_id)})
-    if not user:
-        return jsonify({'error': 'Usuario no encontrado'}), 404
-
-    data = request.json
-    origen = data.get('origen')
-    destino = data.get('destino')
-    pasajeros = data.get('pasajeros')
-
-    if not origen or not destino or not pasajeros:
-        return jsonify({'error': 'Faltan datos del viaje'}), 400
-
-    viaje = {
-        'origen': origen,
-        'destino': destino,
-        'pasajeros': pasajeros,
-        'usuario': user['usuario']
-    }
-    viajes_collection.insert_one(viaje)
-    return jsonify({'mensaje': 'Viaje publicado', 'usuario': user['usuario']})
 
 if __name__ == '__main__':
     app.run(debug=True)

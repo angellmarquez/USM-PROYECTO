@@ -47,64 +47,31 @@ document.querySelectorAll('.sub-menu-link[data-page]').forEach(link => {
 });
 
 // Sidebar collapse/expand
+document.getElementById('menu-btn').addEventListener('click', function() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('collapsed');
+    // Si se colapsa, cierra todos los submenús pero recuerda el abierto
+    if (sidebar.classList.contains('collapsed')) {
+        document.querySelectorAll('.menu-item-dropdown.open').forEach(item => {
+            item.classList.remove('open');
+        });
+    } else {
+        // Si se expande y había uno abierto antes, lo reabre
+        if (lastOpenDropdown) {
+            lastOpenDropdown.classList.add('open');
+        }
+    }
+});
+
 const sidebar = document.getElementById('sidebar');
-const menuBtn = document.getElementById('menu-btn');
 const mainIframe = document.getElementById('main-iframe');
 
-// Función para forzar sidebar minimizada y ocultar el botón
-function forzarSidebarMinimizada(pagina) {
-    // Siempre colapsada
-    sidebar.classList.add('collapsed');
-    // Oculta el botón de expandir
-    if (menuBtn) menuBtn.style.display = 'none';
-
-    // Solo en mapa.html permite expandir
-    if (pagina && pagina.endsWith('mapa.html')) {
-        sidebar.classList.remove('collapsed');
-        if (menuBtn) menuBtn.style.display = '';
-    }
-}
-
-// Al cargar la página principal, forzar minimizada excepto en mapa
-window.addEventListener('DOMContentLoaded', () => {
-    // Detecta la página inicial del iframe
-    let pagina = mainIframe.getAttribute('src') || '';
-    forzarSidebarMinimizada(pagina);
-});
-
-// Al cambiar de página en el iframe, forzar minimizada excepto en mapa
 mainIframe.addEventListener('load', function () {
-    let pagina = '';
-    try {
-        pagina = mainIframe.contentWindow.location.pathname;
-    } catch {
-        // Si hay error por cross-origin, usa src
-        pagina = mainIframe.getAttribute('src') || '';
-    }
-    forzarSidebarMinimizada(pagina);
-
-    // Verifica si la página cargada es settings.html
-    if (pagina.endsWith('settings.html')) {
-        sidebar.style.display = 'none';
-    } else {
-        sidebar.style.display = '';
-    }
+  // Verifica si la página cargada es settings.html
+  const currentPage = mainIframe.contentWindow.location.pathname;
+  if (currentPage.endsWith('settings.html')) {
+    sidebar.style.display = 'none';
+  } else {
+    sidebar.style.display = '';
+  }
 });
-
-// Si el usuario intenta expandir la sidebar en otra página, no lo permitas
-if (menuBtn) {
-    menuBtn.addEventListener('click', function() {
-        // Solo permite expandir si está en mapa.html
-        let pagina = '';
-        try {
-            pagina = mainIframe.contentWindow.location.pathname;
-        } catch {
-            pagina = mainIframe.getAttribute('src') || '';
-        }
-        if (pagina.endsWith('mapa.html')) {
-            sidebar.classList.toggle('collapsed');
-        } else {
-            sidebar.classList.add('collapsed');
-        }
-    });
-}

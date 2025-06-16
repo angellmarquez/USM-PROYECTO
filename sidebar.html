@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar</title>
-    <link rel="stylesheet" href="/sidebarstyle.css">
+    <link rel="stylesheet" href="sidebarstyle.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
@@ -14,7 +14,7 @@
                 <i class='bx bxs-chevron-left'></i>
             </div>
             <div class="brand">
-                <img src="/brand-light.svg" alt="logo">
+                <img src="brand/brand-light.svg" alt="logo">
                 <span>USM</span>
             </div>
         </div>
@@ -101,7 +101,7 @@
       if (data.avatar_url && data.avatar_url.trim() !== "") {
         sidebarAvatar.src = data.avatar_url;
       } else {
-        sidebarAvatar.src = "user_img.png"; // Imagen por defecto
+        sidebarAvatar.src = "user_img.png";
       }
     }
   })
@@ -109,7 +109,7 @@
     const sidebarName = document.getElementById('sidebar-username');
     if (sidebarName) sidebarName.textContent = 'Usuario';
     const sidebarAvatar = document.getElementById('sidebar-avatar');
-    if (sidebarAvatar) sidebarAvatar.src = "/user_img.png";
+    if (sidebarAvatar) sidebarAvatar.src = "user_img.png";
   });
 
       document.querySelector('.user-icon').addEventListener('click', async () => {
@@ -117,7 +117,7 @@
           method: 'POST',
           credentials: 'include'
         });
-        window.location.href = '/templates/index.html'; // Cambiado de 'login.html' a 'index.html'
+        window.location.href = 'index.html'; // Cambiado de 'login.html' a 'index.html'
       });
 
       // Punto verde sobre la campana si hay notificaciones sin leer

@@ -219,7 +219,7 @@
   </div>
   <div class="login-container">
     <h1>¿Cuál es tu número de teléfono o correo?</h1>
-    <form id="login-form" action="/templates/verificacion_usuario.html" method="GET">
+    <form id="login-form" action="verificacion_usuario.html" method="GET">
       <!-- Cuadro para correo electrónico -->
       <input type="text" id="email-input" class="email-input" name="email" placeholder="Introduce tu correo electrónico o número de teléfono">
 
@@ -378,7 +378,7 @@
                 localStorage.setItem('telefono', phoneValue);
                 localStorage.removeItem('email');
               }
-              window.location.href = '/templates/verificacion_usuario.html';
+              window.location.href = 'verificacion_usuario.html';
             } else {
               const errorData = await sendCodeResponse.json();
               alert('Error: ' + errorData.error);

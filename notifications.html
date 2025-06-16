@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Notificaciones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: #f7f8fa;
+            color: #22223b;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+        .header {
+            background: #18181a;
+            color: #fff;
+            padding: 32px 40px 16px 40px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+        }
+        .container {
+            display: flex;
+            height: calc(100vh - 90px);
+            overflow-x: hidden;
+        }
+        .sidebar-placeholder {
+            width: 260px;
+            background: #f7f8fa;
+            border-right: 1px solid #e0e0e0;
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
+            /* Permite que el hijo use scroll si es necesario */
+        }
+        .notifications-list {
+            background: #fff;
+            margin: 24px 40px 40px 40px;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px 0 #e9e9f3;
+            padding: 0;
+            overflow-y: auto; /* Permite scroll vertical */
+            min-height: 120px;
+            max-height: calc(100vh - 140px); /* Ajusta según header y márgenes */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .empty-message {
+            color: #bfc0c0;
+            font-size: 1.2rem;
+            text-align: center;
+            width: 100%;
+            padding: 40px 0;
+        }
+        .notification-item {
+            width: 100%;
+            background: #fff;
+            border-radius: 18px;
+            margin: 16px 0;
+            box-shadow: 0 4px 24px 0 #e9e9f3;
+            padding: 32px 32px 16px 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-sizing: border-box;
+        }
+        .notification-date {
+            font-size: 0.95em;
+            color: #888;
+            margin-top: 18px;
+            width: 100%;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            text-align: right;
+        }
+        .delete-fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 56px;
+            height: 56px;
+            background: #e53935;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: background 0.2s;
+        }
+        .delete-fab:hover {
+            background: #b71c1c;
+        }
+        .delete-fab svg {
+            width: 28px;
+            height: 28px;
+            pointer-events: none;
+        }
+        @media (max-width: 900px) {
+            .sidebar-placeholder {
+                width: 70px;
+            }
+            .notifications-list {
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+            .header {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+            .delete-fab {
+                right: 12px;
+                bottom: 12px;
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Notificaciones
+    </div>
+    <div class="container">
+        <div class="sidebar-placeholder"></div>
+        <div class="main-content">
+            <div class="notifications-list" id="notifications-list"></div>
+        </div>
+    </div>
+    <button class="delete-fab" id="delete-all-btn" title="Eliminar todas las notificaciones">
+        <svg viewBox="0 0 24 24" fill="none">
+            <path d="M3 6h18M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="10" y1="11" x2="10" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <line x1="14" y1="11" x2="14" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <script>
+        function renderNotifications() {
+            let notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
+            const contenedor = document.getElementById('notifications-list');
+            if (notificaciones.length === 0) {
+                contenedor.innerHTML = `<div class="empty-message">No tienes notificaciones por el momento.</div>`;
+            } else {
+                contenedor.innerHTML = notificaciones.slice().reverse().map(n =>
+                    `<div class="notification-item">
+                        <div>${n.mensaje}</div>
+                        <div class="notification-date">${n.fecha}</div>
+                    </div>`
+                ).join('');
+                // Marcar todas como leídas
+                notificaciones.forEach(n => n.leida = true);
+                localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+            }
+            // Ocultar punto rojo en la campana
+            if (window.parent && window.parent.document) {
+                const notificationDot = window.parent.document.getElementById('notification-dot');
+                if (notificationDot) notificationDot.style.display = 'none';
+            }
+        }
+
+        renderNotifications();
+
+        document.getElementById('delete-all-btn').onclick = function() {
+            localStorage.removeItem('notificaciones');
+            renderNotifications();
+        };
+    </script>
+</body>
+</html>
