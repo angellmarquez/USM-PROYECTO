@@ -35,6 +35,7 @@ mail = Mail(app)
 client = MongoClient("mongodb+srv://angel:angelito01@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
 db = client.get_database("USM")
 users_collection = db.usuarios
+viajes_collection = db.viajes
 
 FACULTADES = {
     "ingenieria-arquitectura": [
@@ -316,44 +317,32 @@ def check_user():
         user = users_collection.find_one({'telefono': phone})
     return jsonify({'exists': bool(user)})
 
-@app.route('/api/venezuela')
-def api_venezuela():
-    # Suponiendo que tienes una colección llamada 'venezuela'
-    db = app.config['SESSION_MONGODB'][app.config['SESSION_MONGODB_DB']]
-    venezuela = list(db['venezuela'].find({}, {'_id': 0}))
-    return jsonify(venezuela)
+@app.route('/api/publicar_viaje', methods=['POST'])
+def publicar_viaje():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'No autenticado'}), 401
 
-@app.route('/api/parroquias')
-def api_parroquias():
-    db = app.config['SESSION_MONGODB'][app.config['SESSION_MONGODB_DB']]
-    parroquias = list(db['parroquias'].find({}, {'_id': 0}))
-    return jsonify(parroquias)
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+    if not user:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
 
-@app.route('/api/parroquias_filtradas')
-def api_parroquias_filtradas():
-    db = app.config['SESSION_MONGODB'][app.config['SESSION_MONGODB_DB']]
-    # 1. Busca los municipios de Miranda (14) y Distrito Capital (24)
-    municipios = list(db['municipios'].find(
-        {"id_estado": {"$in": [14, 24]}},
-        {"_id": 0, "id_municipio": 1, "municipio": 1, "id_estado": 1}
-    ))
-    ids_municipios = [m['id_municipio'] for m in municipios]
+    data = request.json
+    origen = data.get('origen')
+    destino = data.get('destino')
+    pasajeros = data.get('pasajeros')
 
-    # 2. Busca las parroquias de esos municipios
-    parroquias = list(db['parroquias'].find(
-        {"id_municipio": {"$in": ids_municipios}},
-        {"_id": 0, "id_parroquia": 1, "parroquia": 1, "id_municipio": 1}
-    ))
+    if not origen or not destino or not pasajeros:
+        return jsonify({'error': 'Faltan datos del viaje'}), 400
 
-    # 3. Opcional: agrega el nombre del municipio y estado a cada parroquia
-    municipios_dict = {m['id_municipio']: m for m in municipios}
-    estados_dict = {14: "Miranda", 24: "Distrito Capital"}
-    for p in parroquias:
-        mun = municipios_dict.get(p['id_municipio'])
-        p['municipio'] = mun['municipio'] if mun else ""
-        p['estado'] = estados_dict.get(mun['id_estado'], "") if mun else ""
-
-    return jsonify(parroquias)
+    viaje = {
+        'origen': origen,
+        'destino': destino,
+        'pasajeros': pasajeros,
+        'usuario': user['usuario']  # Guarda el nombre de usuario
+    }
+    viajes_collection.insert_one(viaje)
+    return jsonify({'mensaje': 'Viaje publicado', 'usuario': user['usuario']})
 
 if __name__ == '__main__':
     app.run(debug=True)
