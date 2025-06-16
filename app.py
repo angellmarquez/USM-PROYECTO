@@ -323,5 +323,37 @@ def api_venezuela():
     venezuela = list(db['venezuela'].find({}, {'_id': 0}))
     return jsonify(venezuela)
 
+@app.route('/api/parroquias')
+def api_parroquias():
+    db = app.config['SESSION_MONGODB'][app.config['SESSION_MONGODB_DB']]
+    parroquias = list(db['parroquias'].find({}, {'_id': 0}))
+    return jsonify(parroquias)
+
+@app.route('/api/parroquias_filtradas')
+def api_parroquias_filtradas():
+    db = app.config['SESSION_MONGODB'][app.config['SESSION_MONGODB_DB']]
+    # 1. Busca los municipios de Miranda (14) y Distrito Capital (24)
+    municipios = list(db['municipios'].find(
+        {"id_estado": {"$in": [14, 24]}},
+        {"_id": 0, "id_municipio": 1, "municipio": 1, "id_estado": 1}
+    ))
+    ids_municipios = [m['id_municipio'] for m in municipios]
+
+    # 2. Busca las parroquias de esos municipios
+    parroquias = list(db['parroquias'].find(
+        {"id_municipio": {"$in": ids_municipios}},
+        {"_id": 0, "id_parroquia": 1, "parroquia": 1, "id_municipio": 1}
+    ))
+
+    # 3. Opcional: agrega el nombre del municipio y estado a cada parroquia
+    municipios_dict = {m['id_municipio']: m for m in municipios}
+    estados_dict = {14: "Miranda", 24: "Distrito Capital"}
+    for p in parroquias:
+        mun = municipios_dict.get(p['id_municipio'])
+        p['municipio'] = mun['municipio'] if mun else ""
+        p['estado'] = estados_dict.get(mun['id_estado'], "") if mun else ""
+
+    return jsonify(parroquias)
+
 if __name__ == '__main__':
     app.run(debug=True)
