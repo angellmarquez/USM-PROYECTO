@@ -316,5 +316,12 @@ def check_user():
         user = users_collection.find_one({'telefono': phone})
     return jsonify({'exists': bool(user)})
 
+@app.route('/api/venezuela')
+def api_venezuela():
+    # Suponiendo que tienes una colección llamada 'venezuela'
+    db = app.config['SESSION_MONGODB'][app.config['SESSION_MONGODB_DB']]
+    venezuela = list(db['venezuela'].find({}, {'_id': 0}))
+    return jsonify(venezuela)
+
 if __name__ == '__main__':
     app.run(debug=True)
