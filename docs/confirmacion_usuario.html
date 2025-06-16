@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmación de Usuario</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #fff;
+    }
+
+    .header {
+      background-color: #000;
+      color: #fff;
+      padding: 20px 40px;
+      width: 100%;
+      text-align: left;
+      font-size: 28px;
+      font-weight: bold;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-sizing: border-box;
+    }
+
+    .confirm-container {
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      margin-top: 100px;
+    }
+
+    .confirm-container h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .form-row input,
+    .form-row select {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .phone-input-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .phone-input-container select {
+      width: 20%;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    .phone-input-container input {
+      width: 80%;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .buttons-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .buttons-container button {
+      width: 48%;
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .back-button {
+      background-color: #f5f5f5;
+      color: #000;
+    }
+
+    .back-button:hover {
+      background-color: #e0e0e0;
+    }
+
+    .next-button {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .next-button:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">USM</div>
+  <div class="confirm-container">
+    <h1>Confirmar Información</h1>
+    <form id="confirm-form">
+      <div class="form-row">
+        <input type="text" id="first-name" name="first-name" placeholder="Nombre" required>
+        <input type="text" id="last-name" name="last-name" placeholder="Apellido" required>
+      </div>
+      <div class="phone-input-container" id="phone-input-container" style="display: none;">
+        <select id="country-code" name="country-code">
+          <option value="+58">VE</option>
+        </select>
+        <input type="text" id="phone-number" name="phone-number" placeholder="+58 424" required>
+      </div>
+      <div class="form-row full-width" id="email-container" style="display: none;">
+        <input type="email" id="email-input" name="email" placeholder="Introduce tu correo electrónico" required>
+      </div>
+      <div id="unique-error" style="color: red; margin-top: 10px; display: none;"></div>
+      <div class="buttons-container">
+        <button type="button" class="back-button">← Atrás</button>
+        <button type="button" class="next-button" id="next-button">Siguiente →</button>
+      </div>
+    </form>
+  </div>
+  <script>
+  // Obtén los parámetros de la URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const email = urlParams.get('email');
+  const phone = urlParams.get('phone');
+
+  // Referencias a los contenedores de correo y teléfono
+  const emailContainer = document.getElementById('email-container');
+  const phoneInputContainer = document.getElementById('phone-input-container');
+  const uniqueError = document.getElementById('unique-error');
+
+  // Verifica si se recibió un correo o un número de teléfono
+  if (email) {
+    // Mostrar el campo para ingresar el número de teléfono
+    emailContainer.style.display = 'none';
+    phoneInputContainer.style.display = 'flex';
+  } else if (phone) {
+    // Mostrar el campo para ingresar el correo
+    phoneInputContainer.style.display = 'none';
+    emailContainer.style.display = 'block';
+  } else {
+    alert('No se encontraron datos válidos. Por favor, regresa al inicio.');
+    window.location.href = 'login.html';
+  }
+
+  // Botón de "Siguiente"
+  document.getElementById('next-button').addEventListener('click', async () => {
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const emailValue = document.getElementById('email-input').value.trim();
+    const phoneValue = document.getElementById('phone-number').value.trim();
+    const errorDiv = document.getElementById('unique-error');
+
+    // Verifica que haya algo escrito
+    if (!emailValue && !phoneValue) {
+      errorDiv.textContent = 'Debes ingresar un correo o número de teléfono.';
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    // Verificar unicidad en el backend
+    let exists = false;
+    try {
+      const res = await fetch('https://usm-proyecto.onrender.com/check-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailValue || null,
+          phone: phoneValue || null
+        })
+      });
+      const data = await res.json();
+      exists = data.exists;
+    } catch (err) {
+      errorDiv.textContent = 'Error al verificar la información. Intenta de nuevo.';
+      errorDiv.style.display = 'block';
+      return;
+    }
+
+    if (exists) {
+      errorDiv.textContent = emailValue ? 'Ese correo electrónico ya está registrado.' : 'Ese número de teléfono ya está registrado.';
+      errorDiv.style.display = 'block';
+      return;
+    } else {
+      errorDiv.style.display = 'none';
+    }
+
+    // Si no existe, puedes continuar con el registro
+    localStorage.setItem('nombre', firstName);
+    localStorage.setItem('apellido', lastName);
+    localStorage.setItem('telefono', phone || phoneValue);
+    localStorage.setItem('email', email || emailValue);
+
+    window.location.href = 'register.html';
+  });
+
+  // Botón de "Atrás"
+  document.querySelector('.back-button').addEventListener('click', function () {
+    window.history.back();
+  });
+  </script>
+</body>
+</html>
