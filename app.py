@@ -15,7 +15,7 @@ CORS(app, supports_credentials=True)
 
 # Cambia la configuración de sesión:
 app.config['SESSION_TYPE'] = 'mongodb'
-app.config['SESSION_MONGODB'] = MongoClient("mongodb+srv://angel:30906629@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
+app.config['SESSION_MONGODB'] = MongoClient("mongodb+srv://angel:angelito01@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
 app.config['SESSION_MONGODB_DB'] = 'USM'
 app.config['SESSION_MONGODB_COLLECT'] = 'sessions'
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
