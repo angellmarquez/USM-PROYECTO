@@ -1197,7 +1197,7 @@
             }
             tbody.appendChild(tr);
         }
-        guardarHorarioEnBD(horaIni, horaFin); // <--- Guarda al generar la tabla
+        
     }
 
     // Modifica guardarCeldaHorario para guardar después de editar texto
@@ -1334,6 +1334,34 @@
             firstColor.classList.add('selected');
             colorSeleccionado = firstColor.getAttribute('data-color');
         }
+    });
+
+    document.getElementById('horario-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        let entradaArr = parseHora(
+            document.getElementById('hora-entrada').value,
+            document.getElementById('ampm-entrada')
+        );
+        let salidaArr = parseHora(
+            document.getElementById('hora-salida').value,
+            document.getElementById('ampm-salida')
+        );
+        if (!entradaArr || !salidaArr) {
+            errorMsg.textContent = 'Formato de hora inválido. Ej: 7, 7:00, 13, 1pm, 1:45pm';
+            return;
+        }
+        let start = entradaArr[0]*60 + entradaArr[1];
+        let end = salidaArr[0]*60 + salidaArr[1];
+        if (end <= start) {
+            errorMsg.textContent = 'La hora de salida debe ser mayor que la hora de entrada.';
+            return;
+        } else {
+            errorMsg.textContent = '';
+        }
+        generarTablaHorario(entradaArr, salidaArr);
+
+        // --- GUARDA EL RANGO DE HORAS PERSONALIZADO ---
+        guardarHorarioEnBD(entradaArr, salidaArr);
     });
     </script>
 </body>
