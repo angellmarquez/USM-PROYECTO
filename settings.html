@@ -766,7 +766,7 @@
     font-weight: 700;
     box-shadow: 0 2px 8px #2563eb22;
 }
-</style>
+    </style>
 </head>
 <body>
     <button id="closeBtn" title="Cerrar">&times;</button>
@@ -1346,6 +1346,16 @@
             document.getElementById('hora-salida').value,
             document.getElementById('ampm-salida')
         );
+        let errorMsg = document.getElementById('horario-error');
+        if (!errorMsg) {
+            errorMsg = document.createElement('div');
+            errorMsg.id = 'horario-error';
+            errorMsg.style.color = '#e53935';
+            errorMsg.style.fontWeight = '600';
+            errorMsg.style.margin = '10px 0 0 0';
+            errorMsg.style.textAlign = 'center';
+            document.getElementById('horario-form').parentNode.insertBefore(errorMsg, document.getElementById('horario-form').nextSibling);
+        }
         if (!entradaArr || !salidaArr) {
             errorMsg.textContent = 'Formato de hora inválido. Ej: 7, 7:00, 13, 1pm, 1:45pm';
             return;
@@ -1363,6 +1373,26 @@
         // --- GUARDA EL RANGO DE HORAS PERSONALIZADO ---
         guardarHorarioEnBD(entradaArr, salidaArr);
     });
+
+    function parseHora(str, ampmSelect) {
+        str = str.trim().toLowerCase();
+        let ampm = null;
+        if (str.endsWith('am')) { ampm = 'am'; str = str.replace('am','').trim(); }
+        if (str.endsWith('pm')) { ampm = 'pm'; str = str.replace('pm','').trim(); }
+        let match = str.match(/^(\d{1,2})(?::(\d{1,2}))?$/);
+        if (!match) return null;
+        let h = parseInt(match[1],10);
+        let m = match[2] ? parseInt(match[2],10) : 0;
+        if (ampmSelect && ampmSelect.style.display !== 'none') {
+            ampm = ampmSelect.value;
+        }
+        if (ampm) {
+            if (h === 12) h = (ampm === 'am') ? 0 : 12;
+            else if (ampm === 'pm') h += 12;
+        }
+        if (h < 0 || h > 23 || m < 0 || m > 59) return null;
+        return [h, m];
+    }
     </script>
 </body>
 </html>
