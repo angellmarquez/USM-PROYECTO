@@ -1107,19 +1107,28 @@
     // Función para guardar el horario en el backend
     function guardarHorarioEnBD(horaIni, horaFin) {
         const resumen = obtenerResumenHorario(horaIni, horaFin);
+        // Obtén los valores de los inputs
+        const hora_entrada = document.getElementById('hora-entrada').value;
+        const ampm_entrada = document.getElementById('ampm-entrada').value;
+        const hora_salida = document.getElementById('hora-salida').value;
+        const ampm_salida = document.getElementById('ampm-salida').value;
+
         fetch('https://usm-proyecto.onrender.com/update-user', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
             body: JSON.stringify({
                 horario_tabla: horarioData,
-                horario_resumido: resumen
+                horario_resumido: resumen,
+                hora_entrada,
+                ampm_entrada,
+                hora_salida,
+                ampm_salida
             })
         })
         .then(res => res.json())
         .then(data => {
             // Puedes mostrar un mensaje de éxito si quieres
-            // alert('Horario guardado');
         });
     }
 
@@ -1239,15 +1248,23 @@
             if (data.horario_tabla) {
                 horarioData = data.horario_tabla;
             }
-            // Si quieres, puedes también restaurar las horas de entrada/salida y generar la tabla
-            // Por defecto:
-            document.getElementById('hora-entrada').value = '7:00';
-            document.getElementById('ampm-entrada').style.display = '';
-            document.getElementById('ampm-entrada').value = 'am';
-            document.getElementById('hora-salida').value = '1:00';
-            document.getElementById('ampm-salida').style.display = '';
-            document.getElementById('ampm-salida').value = 'pm';
-            generarTablaHorario([7,0], [13,0]);
+            // Usa los valores guardados o los de defecto
+            document.getElementById('hora-entrada').value = data.hora_entrada || '7:00';
+            document.getElementById('ampm-entrada').value = data.ampm_entrada || 'am';
+            document.getElementById('hora-salida').value = data.hora_salida || '1:00';
+            document.getElementById('ampm-salida').value = data.ampm_salida || 'pm';
+
+            // Convierte a formato [hora, minuto]
+            function parseHoraSimple(str, ampm) {
+                let [h, m] = str.split(':').map(Number);
+                if (ampm === 'pm' && h < 12) h += 12;
+                if (ampm === 'am' && h === 12) h = 0;
+                return [h, m || 0];
+            }
+            const horaIni = parseHoraSimple(document.getElementById('hora-entrada').value, document.getElementById('ampm-entrada').value);
+            const horaFin = parseHoraSimple(document.getElementById('hora-salida').value, document.getElementById('ampm-salida').value);
+
+            generarTablaHorario(horaIni, horaFin);
         });
     });
 

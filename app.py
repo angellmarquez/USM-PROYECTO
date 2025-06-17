@@ -209,8 +209,12 @@ def user_info():
         'direccion': user.get('direccion', ''),
         'about': user.get('about', ''),
         'parada_bus': user.get('parada_bus', ''),
-        'horario_tabla': user.get('horario_tabla', {}),      # <--- AGREGADO
-        'horario_resumido': user.get('horario_resumido', {}) # <--- AGREGADO
+        'horario_tabla': user.get('horario_tabla', {}),
+        'horario_resumido': user.get('horario_resumido', {}),
+        'hora_entrada': user.get('hora_entrada', ''),
+        'ampm_entrada': user.get('ampm_entrada', ''),
+        'hora_salida': user.get('hora_salida', ''),
+        'ampm_salida': user.get('ampm_salida', '')
     })
 
 @app.route('/check-password', methods=['POST'])
@@ -250,7 +254,8 @@ def update_user():
     campos_permitidos = [
         'nombre', 'apellido', 'facultad', 'carrera', 'direccion',
         'telefono', 'email', 'about', 'parada_bus',
-        'horario_tabla', 'horario_resumido'  # <--- AGREGADO
+        'horario_tabla', 'horario_resumido',
+        'hora_entrada', 'ampm_entrada', 'hora_salida', 'ampm_salida'  # <--- AGREGADO
     ]
     update_data = {k: v for k, v in data.items() if k in campos_permitidos}
     if not update_data:
