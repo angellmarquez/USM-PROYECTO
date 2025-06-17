@@ -328,5 +328,40 @@ def check_user():
         user = users_collection.find_one({'telefono': phone})
     return jsonify({'exists': bool(user)})
 
+@app.route('/confirmar-asistencia', methods=['POST'])
+def confirmar_asistencia():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'No autenticado'}), 401
+
+    data = request.json
+    nombre_ruta = data.get('nombre_ruta')
+    sentido = data.get('sentido')  # 'ida' o 'vuelta'
+    if not nombre_ruta or sentido not in ['ida', 'vuelta']:
+        return jsonify({'error': 'Datos incompletos'}), 400
+
+    ruta = db.rutas.find_one({'nombre': nombre_ruta})
+    if not ruta:
+        return jsonify({'error': 'Ruta no encontrada'}), 404
+
+    # Asegura que el campo asistentes existe
+    if 'asistentes' not in ruta:
+        ruta['asistentes'] = {'ida': [], 'vuelta': []}
+    if sentido not in ruta['asistentes']:
+        ruta['asistentes'][sentido] = []
+
+    # Evita duplicados
+    if user_id in ruta['asistentes'][sentido]:
+        return jsonify({'error': 'Ya confirmaste asistencia'}), 400
+
+    ruta['asistentes'][sentido].append(user_id)
+    db.rutas.update_one(
+        {'_id': ruta['_id']},
+        {'$set': {f'asistentes.{sentido}': ruta['asistentes'][sentido]}}
+    )
+
+    return jsonify({'success': True})
+
+
 if __name__ == '__main__':
     app.run(debug=True)

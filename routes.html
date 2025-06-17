@@ -543,13 +543,25 @@
         });
         panelIda.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
           e.stopPropagation();
-          const notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
-          notificaciones.push({
-            mensaje: `🚌 Confirmación de ingreso enviada para la estación ${origen}.<br>¡Buen viaje! Si tienes dudas, acércate al personal de la estación.`,
-            fecha: new Date().toLocaleString(),
-            leida: false
+          fetch('/confirmar-asistencia', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              nombre_ruta: origen,
+              sentido: 'ida'
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              alert('¡Asistencia confirmada!');
+            } else {
+              alert(data.error || 'Error al confirmar asistencia');
+            }
           });
-          localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
         });
 
         // Eventos para panelVuelta
@@ -568,13 +580,25 @@
         });
         panelVuelta.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
           e.stopPropagation();
-          const notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
-          notificaciones.push({
-            mensaje: `🚌 Confirmación de ingreso enviada para la estación ${destino}.<br>¡Buen viaje! Si tienes dudas, acércate al personal de la estación.`,
-            fecha: new Date().toLocaleString(),
-            leida: false
+          fetch('/confirmar-asistencia', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              nombre_ruta: origen,
+              sentido: 'vuelta'
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              alert('¡Asistencia confirmada!');
+            } else {
+              alert(data.error || 'Error al confirmar asistencia');
+            }
           });
-          localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
         });
       });
     }
