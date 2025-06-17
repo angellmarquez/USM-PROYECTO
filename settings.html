@@ -7,14 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main-bg: #f6f6fa;
-            --main-dark: #23223a;
-            --main-purple: #7c3aed;
-            --main-purple-dark: #5b21b6;
+            --main-bg: #eaf1fb;
+            --main-dark: #1a237e;
+            --main-blue: #2563eb;
+            --main-blue-dark: #1746a0;
             --main-gray: #e0e0e0;
             --main-white: #fff;
-            --shadow: 0 4px 24px 0 rgba(124,58,237,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.07);
+            --shadow: 0 4px 24px 0 rgba(37,99,235,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.07);
             --radius: 20px;
+            --anim-fast: 0.5s cubic-bezier(.4,0,.2,1);
         }
         html, body {
             margin: 0;
@@ -24,14 +25,22 @@
             color: var(--main-dark);
             min-height: 100vh;
             box-sizing: border-box;
+            animation: fadeInBg 1.2s;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+        @keyframes fadeInBg {
+            from { background: #fff; }
+            to { background: var(--main-bg);}
         }
         .hero {
             width: 100vw;
-            background: linear-gradient(90deg, var(--main-purple-dark) 0%, var(--main-purple) 100%);
+            background: linear-gradient(90deg, var(--main-blue-dark) 0%, var(--main-blue) 100%);
             color: #fff;
             padding: 56px 0 36px 0;
             text-align: center;
-            box-shadow: 0 4px 24px #7c3aed22;
+            box-shadow: 0 4px 24px #2563eb22;
+            animation: fadeInDown var(--anim-fast);
         }
         .hero-title {
             font-size: 2.7em;
@@ -39,11 +48,16 @@
             margin-bottom: 8px;
             letter-spacing: -1px;
             font-family: 'Montserrat', Arial, sans-serif;
+            text-shadow: 0 2px 12px #2563eb33;
         }
         .hero-desc {
             font-size: 1.18em;
             font-weight: 400;
             color: #e0e0e0;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px);}
+            to { opacity: 1; transform: translateY(0);}
         }
         .main-flex {
             display: flex;
@@ -53,6 +67,7 @@
             gap: 40px;
             align-items: flex-start;
             padding: 0 24px;
+            animation: fadeInUp var(--anim-fast);
         }
         .preview-card {
             background: var(--main-white);
@@ -65,13 +80,14 @@
             flex-direction: column;
             align-items: center;
             margin-top: 0;
-            border-top: 7px solid var(--main-purple);
+            border-top: 7px solid var(--main-blue);
             transition: border-color 0.2s, box-shadow 0.2s;
             position: relative;
+            animation: fadeInUp 0.8s 0.2s backwards;
         }
         .preview-card:hover {
-            box-shadow: 0 8px 32px #7c3aed33;
-            border-top: 7px solid var(--main-purple-dark);
+            box-shadow: 0 8px 32px #2563eb33;
+            border-top: 7px solid var(--main-blue-dark);
         }
         .preview-avatar {
             width: 120px;
@@ -80,8 +96,8 @@
             background: #fff;
             object-fit: cover;
             margin-bottom: 18px;
-            box-shadow: 0 2px 8px #7c3aed22;
-            border: 5px solid var(--main-purple);
+            box-shadow: 0 2px 8px #2563eb22;
+            border: 5px solid var(--main-blue);
             transition: border 0.2s;
             position: relative;
         }
@@ -90,7 +106,7 @@
             top: 110px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--main-purple);
+            background: var(--main-blue);
             color: #fff;
             border: none;
             border-radius: 50%;
@@ -101,11 +117,11 @@
             justify-content: center;
             font-size: 1.5em;
             cursor: pointer;
-            box-shadow: 0 2px 8px #7c3aed22;
+            box-shadow: 0 2px 8px #2563eb22;
             transition: background 0.2s;
         }
         .avatar-upload-btn:hover {
-            background: var(--main-purple-dark);
+            background: var(--main-blue-dark);
         }
         .preview-name {
             font-size: 1.35em;
@@ -113,7 +129,7 @@
             margin-bottom: 2px;
             text-align: center;
             letter-spacing: 0.5px;
-            color: var(--main-purple-dark);
+            color: var(--main-blue-dark);
             font-family: 'Montserrat', Arial, sans-serif;
         }
         .preview-about {
@@ -133,20 +149,21 @@
         .section {
             background: var(--main-white);
             border-radius: var(--radius);
-            box-shadow: 0 2px 12px #7c3aed11;
+            box-shadow: 0 2px 12px #2563eb11;
             padding: 28px 24px;
             margin-bottom: 0;
             width: 100%;
             transition: box-shadow 0.2s;
+            animation: fadeInUp 0.8s 0.3s backwards;
         }
         .section:hover {
-            box-shadow: 0 6px 24px #7c3aed22;
+            box-shadow: 0 6px 24px #2563eb22;
         }
         .section-title {
             font-size: 1.15em;
             font-weight: bold;
             margin-bottom: 16px;
-            color: var(--main-purple-dark);
+            color: var(--main-blue-dark);
             letter-spacing: -0.5px;
             font-family: 'Montserrat', Arial, sans-serif;
         }
@@ -163,13 +180,13 @@
             font-size: 1.05em;
             letter-spacing: -0.5px;
             font-family: 'Montserrat', Arial, sans-serif;
-            color: var(--main-purple-dark);
+            color: var(--main-blue-dark);
         }
         input[type="text"], input[type="email"], input[type="tel"], textarea {
             width: 70%;
             padding: 14px 16px;
             border-radius: 9px;
-            border: 1.5px solid var(--main-purple-dark);
+            border: 1.5px solid var(--main-blue-dark);
             background: #fafafa;
             color: var(--main-dark);
             font-size: 1.13em;
@@ -177,13 +194,13 @@
             resize: none;
             transition: border 0.2s, box-shadow 0.2s;
             font-family: 'Segoe UI', Arial, sans-serif;
-            box-shadow: 0 1px 4px #7c3aed11;
+            box-shadow: 0 1px 4px #2563eb11;
         }
         input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, textarea:focus {
-            border: 1.5px solid var(--main-purple);
+            border: 1.5px solid var(--main-blue);
             outline: none;
             background: #fff;
-            box-shadow: 0 2px 8px #7c3aed22;
+            box-shadow: 0 2px 8px #2563eb22;
         }
         input[readonly], textarea[readonly] {
             background: #e0e0e0;
@@ -194,7 +211,7 @@
             display: none;
         }
         .btn {
-            background: var(--main-purple);
+            background: var(--main-blue);
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -205,22 +222,22 @@
             font-weight: 600;
             margin-top: 8px;
             transition: background 0.2s, box-shadow 0.2s, color 0.2s, border 0.2s;
-            box-shadow: 0 2px 8px #7c3aed11;
+            box-shadow: 0 2px 8px #2563eb11;
             font-family: 'Montserrat', Arial, sans-serif;
         }
         .btn:hover {
             background: #fff;
-            color: var(--main-purple-dark);
-            border: 1.5px solid var(--main-purple-dark);
-            box-shadow: 0 4px 16px #7c3aed22;
+            color: var(--main-blue-dark);
+            border: 1.5px solid var(--main-blue-dark);
+            box-shadow: 0 4px 16px #2563eb22;
         }
         .btn-secondary {
-            background: #ececf3;
-            color: var(--main-purple-dark);
+            background: #e3eafc;
+            color: var(--main-blue-dark);
             box-shadow: none;
         }
         .btn-secondary:hover {
-            background: var(--main-purple-dark);
+            background: var(--main-blue-dark);
             color: #fff;
         }
         .btn-danger {
@@ -251,16 +268,17 @@
             color: #e53935;
             text-shadow: 0 2px 8px #e5393555;
         }
-        /* Agrega esto para las pestañas */
+        /* Pestañas */
         .settings-tabs {
             display: flex;
             gap: 12px;
             margin: 32px auto 0 auto;
             justify-content: center;
+            animation: fadeInUp 0.7s 0.1s backwards;
         }
         .settings-tab-btn {
-            background: #ececf3;
-            color: #5b21b6;
+            background: #e3eafc;
+            color: #2563eb;
             border: none;
             border-radius: 8px 8px 0 0;
             padding: 12px 32px;
@@ -271,7 +289,7 @@
             font-family: 'Montserrat', Arial, sans-serif;
         }
         .settings-tab-btn.active {
-            background: var(--main-purple);
+            background: var(--main-blue);
             color: #fff;
         }
         @media (max-width: 600px) {
@@ -306,22 +324,25 @@
             from { opacity: 0; transform: translateY(30px);}
             to { opacity: 1; transform: translateY(0);}
         }
+        /* Horario */
         .horario-container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 40px auto 0 auto;
-            padding: 32px 24px;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 4px 24px 0 rgba(124,58,237,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.07);
+            padding: 36px 28px 32px 28px;
+            background: #fafdff;
+            border-radius: 24px;
+            box-shadow: 0 6px 32px 0 rgba(37,99,235,0.13), 0 1.5px 8px 0 rgba(0,0,0,0.07);
+            animation: fadeInUp 0.9s 0.2s backwards;
         }
         .horario-title {
-            color: #5b21b6;
+            color: #2563eb;
             text-align: center;
             margin-bottom: 28px;
             font-family: 'Montserrat', Arial, sans-serif;
             font-size: 2em;
             font-weight: 800;
             letter-spacing: -1px;
+            text-shadow: 0 2px 8px #2563eb11;
         }
         .horario-form {
             display: flex;
@@ -330,10 +351,11 @@
             align-items: center;
             margin-bottom: 28px;
             flex-wrap: wrap;
+            animation: fadeInUp 0.7s 0.2s backwards;
         }
         .horario-form label {
             font-weight: 600;
-            color: #5b21b6;
+            color: #2563eb;
             font-size: 1.08em;
             display: flex;
             flex-direction: column;
@@ -343,17 +365,17 @@
         .horario-form select {
             padding: 10px 18px;
             border-radius: 8px;
-            border: 1.5px solid #7c3aed;
+            border: 1.5px solid #2563eb;
             background: #f6f6fa;
             color: #23223a;
             font-size: 1.08em;
             font-family: 'Inter', Arial, sans-serif;
-            box-shadow: 0 1px 4px #7c3aed11;
+            box-shadow: 0 1px 4px #2563eb11;
             transition: border 0.2s;
             margin-top: 2px;
         }
         .horario-form select:focus {
-            border: 1.5px solid #5b21b6;
+            border: 1.5px solid #1746a0;
             outline: none;
             background: #fff;
         }
@@ -362,24 +384,25 @@
             font-size: 1.12em;
             font-weight: 700;
             border-radius: 8px;
-            background: #7c3aed;
+            background: #2563eb;
             color: #fff;
             border: none;
-            box-shadow: 0 2px 8px #7c3aed22;
+            box-shadow: 0 2px 8px #2563eb22;
             cursor: pointer;
             transition: background 0.2s, color 0.2s;
             margin-top: 18px;
         }
         .horario-btn:hover {
             background: #fff;
-            color: #5b21b6;
-            border: 1.5px solid #5b21b6;
+            color: #2563eb;
+            border: 1.5px solid #2563eb;
         }
         .horario-table-wrap {
             overflow-x: auto;
             border-radius: 16px;
-            box-shadow: 0 2px 12px #7c3aed11;
+            box-shadow: 0 2px 12px #2563eb11;
             background: #fff;
+            animation: fadeInUp 0.8s 0.3s backwards;
         }
         .horario-table {
             width: 100%;
@@ -393,6 +416,7 @@
             overflow: hidden;
             margin: 0 auto;
             table-layout: fixed;
+            animation: fadeInUp 1s 0.3s backwards;
         }
         .horario-table th, .horario-table td {
             border: 1px solid #e0e0e0;
@@ -404,31 +428,116 @@
             min-width: 70px;
             font-size: 0.98em;
             padding: 0;
+            transition: background 0.2s;
         }
         .horario-table th {
-            background: #ede9fe;
-            color: #7c3aed;
+            background: #e3eafc;
+            color: #2563eb;
             font-weight: 700;
             font-size: 1.08em;
             letter-spacing: 0.5px;
             height: 50px;
             border-top: none;
         }
+        .hora-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 0;
+            font-size: 1.08em;
+        }
+        .hora-icon {
+            font-size: 1.15em;
+            opacity: 0.7;
+            margin-right: 2px;
+        }
+        .hora-inicio {
+            font-weight: 800;
+            color: #2563eb;
+            font-size: 1.08em;
+            letter-spacing: 0.5px;
+        }
+        .hora-sep {
+            color: #1746a0;
+            font-size: 1em;
+            font-weight: 600;
+            opacity: 0.7;
+            margin: 0 2px;
+        }
+        .hora-fin-pill {
+            background: #e3eafc;
+            color: #1746a0;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.98em;
+            margin-left: 2px;
+            box-shadow: 0 1px 4px #2563eb11;
+            border: 1px solid #d0e2ff;
+            display: inline-block;
+        }
         .horario-table .hora {
             background: #f6f6fa;
-            font-weight: 600;
-            color: #23223a;
-            font-size: 1.01em;
+            font-weight: 700;
+            color: #1746a0;
+            font-size: 1.04em;
             min-width: 80px;
             max-width: 90px;
             width: 90px;
             border-left: none;
+            padding: 0;
+            line-height: 1.1;
+        }
+        .hora-inicio {
+            display: block;
+            font-size: 1.13em;
+            font-weight: 800;
+            color: #2563eb;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .hora-fin {
+            display: block;
+            font-size: 0.98em;
+            font-weight: 600;
+            color: #1746a0;
+            opacity: 0.85;
+            margin-top: 0;
+        }
+        .horario-table .hora {
+            background: #f6f6fa;
+            font-weight: 700;
+            color: #1746a0;
+            font-size: 1.04em;
+            min-width: 80px;
+            max-width: 90px;
+            width: 90px;
+            border-left: none;
+            padding: 0;
+            line-height: 1.1;
+        }
+        .hora-inicio {
+            display: block;
+            font-size: 1.13em;
+            font-weight: 800;
+            color: #2563eb;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .hora-fin {
+            display: block;
+            font-size: 0.98em;
+            font-weight: 600;
+            color: #1746a0;
+            opacity: 0.85;
+            margin-top: 0;
         }
         .horario-table tr.alt {
-            background: #f8faff;
+            background: #f3f7fd;
         }
         .horario-table tr:hover td {
-            background: #f3e8ff;
+            background: #e3eafc;
             transition: background 0.2s;
         }
         .horario-table th:first-child, .horario-table td:first-child {
@@ -441,10 +550,67 @@
             border-bottom: none;
         }
         .horario-hint {
-            color: #888;
-            font-size: 0.97em;
+            color: #2563eb;
+            font-size: 1em;
             text-align: center;
             margin-top: 18px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+        /* Encuesta parada */
+        .encuesta-parada {
+            margin: 32px 0 0 0;
+            max-width: 340px;
+            min-width: 220px;
+            background: #e3eafc;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #2563eb11;
+            padding: 24px 18px;
+            animation: fadeInUp 1s 0.4s backwards;
+        }
+        .encuesta-parada label {
+            font-weight: 800;
+            color: #1746a0;
+            font-size: 1.18em;
+            display: block;
+            margin-bottom: 14px;
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        .encuesta-parada select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1.5px solid #2563eb;
+            font-size: 1.08em;
+            background: #fff;
+            margin-bottom: 18px;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+        .encuesta-parada button {
+            margin-top: 8px;
+            padding: 10px 28px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.08em;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #2563eb22;
+            transition: background 0.2s, color 0.2s;
+        }
+        .encuesta-parada button:hover {
+            background: #fff;
+            color: #2563eb;
+            border: 1.5px solid #2563eb;
+        }
+        #encuesta-msg {
+            margin-top: 12px;
+            color: #22a06b;
+            font-weight: 700;
+            font-size: 1.08em;
+            text-align: center;
+            min-height: 24px;
         }
         @media (max-width: 900px) {
             .horario-table th, .horario-table td { font-size: 0.93em; min-width: 50px; max-width: 70px; }
@@ -455,8 +621,152 @@
             .horario-title { font-size: 1.2em; }
             .horario-form { gap: 8px; }
             .horario-btn { padding: 8px 12px; font-size: 1em; }
+            .encuesta-parada { padding: 18px 4vw; }
         }
-    </style>
+        .horario-form-pro {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            background: #eaf1fb;
+            border-radius: 16px;
+            padding: 18px 24px 18px 24px;
+            box-shadow: 0 2px 12px #2563eb11;
+            animation: fadeInUp 0.7s 0.2s backwards;
+        }
+        .horario-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 170px;
+        }
+        .horario-field label {
+            font-weight: 800;
+            color: #2563eb;
+            font-size: 1.13em;
+            margin-bottom: 2px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            letter-spacing: 0.2px;
+        }
+        .horario-input-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .horario-input-group input[type="text"] {
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 1.5px solid #2563eb;
+            background: #fff;
+            color: #1746a0;
+            font-size: 1.18em;
+            font-weight: 700;
+            width: 80px;
+            box-shadow: 0 1px 6px #2563eb11;
+            transition: border 0.2s, box-shadow 0.2s;
+            text-align: center;
+            outline: none;
+        }
+        .horario-input-group input[type="text"]:focus {
+            border: 2px solid #1746a0;
+            box-shadow: 0 2px 12px #2563eb22;
+            background: #fafdff;
+        }
+        .horario-input-group select {
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1.5px solid #2563eb;
+            background: #fff;
+            color: #1746a0;
+            font-size: 1.13em;
+            font-weight: 600;
+            box-shadow: 0 1px 6px #2563eb11;
+            transition: border 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .horario-input-group select:focus {
+            border: 2px solid #1746a0;
+            box-shadow: 0 2px 12px #2563eb22;
+            background: #fafdff;
+        }
+        .horario-btn-pro {
+            padding: 16px 38px;
+            font-size: 1.18em;
+            font-weight: 800;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #2563eb 60%, #1746a0 100%);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 16px #2563eb22;
+            cursor: pointer;
+            margin-top: 0;
+            margin-bottom: 0;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            font-family: 'Montserrat', Arial, sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .horario-btn-pro:hover {
+            background: #fff;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            box-shadow: 0 6px 24px #2563eb33;
+        }
+        @media (max-width: 700px) {
+            .horario-form-pro {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 18px;
+                padding: 14px 6vw;
+            }
+            .horario-btn-pro {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+        .color-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 8px #2563eb22;
+            cursor: pointer;
+            transition: border 0.2s, box-shadow 0.2s, transform 0.1s;
+            outline: 2px solid transparent;
+        }
+        .color-circle.selected {
+            border: 3px solid #2563eb;
+            outline: 2px solid #2563eb;
+            transform: scale(1.13);
+            box-shadow: 0 4px 16px #2563eb33;
+        }
+.celda-punto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 38px;
+}
+.punto-color {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    box-shadow: 0 1px 6px #0002;
+    border: 2.5px solid #fff;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.punto-color:hover {
+    transform: scale(1.18);
+}
+.horario-table td.coloreada {
+    color: #fff !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px #2563eb22;
+}
+</style>
 </head>
 <body>
     <button id="closeBtn" title="Cerrar">&times;</button>
@@ -479,6 +789,21 @@
                     <div class="preview-name" id="miniNombre"></div>
                     <div class="preview-about" id="miniAbout"></div>
                     <button class="btn btn-secondary" id="removeAvatarBtn" style="margin-top:10px;">Eliminar avatar</button>
+                </div>
+                <!-- AQUÍ PEGA LA ENCUESTA -->
+                <div class="encuesta-parada">
+                    <form id="form-parada">
+                        <label for="parada-bus">
+                            Generalmente, ¿qué parada de autobús usas?
+                        </label>
+                        <select id="parada-bus" name="parada-bus" required>
+                            <option value="" disabled selected>Seleccione una parada...</option>
+                        </select>
+                        <button type="submit" class="btn">
+                            Enviar respuesta
+                        </button>
+                        <div id="encuesta-msg"></div>
+                    </form>
                 </div>
             </div>
             <div class="form-container">
@@ -540,17 +865,39 @@
     <div id="tab-content-horario" style="display:none;">
         <div class="horario-container">
             <h2 class="horario-title">Horario semanal</h2>
-            <form id="horario-form" class="horario-form">
-                <label>
-                    <span>Hora de entrada:</span>
-                    <select id="hora-entrada" required></select>
-                </label>
-                <label>
-                    <span>Hora de salida:</span>
-                    <select id="hora-salida" required></select>
-                </label>
-                <button type="submit" class="btn horario-btn">Generar horario</button>
+            <form id="horario-form" class="horario-form horario-form-pro">
+                <div class="horario-field">
+                    <label for="hora-entrada">Hora de entrada:</label>
+                    <div class="horario-input-group">
+                        <input type="text" id="hora-entrada" placeholder="7:00" required autocomplete="off">
+                        <select id="ampm-entrada">
+                            <option value="am">AM</option>
+                            <option value="pm">PM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="horario-field">
+                    <label for="hora-salida">Hora de salida:</label>
+                    <div class="horario-input-group">
+                        <input type="text" id="hora-salida" placeholder="1:00" required autocomplete="off">
+                        <select id="ampm-salida">
+                            <option value="am">AM</option>
+                            <option value="pm">PM</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn horario-btn horario-btn-pro">Generar horario</button>
             </form>
+            <div class="horario-color-picker" style="display:flex;align-items:center;gap:18px;justify-content:center;margin-bottom:18px;">
+                <span style="font-weight:700;color:#2563eb;font-size:1.08em;">Selecciona un color para marcar tus clases:</span>
+                <div id="color-palette" style="display:flex;gap:10px;">
+                    <div class="color-circle" data-color="#2563eb" title="Materia 1" style="background:#2563eb;"></div>
+                    <div class="color-circle" data-color="#22a06b" title="Materia 2" style="background:#22a06b;"></div>
+                    <div class="color-circle" data-color="#f59e42" title="Materia 3" style="background:#f59e42;"></div>
+                    <div class="color-circle" data-color="#e53935" title="Materia 4" style="background:#e53935;"></div>
+                    <div class="color-circle" data-color="#a259e4" title="Materia 5" style="background:#a259e4;"></div>
+                </div>
+            </div>
             <div class="horario-table-wrap">
                 <table class="horario-table" id="tabla-horario">
                     <thead>
@@ -573,20 +920,6 @@
                 Selecciona tu hora de entrada y salida para ver tu horario.
             </p>
         </div>
-    </div>
-    <div class="encuesta-parada" style="margin:32px auto 0 auto; max-width:500px; background:#f8faff; border-radius:12px; box-shadow:0 1px 6px #7c3aed11; padding:24px;">
-        <form id="form-parada">
-            <label for="parada-bus" style="font-weight:700; color:#5b21b6; font-size:1.13em; display:block; margin-bottom:12px;">
-                Generalmente, ¿qué parada de autobús usa?
-            </label>
-            <select id="parada-bus" name="parada-bus" required style="width:100%; padding:12px; border-radius:8px; border:1.5px solid #7c3aed; font-size:1.08em; background:#fff;">
-                <option value="" disabled selected>Seleccione una parada...</option>
-            </select>
-            <button type="submit" class="btn" style="margin-top:18px; padding:10px 28px; background:#7c3aed; color:#fff; border:none; border-radius:8px; font-weight:700; font-size:1.08em; cursor:pointer;">
-                Enviar respuesta
-            </button>
-            <div id="encuesta-msg" style="margin-top:12px; color:#22a06b; font-weight:600;"></div>
-        </form>
     </div>
     <script>
     // PESTAÑAS
@@ -721,8 +1054,6 @@
     };
 
     const INTERVALO_MIN = 45; // minutos
-    const HORA_MIN = 7; // 7:00 AM
-    const HORA_MAX = 19; // 7:00 PM
 
     function pad(n) { return n < 10 ? '0'+n : n; }
     function to12h(h, m) {
@@ -732,74 +1063,76 @@
         return `${pad(h12)}:${pad(m)}${suf}`;
     }
 
-    // Genera las opciones de hora para los selectores
-    function generarOpcionesHoras() {
-        const entrada = document.getElementById('hora-entrada');
-        const salida = document.getElementById('hora-salida');
-        entrada.innerHTML = '';
-        salida.innerHTML = '';
-        let opciones = [];
-        for (let h = HORA_MIN; h < HORA_MAX; h++) {
-            opciones.push({h, m:0});
-            opciones.push({h, m:45});
-        }
-        opciones.push({h:HORA_MAX, m:0});
-        opciones.forEach(opt => {
-            let val = `${pad(opt.h)}:${pad(opt.m)}`;
-            let label = to12h(opt.h, opt.m);
-            let o1 = document.createElement('option');
-            o1.value = val;
-            o1.textContent = label;
-            entrada.appendChild(o1.cloneNode(true));
-            salida.appendChild(o1);
-        });
-        // Valores por defecto
-        entrada.selectedIndex = 0;
-        salida.selectedIndex = opciones.length-1;
-        actualizarOpcionesSalida();
-    }
-
-    // Actualiza las opciones de salida según la entrada seleccionada
-    function actualizarOpcionesSalida() {
-        const entrada = document.getElementById('hora-entrada');
-        const salida = document.getElementById('hora-salida');
-        let entradaVal = entrada.value;
-        let [h1, m1] = entradaVal.split(':').map(Number);
-        let start = h1*60 + m1;
-        let foundValid = false;
-        for (let i = 0; i < salida.options.length; i++) {
-            let [h2, m2] = salida.options[i].value.split(':').map(Number);
-            let end = h2*60 + m2;
-            if (end > start) {
-                salida.options[i].disabled = false;
-                if (!foundValid) {
-                    salida.selectedIndex = i;
-                    foundValid = true;
-                }
-            } else {
-                salida.options[i].disabled = true;
-            }
-        }
-    }
-
-    // Evento para actualizar las opciones de salida cuando cambia la entrada
-    document.getElementById('hora-entrada').addEventListener('change', actualizarOpcionesSalida);
-
-    generarOpcionesHoras();
-
     // --- CELDAS EDITABLES ---
     let horarioData = {}; // Guarda el contenido de cada celda
 
+    // Días de la semana en el orden de la tabla
+    const DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+    // Convierte minutos a string HH:MM
+    function minToHoraStr(min) {
+        let h = Math.floor(min / 60);
+        let m = min % 60;
+        return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+    }
+
+    // Obtiene el resumen de horario (inicio y fin por día)
+    function obtenerResumenHorario(horaIni, horaFin) {
+        let [h1, m1] = horaIni;
+        let [h2, m2] = horaFin;
+        let start = h1 * 60 + m1;
+        let end = h2 * 60 + m2;
+        let filas = Math.floor((end - start) / INTERVALO_MIN);
+        let resumen = {};
+        for (let d = 0; d < 6; d++) {
+            let primero = null, ultimo = null;
+            for (let f = 0; f < filas; f++) {
+                let key = `${f}-${d}`;
+                let celda = horarioData[key];
+                if (celda && (celda.punto || (celda.texto && celda.texto.trim() !== ''))) {
+                    let minIni = start + f * INTERVALO_MIN;
+                    let minFin = minIni + INTERVALO_MIN;
+                    if (primero === null || minIni < primero) primero = minIni;
+                    if (ultimo === null || minFin > ultimo) ultimo = minFin;
+                }
+            }
+            resumen[DIAS[d]] = {
+                inicio: primero !== null ? minToHoraStr(primero) : null,
+                fin: ultimo !== null ? minToHoraStr(ultimo) : null
+            };
+        }
+        return resumen;
+    }
+
+    // Función para guardar el horario en el backend
+    function guardarHorarioEnBD(horaIni, horaFin) {
+        const resumen = obtenerResumenHorario(horaIni, horaFin);
+        fetch('https://usm-proyecto.onrender.com/update-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({
+                horario_tabla: horarioData,
+                horario_resumido: resumen
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Puedes mostrar un mensaje de éxito si quieres
+            // alert('Horario guardado');
+        });
+    }
+
+    // Modifica la función generarTablaHorario para guardar después de cada cambio
     function generarTablaHorario(horaIni, horaFin) {
         const tbody = document.querySelector('#tabla-horario tbody');
         tbody.innerHTML = '';
-        let [h1, m1] = horaIni.split(':').map(Number);
-        let [h2, m2] = horaFin.split(':').map(Number);
+        let [h1, m1] = horaIni;
+        let [h2, m2] = horaFin;
         let start = h1*60 + m1;
         let end = h2*60 + m2;
         if (end <= start) return;
         let alt = false;
-        let dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
         let fila = 0;
         for (let t = start; t < end; t += INTERVALO_MIN, fila++) {
             let hIni = Math.floor(t/60), mIni = t%60;
@@ -811,94 +1144,111 @@
             alt = !alt;
             let tdHora = document.createElement('td');
             tdHora.className = 'hora';
-            tdHora.textContent = horaTxt;
+            tdHora.innerHTML = `
+                <span class="hora-inicio">${to12h(hIni, mIni)}</span>
+                <br>
+                <span class="hora-fin">${to12h(hFin, mFin)}</span>
+            `;
             tr.appendChild(tdHora);
-            for (let d=0; d<6; d++) {
+            for (let d = 0; d < 6; d++) {
                 let td = document.createElement('td');
                 td.style.cursor = 'pointer';
                 td.dataset.fila = fila;
                 td.dataset.dia = d;
                 let key = `${fila}-${d}`;
-                td.innerHTML = horarioData[key] || '';
-                td.onclick = function() {
-                    editarCeldaHorario(td, key);
+                let celda = horarioData[key] || {};
+                if (celda.punto) {
+                    td.innerHTML = `<div class="celda-punto"><span class="punto-color" style="background:${celda.punto};"></span></div>`;
+                } else if (celda.texto) {
+                    td.innerHTML = celda.texto;
+                } else {
+                    td.innerHTML = '';
+                }
+                td.onclick = function(e) {
+                    if (e.detail === 2) {
+                        editarCeldaHorario(td, key);
+                        return;
+                    }
+                    let celda = horarioData[key] || {};
+                    if (celda.punto) {
+                        delete celda.punto;
+                        if (celda.texto) {
+                            td.innerHTML = celda.texto;
+                        } else {
+                            td.innerHTML = '';
+                        }
+                    } else if (colorSeleccionado) {
+                        celda.punto = colorSeleccionado;
+                        td.innerHTML = `<div class="celda-punto"><span class="punto-color" style="background:${colorSeleccionado};"></span></div>`;
+                    }
+                    horarioData[key] = celda;
+                    guardarHorarioEnBD(horaIni, horaFin); // <--- Guarda cada vez que se marca/desmarca
                 };
                 tr.appendChild(td);
             }
             tbody.appendChild(tr);
         }
+        guardarHorarioEnBD(horaIni, horaFin); // <--- Guarda al generar la tabla
     }
 
-    // Permite editar la celda y guardar varias líneas
-    function editarCeldaHorario(td, key) {
-        if (td.querySelector('textarea')) return; // Ya está editando
-        let valor = td.innerHTML.replace(/<br\s*\/?>/gi, '\n');
-        td.innerHTML = '';
-        let textarea = document.createElement('textarea');
-        textarea.style.width = '95%';
-        textarea.style.height = '40px';
-        textarea.style.resize = 'vertical';
-        textarea.style.fontSize = '1em';
-        textarea.style.fontFamily = 'inherit';
-        textarea.value = valor;
-        td.appendChild(textarea);
-        textarea.focus();
-
-        textarea.onkeydown = function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                guardarCeldaHorario(td, textarea, key);
-            }
-        };
-        textarea.onblur = function() {
-            guardarCeldaHorario(td, textarea, key);
-        };
-    }
-
+    // Modifica guardarCeldaHorario para guardar después de editar texto
     function guardarCeldaHorario(td, textarea, key) {
         let val = textarea.value.trim();
-        horarioData[key] = val ? val.replace(/\n/g, '<br>') : '';
-        td.innerHTML = horarioData[key];
-        td.onclick = function() {
-            editarCeldaHorario(td, key);
+        let celda = horarioData[key] || {};
+        celda.texto = val ? val.replace(/\n/g, '<br>') : '';
+        if (celda.punto) {
+            td.innerHTML = `<div class="celda-punto"><span class="punto-color" style="background:${celda.punto};"></span></div>`;
+        } else {
+            td.innerHTML = celda.texto;
+        }
+        horarioData[key] = celda;
+        td.onclick = function(e) {
+            if (e.detail === 2) {
+                editarCeldaHorario(td, key);
+                return;
+            }
+            let celda = horarioData[key] || {};
+            if (celda.punto) {
+                delete celda.punto;
+                if (celda.texto) {
+                    td.innerHTML = celda.texto;
+                } else {
+                    td.innerHTML = '';
+                }
+            } else if (colorSeleccionado) {
+                celda.punto = colorSeleccionado;
+                td.innerHTML = `<div class="celda-punto"><span class="punto-color" style="background:${colorSeleccionado};"></span></div>`;
+            }
+            horarioData[key] = celda;
+            // Guarda después de cada cambio
+            let horaIni = parseHora(document.getElementById('hora-entrada').value, document.getElementById('ampm-entrada'));
+            let horaFin = parseHora(document.getElementById('hora-salida').value, document.getElementById('ampm-salida'));
+            if (horaIni && horaFin) guardarHorarioEnBD(horaIni, horaFin);
         };
+        // Guarda después de editar texto
+        let horaIni = parseHora(document.getElementById('hora-entrada').value, document.getElementById('ampm-entrada'));
+        let horaFin = parseHora(document.getElementById('hora-salida').value, document.getElementById('ampm-salida'));
+        if (horaIni && horaFin) guardarHorarioEnBD(horaIni, horaFin);
     }
 
-    // Agrega un mensaje de error debajo del formulario
-    const form = document.getElementById('horario-form');
-    let errorMsg = document.createElement('div');
-    errorMsg.id = 'horario-error';
-    errorMsg.style.color = '#e53935';
-    errorMsg.style.fontWeight = '600';
-    errorMsg.style.margin = '10px 0 0 0';
-    errorMsg.style.textAlign = 'center';
-    form.parentNode.insertBefore(errorMsg, form.nextSibling);
-
-    // Evento del formulario con validación
-    form.addEventListener('submit', function(e){
-        e.preventDefault();
-        let entrada = document.getElementById('hora-entrada').value;
-        let salida = document.getElementById('hora-salida').value;
-        // Validación: la salida debe ser mayor que la entrada
-        let [h1, m1] = entrada.split(':').map(Number);
-        let [h2, m2] = salida.split(':').map(Number);
-        let start = h1*60 + m1;
-        let end = h2*60 + m2;
-        if (end <= start) {
-            errorMsg.textContent = 'La hora de salida debe ser mayor que la hora de entrada.';
-            return;
-        } else {
-            errorMsg.textContent = '';
-        }
-        horarioData = {}; // Limpia los datos al generar nuevo horario
-        generarTablaHorario(entrada, salida);
-    });
-
-    // Genera la tabla inicial
+    // Al cargar la página, puedes cargar el horario guardado (opcional)
     window.addEventListener('DOMContentLoaded', ()=>{
-        let entrada = document.getElementById('hora-entrada').value;
-        let salida = document.getElementById('hora-salida').value;
-        generarTablaHorario(entrada, salida);
+        fetch('https://usm-proyecto.onrender.com/user-info', { credentials: 'include' })
+        .then(res => res.json())
+        .then(data => {
+            if (data.horario_tabla) {
+                horarioData = data.horario_tabla;
+            }
+            // Si quieres, puedes también restaurar las horas de entrada/salida y generar la tabla
+            // Por defecto:
+            document.getElementById('hora-entrada').value = '7:00';
+            document.getElementById('ampm-entrada').style.display = '';
+            document.getElementById('ampm-entrada').value = 'am';
+            document.getElementById('hora-salida').value = '1:00';
+            document.getElementById('ampm-salida').style.display = '';
+            document.getElementById('ampm-salida').value = 'pm';
+            generarTablaHorario([7,0], [13,0]);
+        });
     });
 
     // Llenar las opciones de parada con las paradas de la API de rutas
@@ -919,12 +1269,6 @@
           opt.textContent = parada;
           paradaSelect.appendChild(opt);
         });
-        // Opción "Otra"
-        const optOtra = document.createElement('option');
-        optOtra.value = "Otra";
-        optOtra.textContent = "Otra";
-        paradaSelect.appendChild(optOtra);
-
         // Una vez cargadas las opciones, selecciona la parada guardada si existe
         fetch('https://usm-proyecto.onrender.com/user-info', {
           credentials: 'include'
@@ -953,6 +1297,26 @@
         .catch(() => {
             document.getElementById('encuesta-msg').textContent = 'Error al guardar la respuesta.';
         });
+    });
+
+    // Color seleccionado por el usuario
+    let colorSeleccionado = null;
+
+    // Manejo de selección de color
+    document.querySelectorAll('.color-circle').forEach(circle => {
+        circle.addEventListener('click', function() {
+            document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+            colorSeleccionado = this.getAttribute('data-color');
+        });
+    });
+    // Por defecto selecciona el primer color
+    window.addEventListener('DOMContentLoaded', ()=>{
+        const firstColor = document.querySelector('.color-circle');
+        if(firstColor) {
+            firstColor.classList.add('selected');
+            colorSeleccionado = firstColor.getAttribute('data-color');
+        }
     });
     </script>
 </body>
