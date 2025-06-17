@@ -543,7 +543,7 @@
         });
         panelIda.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
           e.stopPropagation();
-          fetch('/confirmar-asistencia', {
+          fetch('https://usm-proyecto.onrender.com/confirmar-asistencia', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -580,7 +580,7 @@
         });
         panelVuelta.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
           e.stopPropagation();
-          fetch('/confirmar-asistencia', {
+          fetch('https://usm-proyecto.onrender.com/confirmar-asistencia', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
