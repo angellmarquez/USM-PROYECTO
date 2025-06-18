@@ -73,7 +73,7 @@ function actualizarSidebarSegunPagina() {
             // Oculta la sidebar y el botón de minimizar
             sidebar.style.display = 'none';
             menuBtn.style.display = 'none';
-        } else if (iframeUrl.endsWith('routes.html')) {
+        } else if (iframeUrl.endsWith('routes.html') || iframeUrl.endsWith('notifications.html')) {
             // Sidebar expandida, no colapsable, sin botón
             sidebar.style.display = '';
             sidebar.classList.remove('collapsed');

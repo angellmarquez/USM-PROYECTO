@@ -1,10 +1,10 @@
 from pymongo import MongoClient
 
-client = MongoClient("mongodb+srv://angel:30906629@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
+client = MongoClient("mongodb+srv://angel:angelito01@usm.2jhpojj.mongodb.net/?retryWrites=true&w=majority&appName=USM")
 db = client['USM']
 rutas = db.rutas
 
-rutas.insert_many([
+rutas_data = [
     {
         "nombre": "LA CALIFORNIA",
         "precio": "50 Bs",
@@ -65,5 +65,19 @@ rutas.insert_many([
         "lng": "",
         "imagen": ""
     }
-])
-print("Rutas insertadas correctamente.")
+]
+
+for ruta in rutas_data:
+    rutas.update_one(
+        {"nombre": ruta["nombre"]},
+        {
+            "$set": {
+                **ruta,
+                "asistentes.ida": [],
+                "asistentes.vuelta": []
+            }
+        },
+        upsert=True
+    )
+
+print("Rutas actualizadas correctamente.")
