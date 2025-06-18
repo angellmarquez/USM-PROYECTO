@@ -330,10 +330,6 @@ def check_user():
 
 @app.route('/confirmar-asistencia', methods=['POST'])
 def confirmar_asistencia():
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({'error': 'No autenticado'}), 401
-
     data = request.json
     nombre_ruta = data.get('nombre_ruta')
     sentido = data.get('sentido')  # 'ida' o 'vuelta'
@@ -344,23 +340,20 @@ def confirmar_asistencia():
     if not ruta:
         return jsonify({'error': 'Ruta no encontrada'}), 404
 
-    # Asegura que el campo asistentes existe
-    if 'asistentes' not in ruta:
-        ruta['asistentes'] = {'ida': [], 'vuelta': []}
-    if sentido not in ruta['asistentes']:
-        ruta['asistentes'][sentido] = []
+    # Inicializa los contadores si no existen
+    if 'asistentes' not in ruta or not isinstance(ruta['asistentes'], dict):
+        ruta['asistentes'] = {}
+    if sentido not in ruta['asistentes'] or not isinstance(ruta['asistentes'][sentido], int):
+        ruta['asistentes'][sentido] = 0
 
-    # Evita duplicados
-    if user_id in ruta['asistentes'][sentido]:
-        return jsonify({'error': 'Ya confirmaste asistencia'}), 400
-
-    ruta['asistentes'][sentido].append(user_id)
+    # Incrementa el contador
+    nuevo_valor = ruta['asistentes'][sentido] + 1
     db.rutas.update_one(
         {'_id': ruta['_id']},
-        {'$set': {f'asistentes.{sentido}': ruta['asistentes'][sentido]}}
+        {'$set': {f'asistentes.{sentido}': nuevo_valor}}
     )
 
-    return jsonify({'success': True})
+    return jsonify({'success': True, 'nuevo_total': nuevo_valor})
 
 
 if __name__ == '__main__':
