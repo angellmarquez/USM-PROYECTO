@@ -4,97 +4,177 @@
     <meta charset="UTF-8">
     <title>Notificaciones</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts y Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+        :root {
+            --main-blue: #2563eb;
+            --main-blue-dark: #1e40af;
+            --main-bg: #f6f8fb;
+            --panel-bg: #fff;
+            --panel-shadow: 0 8px 32px 0 rgba(37,99,235,0.10), 0 2px 8px 0 rgba(0,0,0,0.08);
+            --panel-radius: 20px;
+            --text-main: #23223a;
+            --text-muted: #7c7c8a;
+            --divider: #e5eaf2;
+            --accent: #2563eb;
+        }
         html, body {
             margin: 0;
             padding: 0;
-            font-family: 'Montserrat', Arial, sans-serif;
-            background: #f7f8fa;
-            color: #22223b;
-            overflow-x: hidden;
+            background: var(--main-bg);
+            font-family: 'Inter', Arial, sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
             box-sizing: border-box;
+            overflow-x: hidden;
         }
-        .header {
-            background: #18181a;
-            color: #fff;
-            padding: 32px 40px 16px 40px;
-            font-size: 2.5rem;
-            font-weight: bold;
-            letter-spacing: 2px;
+        .barra-superior {
             width: 100%;
-            box-sizing: border-box;
-            text-align: center;
-            position: relative;
-        }
-        .container {
+            background: #fff;
+            color: var(--main-blue);
+            padding: 0;
+            box-shadow: 0 2px 12px rgba(37,99,235,0.07);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--divider);
             display: flex;
-            height: calc(100vh - 90px);
-            overflow-x: hidden;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 70px;
+            gap: 16px;
         }
-        .sidebar-placeholder {
-            width: 260px;
-            background: #f7f8fa;
-            border-right: 1px solid #e0e0e0;
+        .nav-azul {
+            background: none;
+            color: var(--main-blue-dark);
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 900;
+            font-size: 2.1rem;
+            letter-spacing: 1.5px;
+            padding: 0;
+            margin-left: 220px;
+            flex-shrink: 0;
+            box-shadow: none;
+            border-radius: 0;
         }
-        .main-content {
+        .icon-notif {
+            color: var(--main-blue);
+            font-size: 2.1rem;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .scroll-area {
+            margin-left: 270px; /* igual al ancho de la sidebar */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 110px 0 40px 0;
+            background: var(--main-bg);
+            min-height: 80vh;
+            box-sizing: border-box;
+        }
+        .contenedor-panel {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            padding: 0 40px 0 0; /* Padding derecho, sin padding izquierdo */
+        }
+        .notification-card {
+            width: 100%;
+            background: var(--panel-bg);
+            border-radius: var(--panel-radius);
+            box-shadow: var(--panel-shadow);
+            border-left: 7px solid var(--accent);
+            display: flex;
+            align-items: center; /* <-- Cambia de stretch a center */
+            margin-bottom: 0;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s;
+            transition: box-shadow 0.2s, transform 0.2s;
+            min-height: 120px;
+        }
+        .notification-card:hover {
+            box-shadow: 0 12px 36px 0 rgba(37,99,235,0.13), 0 4px 16px 0 rgba(0,0,0,0.10);
+            transform: translateY(-2px) scale(1.012);
+        }
+        .notification-icon {
+            background: none;
+            color: var(--main-blue-dark);
+            width: 90px;
+            min-width: 90px;
+            height: 100%;
+            display: flex;
+            align-items: center;      /* <-- Centra verticalmente */
+            justify-content: center;  /* <-- Centra horizontalmente */
+            border-top-left-radius: var(--panel-radius);
+            border-bottom-left-radius: var(--panel-radius);
+            padding-bottom: 0;        /* <-- Elimina el padding */
+        }
+        .notification-icon .material-icons {
+            font-size: 3.2rem;
+            margin: 0;
+        }
+        .notification-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 0;
-            /* Permite que el hijo use scroll si es necesario */
+            justify-content: center;
+            padding: 22px 32px 18px 0;
+            gap: 2px;
         }
-        .notifications-list {
-            background: #fff;
-            margin: 24px 40px 40px 40px;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px 0 #e9e9f3;
-            padding: 0;
-            overflow-y: auto; /* Permite scroll vertical */
-            min-height: 120px;
-            max-height: calc(100vh - 140px); /* Ajusta según header y márgenes */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+        .notification-autor {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 1.02rem;
+            margin-bottom: 0;
+            letter-spacing: 0.2px;
+        }
+        .notification-titulo {
+            font-size: 1.28rem;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 800;
+            color: var(--main-blue);
+            margin-bottom: 4px;
+            margin-top: 0;
+            letter-spacing: 0.2px;
+        }
+        .notification-message {
+            font-size: 1.09rem;
+            font-family: 'Inter', Arial, sans-serif;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+        .notification-date {
+            font-size: 0.98em;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-align: right;
         }
         .empty-message {
             color: #bfc0c0;
             font-size: 1.2rem;
             text-align: center;
             width: 100%;
-            padding: 40px 0;
-        }
-        .notification-item {
-            width: 100%;
-            background: #fff;
-            border-radius: 18px;
-            margin: 16px 0;
-            box-shadow: 0 4px 24px 0 #e9e9f3;
-            padding: 32px 32px 16px 32px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-sizing: border-box;
-        }
-        .notification-date {
-            font-size: 0.95em;
-            color: #888;
-            margin-top: 18px;
-            width: 100%;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-            text-align: right;
+            padding: 60px 0 40px 0;
         }
         .delete-fab {
             position: fixed;
             bottom: 32px;
             right: 32px;
-            width: 56px;
-            height: 56px;
-            background: #e53935;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #e53935 60%, #b71c1c 100%);
             color: #fff;
             border: none;
             border-radius: 50%;
@@ -102,30 +182,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 2.2rem;
             cursor: pointer;
             z-index: 1000;
-            transition: background 0.2s;
+            transition: background 0.2s, box-shadow 0.2s;
         }
         .delete-fab:hover {
-            background: #b71c1c;
+            background: linear-gradient(135deg, #b71c1c 60%, #e53935 100%);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.22);
         }
-        .delete-fab svg {
-            width: 28px;
-            height: 28px;
-            pointer-events: none;
+        .delete-fab .material-icons {
+            font-size: 2.1rem;
         }
         @media (max-width: 900px) {
-            .sidebar-placeholder {
-                width: 70px;
+            .contenedor-panel {
+                max-width: 98vw;
+                min-width: 0;
             }
-            .notifications-list {
-                margin-left: 8px;
-                margin-right: 8px;
-            }
-            .header {
-                padding-left: 8px;
-                padding-right: 8px;
+            .scroll-area {
+                padding-top: 80px;
             }
             .delete-fab {
                 right: 12px;
@@ -134,44 +209,64 @@
                 height: 48px;
                 font-size: 1.5rem;
             }
+            .notification-content {
+                padding: 18px 10px 14px 0;
+            }
+            .notification-icon {
+                width: 60px;
+                min-width: 60px;
+                font-size: 2rem;
+            }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        Notificaciones
+    <div class="barra-superior">
+        <span class="icon-notif material-icons">notifications_active</span>
+        <div class="nav-azul">NOTIFICACIONES</div>
     </div>
-    <div class="container">
-        <div class="sidebar-placeholder"></div>
-        <div class="main-content">
-            <div class="notifications-list" id="notifications-list"></div>
+    <div class="scroll-area">
+        <div class="contenedor-panel" id="contenedor-panel">
+            <!-- Notificaciones aquí -->
         </div>
     </div>
     <button class="delete-fab" id="delete-all-btn" title="Eliminar todas las notificaciones">
-        <svg viewBox="0 0 24 24" fill="none">
-            <path d="M3 6h18M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="10" y1="11" x2="10" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
-            <line x1="14" y1="11" x2="14" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <span class="material-icons">delete</span>
     </button>
     <script>
+    
+
         function renderNotifications() {
             let notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
-            const contenedor = document.getElementById('notifications-list');
+            const contenedor = document.getElementById('contenedor-panel');
             if (notificaciones.length === 0) {
-                contenedor.innerHTML = `<div class="empty-message">No tienes notificaciones por el momento.</div>`;
+                contenedor.innerHTML = `<div class="empty-message">
+                    <span class="material-icons" style="font-size:2.7rem; color:#bfc0c0;vertical-align:middle;">notifications_off</span>
+                    <br>No tienes notificaciones por el momento.
+                </div>`;
             } else {
                 contenedor.innerHTML = notificaciones.slice().reverse().map(n =>
-                    `<div class="notification-item">
-                        <div>${n.mensaje}</div>
-                        <div class="notification-date">${n.fecha}</div>
-                    </div>`
-                ).join('');
+    `<div class="notification-card" style="border-left: 7px solid ${n.color || 'var(--accent)'};">
+        <div class="notification-icon" style="color: ${n.color || 'var(--main-blue-dark)'};">
+            <span class="material-icons">notifications</span>
+        </div>
+        <div class="notification-content">
+            <div class="notification-autor">${n.autor || "USM Transporte"}</div>
+            <div class="notification-titulo">${n.titulo || ""}</div>
+            <div class="notification-message">${n.mensaje}</div>
+            <div class="notification-date">${n.fecha}</div>
+        </div>
+    </div>`
+).join('');
                 // Marcar todas como leídas
                 notificaciones.forEach(n => n.leida = true);
                 localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
             }
-            // Ocultar punto rojo en la campana
+            // Ocultar punto rojo en la campana (si existe)
             if (window.parent && window.parent.document) {
                 const notificationDot = window.parent.document.getElementById('notification-dot');
                 if (notificationDot) notificationDot.style.display = 'none';
@@ -181,8 +276,19 @@
         renderNotifications();
 
         document.getElementById('delete-all-btn').onclick = function() {
-            localStorage.removeItem('notificaciones');
-            renderNotifications();
+            // Selecciona todas las tarjetas de notificación
+            const cards = document.querySelectorAll('.notification-card');
+            // Aplica animación de desvanecimiento
+            cards.forEach(card => {
+                card.style.transition = 'opacity 0.5s, transform 0.5s';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+            });
+            // Elimina después de la animación
+            setTimeout(() => {
+                localStorage.removeItem('notificaciones');
+                renderNotifications();
+            }, 500);
         };
     </script>
 </body>

@@ -42,7 +42,7 @@
       color: var(--main-blue);
       padding: 0;
       box-shadow: 0 2px 12px rgba(37,99,235,0.07);
-      position: fixed; /* Cambiado de sticky a fixed */
+      position: fixed;
       top: 0;
       left: 0;
       z-index: 100;
@@ -61,7 +61,7 @@
       font-size: 2.1rem;
       letter-spacing: 1.5px;
       padding: 0;
-      margin-left: 300px; /* Puedes ajustar este valor para moverlo horizontalmente */
+      margin-left: 300px;
       flex-shrink: 0;
       box-shadow: none;
       border-radius: 0;
@@ -118,13 +118,12 @@
         margin-right: 8px;
       }
     }
-    /* Resto del CSS igual que antes */
     .scroll-area {
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 110px 0 40px 0; /* <--- Cambia el 40px por 110px o el alto real de tu nav */
+      padding: 110px 0 40px 0;
       background: var(--main-bg);
       min-height: 80vh;
       box-sizing: border-box;
@@ -541,26 +540,71 @@
           localStorage.setItem('showRouteTo', origen);
           window.location.href = 'mapa.html';
         });
+        // NUEVO: Confirmar asistencia con bloqueo y feedback
         panelIda.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
           e.stopPropagation();
+          const btnIda = this;
+          const key = `asistencia_${origen}_ida`;
+          const lastTime = localStorage.getItem(key);
+          const now = Date.now();
+          if (lastTime && now - parseInt(lastTime) < 10 * 60 * 1000) { // 10 minutos
+              btnIda.disabled = true;
+              btnIda.textContent = "Ya confirmaste (espera 10 min)";
+              setTimeout(() => {
+                  btnIda.disabled = false;
+                  btnIda.textContent = "Confirmar asistencia";
+              }, 2000);
+              return;
+          }
+          btnIda.disabled = true;
+          btnIda.textContent = "Confirmado ✔";
           fetch('https://usm-proyecto.onrender.com/confirmar-asistencia', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-              nombre_ruta: origen,
-              sentido: 'ida'
-            })
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({
+                  nombre_ruta: origen,
+                  sentido: 'ida'
+              })
           })
           .then(res => res.json())
           .then(data => {
-            if (data.success) {
-              alert('¡Asistencia confirmada!');
-            } else {
-              alert(data.error || 'Error al confirmar asistencia');
-            }
+              if (data.success) {
+                  // Notificación: solo si no existe una igual en los últimos 10 min
+                  let notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
+                  const existe = notificaciones.some(n =>
+                      n.titulo === 'Asistencia confirmada' &&
+                      n.mensaje.includes(origen) &&
+                      n.mensaje.includes('(ida)') &&
+                      (new Date() - new Date(n.fecha)) < 10 * 60 * 1000
+                  );
+                  if (!existe) {
+                      notificaciones.push({
+                          autor: "USM Transporte",
+                          titulo: `Asistencia confirmada`,
+                          mensaje: `¡Has confirmado tu asistencia a la estación <b style="color:${color}">${origen}</b> (ida)!`,
+                          fecha: new Date().toLocaleString(),
+                          color: color,
+                          leida: false
+                      });
+                      localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+                  }
+                  localStorage.setItem(key, now.toString());
+                  btnIda.textContent = "Confirmado ✔";
+                  setTimeout(() => {
+                      btnIda.disabled = false;
+                      btnIda.textContent = "Confirmar asistencia";
+                  }, 10 * 60 * 1000);
+              } else {
+                  btnIda.disabled = false;
+                  btnIda.textContent = "Confirmar asistencia";
+                  alert(data.error || 'Error al confirmar asistencia');
+              }
+          })
+          .catch(() => {
+              btnIda.disabled = false;
+              btnIda.textContent = "Confirmar asistencia";
+              alert('Error de red');
           });
         });
 
@@ -578,26 +622,70 @@
           localStorage.setItem('showRouteTo', destino);
           window.location.href = 'mapa.html';
         });
+        // NUEVO: Confirmar asistencia con bloqueo y feedback
         panelVuelta.querySelector('.confirmar-asistencia-btn').addEventListener('click', function(e) {
           e.stopPropagation();
+          const btnVuelta = this;
+          const key = `asistencia_${origen}_vuelta`;
+          const lastTime = localStorage.getItem(key);
+          const now = Date.now();
+          if (lastTime && now - parseInt(lastTime) < 10 * 60 * 1000) { // 10 minutos
+              btnVuelta.disabled = true;
+              btnVuelta.textContent = "Ya confirmaste (espera 10 min)";
+              setTimeout(() => {
+                  btnVuelta.disabled = false;
+                  btnVuelta.textContent = "Confirmar asistencia";
+              }, 2000);
+              return;
+          }
+          btnVuelta.disabled = true;
+          btnVuelta.textContent = "Confirmado ✔";
           fetch('https://usm-proyecto.onrender.com/confirmar-asistencia', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-              nombre_ruta: origen,
-              sentido: 'vuelta'
-            })
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({
+                  nombre_ruta: origen,
+                  sentido: 'vuelta'
+              })
           })
           .then(res => res.json())
           .then(data => {
-            if (data.success) {
-              alert('¡Asistencia confirmada!');
-            } else {
-              alert(data.error || 'Error al confirmar asistencia');
-            }
+              if (data.success) {
+                  let notificaciones = JSON.parse(localStorage.getItem('notificaciones') || '[]');
+                  const existe = notificaciones.some(n =>
+                      n.titulo === 'Asistencia confirmada' &&
+                      n.mensaje.includes(origen) &&
+                      n.mensaje.includes('(vuelta)') &&
+                      (new Date() - new Date(n.fecha)) < 10 * 60 * 1000
+                  );
+                  if (!existe) {
+                      notificaciones.push({
+                          autor: "USM Transporte",
+                          titulo: `Asistencia confirmada`,
+                          mensaje: `¡Has confirmado tu asistencia a la estación <b style="color:${color}">${origen}</b> (vuelta)!`,
+                          fecha: new Date().toLocaleString(),
+                          color: color,
+                          leida: false
+                      });
+                      localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
+                  }
+                  localStorage.setItem(key, now.toString());
+                  btnVuelta.textContent = "Confirmado ✔";
+                  setTimeout(() => {
+                      btnVuelta.disabled = false;
+                      btnVuelta.textContent = "Confirmar asistencia";
+                  }, 10 * 60 * 1000);
+              } else {
+                  btnVuelta.disabled = false;
+                  btnVuelta.textContent = "Confirmar asistencia";
+                  alert(data.error || 'Error al confirmar asistencia');
+              }
+          })
+          .catch(() => {
+              btnVuelta.disabled = false;
+              btnVuelta.textContent = "Confirmar asistencia";
+              alert('Error de red');
           });
         });
       });
@@ -607,7 +695,7 @@
       .then(res => res.json())
       .then(rutas => {
         rutasGlobal = rutas;
-        asignarNumerosYColores(rutasGlobal); // <--- NUEVO
+        asignarNumerosYColores(rutasGlobal);
         renderizarRutas(rutas);
       });
   </script>

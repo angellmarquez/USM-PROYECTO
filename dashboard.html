@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Paradas de Bus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: linear-gradient(120deg, #e3eafc 0%, #f6faff 100%);
+        }
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            min-height: 100vh;
+        }
+        /* Espacio para sidebar */
+        .sidebar-space {
+            width: 220px;
+            min-width: 180px;
+            max-width: 260px;
+            flex-shrink: 0;
+            background: transparent;
+            display: block;
+        }
+        @media (max-width: 900px) {
+            .sidebar-space {
+                display: none;
+            }
+        }
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .layout-flex {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            background: #2563eb;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            height: 54px;
+            box-shadow: 0 4px 18px #2563eb22;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(-30px);
+            animation: fadeInNav 0.9s 0.1s cubic-bezier(.23,1.01,.32,1) forwards;
+        }
+        @keyframes fadeInNav {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .navbar-logo {
+            font-size: 1.08em;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #fff;
+            text-shadow: 0 2px 8px #1746a055;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-logo span {
+            font-size: 1em;
+            font-weight: 700;
+            color: #aee2ff;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 22px;
+        }
+        .navbar-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.98em;
+            letter-spacing: 0.2px;
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+            transition: border 0.18s, color 0.18s;
+        }
+        .navbar-links a:hover, .navbar-links a.active {
+            border-bottom: 2px solid #aee2ff;
+            color: #aee2ff;
+        }
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+                padding: 8px 2vw;
+                gap: 6px;
+            }
+            .navbar-links {
+                gap: 12px;
+            }
+        }
+        .dashboard-container {
+            max-width: 950px;
+            margin: 28px auto 0 auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 6px 24px #2563eb18;
+            padding: 24px 18px 32px 18px;
+            animation: fadeInUp 1.1s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h1 {
+            color: #1746a0;
+            text-align: center;
+            margin-bottom: 22px;
+            font-size: 1.45em;
+            font-weight: 900;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInTitle 1.2s 0.2s cubic-bezier(.23,1.01,.32,1) forwards;
+        }
+        @keyframes fadeInTitle {
+            from {
+                opacity: 0;
+                transform: translateY(-18px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .chart-card {
+            background: #fafdff;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px #2563eb11;
+            padding: 16px 10px 10px 10px;
+            transition: box-shadow 0.22s, transform 0.22s;
+            border: 1.2px solid #e3eafc;
+            opacity: 0;
+            transform: translateY(30px) scale(0.98);
+            animation: fadeInCard 1s cubic-bezier(.23,1.01,.32,1) forwards;
+        }
+        .chart-card:nth-child(1) { animation-delay: 0.22s; }
+        .chart-card:nth-child(2) { animation-delay: 0.36s; }
+        .chart-card:nth-child(3) { animation-delay: 0.5s; }
+        @keyframes fadeInCard {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .chart-card:hover {
+            box-shadow: 0 8px 24px #2563eb33;
+            border: 1.2px solid #2563eb55;
+            transform: translateY(-3px) scale(1.01);
+        }
+        .chart-card h2 {
+            font-size: 1em;
+            color: #2563eb;
+            margin-bottom: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-align: left;
+            opacity: 0;
+            animation: fadeInTitle 1.2s 0.5s cubic-bezier(.23,1.01,.32,1) forwards;
+        }
+        @media (max-width: 900px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-container {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            .dashboard-container {
+                padding: 6px 1vw 12px 1vw;
+            }
+            h1 {
+                font-size: 1em;
+            }
+            .chart-card {
+                padding: 7px 2vw 4px 2vw;
+            }
+            .navbar {
+                padding: 8px 2vw;
+            }
+        }
+        /* Leyenda personalizada */
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 7px 0 0 0;
+            justify-content: center;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.93em;
+            color: #1746a0;
+            font-weight: 600;
+        }
+        .legend-color {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 4px #2563eb22;
+        }
+        /* Evita scroll horizontal */
+        body, html {
+            overflow-x: hidden !important;
+        }
+        .dashboard-container {
+            margin-left: 240px;
+        }
+        @media (max-width: 900px) {
+            .dashboard-container {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#aee2ff" style="vertical-align:middle;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+            <span>USM Bus</span>
+        </div>
+        <div class="navbar-links">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Mi Horario</a>
+            <a href="#">Perfil</a>
+            <a href="#">Cerrar sesión</a>
+        </div>
+    </nav>
+    <div class="layout-flex">
+        <div class="sidebar-space">
+            <!-- Aquí puedes agregar tu sidebar en el futuro -->
+        </div>
+        <div class="main-content">
+            <div class="dashboard-container">
+                <h1>Dashboard de Paradas de Bus</h1>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h2>Paradas más concurridas</h2>
+                        <canvas id="barChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h2>Personas esperadas por parada y día</h2>
+                        <canvas id="lineChart"></canvas>
+                        <div class="chart-legend" id="lineLegend"></div>
+                    </div>
+                    <div class="chart-card" style="grid-column: span 2;">
+                        <h2>Horas pico por parada y día</h2>
+                        <canvas id="heatmapChart"></canvas>
+                        <div class="chart-legend" id="heatmapLegend"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Datos de ejemplo
+        const paradas = ['Central', 'Norte', 'Sur', 'Este', 'Oeste'];
+        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const horas = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+        const colores = ['#2563eb', '#22a06b', '#f59e42', '#e53935', '#a259e4'];
+
+        // 1. Gráfica de barras: Paradas más concurridas
+        const concurrencia = [120, 95, 80, 60, 45];
+
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: paradas,
+                datasets: [{
+                    label: 'Personas por día',
+                    data: concurrencia,
+                    backgroundColor: colores,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 900,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#2563eb',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e3eafc' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. Gráfica de líneas: Personas esperadas por parada y día
+        const lineData = [
+            [30, 25, 28, 22, 15], // Central
+            [20, 18, 22, 19, 16], // Norte
+            [15, 14, 13, 12, 10], // Sur
+            [10, 12, 11, 10, 9],  // Este
+            [8, 7, 9, 8, 7]       // Oeste
+        ];
+
+        const lineChart = new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: dias,
+                datasets: paradas.map((parada, i) => ({
+                    label: parada,
+                    data: lineData[i],
+                    borderColor: colores[i],
+                    backgroundColor: colores[i] + '33',
+                    pointBackgroundColor: colores[i],
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    borderWidth: 2,
+                    tension: 0.35
+                }))
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1100,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#2563eb',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e3eafc' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Leyenda personalizada para lineChart
+        const lineLegend = document.getElementById('lineLegend');
+        paradas.forEach((parada, i) => {
+            const item = document.createElement('span');
+            item.className = 'legend-item';
+            item.innerHTML = `<span class="legend-color" style="background:${colores[i]}"></span>${parada}`;
+            lineLegend.appendChild(item);
+        });
+
+        // 3. Heatmap simulado: Horas pico por parada y día
+        // (usamos un gráfico de barras apiladas para simular el heatmap)
+        const heatmapData = [
+            // Central
+            [10, 15, 20, 25, 18, 12, 10, 10],
+            // Norte
+            [8, 12, 15, 18, 14, 10, 8, 10],
+            // Sur
+            [5, 8, 10, 12, 10, 8, 6, 7],
+            // Este
+            [4, 6, 8, 10, 8, 6, 5, 5],
+            // Oeste
+            [3, 5, 7, 8, 7, 5, 4, 4]
+        ];
+
+        new Chart(document.getElementById('heatmapChart'), {
+            type: 'bar',
+            data: {
+                labels: horas,
+                datasets: paradas.map((parada, i) => ({
+                    label: parada,
+                    data: heatmapData[i],
+                    backgroundColor: colores[i],
+                    stack: 'Stack 0',
+                    borderRadius: 6,
+                    borderSkipped: false
+                }))
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1200,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#2563eb',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    x: { stacked: true, grid: { color: '#e3eafc' } },
+                    y: { stacked: true, beginAtZero: true, grid: { color: '#e3eafc' } }
+                }
+            }
+        });
+
+        // Leyenda personalizada para heatmapChart
+        const heatmapLegend = document.getElementById('heatmapLegend');
+        paradas.forEach((parada, i) => {
+            const item = document.createElement('span');
+            item.className = 'legend-item';
+            item.innerHTML = `<span class="legend-color" style="background:${colores[i]}"></span>${parada}`;
+            heatmapLegend.appendChild(item);
+        });
+    </script>
+</body>
+</html>
