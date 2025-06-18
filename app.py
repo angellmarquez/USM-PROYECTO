@@ -8,6 +8,7 @@ import requests
 import os
 from bson import ObjectId
 from flask import send_from_directory
+from collections import defaultdict
 
 app = Flask(__name__)
 app.secret_key = 'TU_SECRETO_AQUI'  # Cambia esto por una clave secreta segura
@@ -354,6 +355,52 @@ def confirmar_asistencia():
     )
 
     return jsonify({'success': True, 'nuevo_total': nuevo_valor})
+
+@app.route('/dashboard/concurrencia', methods=['GET'])
+def dashboard_concurrencia():
+    rutas = list(db.rutas.find({}))
+    concurrencia = []
+    for ruta in rutas:
+        asistentes = ruta.get('asistentes', {})
+        total = len(asistentes.get('ida', [])) + len(asistentes.get('vuelta', []))
+        concurrencia.append({'nombre': ruta.get('nombre', 'Sin nombre'), 'total': total})
+    concurrencia.sort(key=lambda x: x['total'], reverse=True)
+    return jsonify(concurrencia)
+
+@app.route('/dashboard/esperados', methods=['GET'])
+def dashboard_esperados():
+    usuarios = list(db.usuarios.find({}))
+    dias = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes']
+    paradas_dias = defaultdict(lambda: [0]*5)
+    for u in usuarios:
+        parada = u.get('parada_bus', '').strip().upper()
+        horario = u.get('horario_resumido', {})
+        for i, dia in enumerate(dias):
+            if dia in horario and horario[dia]:
+                paradas_dias[parada][i] += 1
+    return jsonify({'paradas': list(paradas_dias.keys()), 'dias': dias, 'datos': list(paradas_dias.values())})
+
+@app.route('/dashboard/horas_pico', methods=['GET'])
+def dashboard_horas_pico():
+    usuarios = list(db.usuarios.find({}))
+    horas = [f"{h:02d}:00" for h in range(7, 15)]  # 07:00 a 14:00
+    paradas = set()
+    heatmap = defaultdict(lambda: [0 for _ in horas])
+    for u in usuarios:
+        parada = u.get('parada_bus', '').strip().upper()
+        if not parada:
+            continue
+        paradas.add(parada)
+        horario = u.get('horario_resumido', {})
+        for dia in horario.values():
+            inicio = dia.get('inicio', '')
+            fin = dia.get('fin', '')
+            for j, hora in enumerate(horas):
+                if inicio <= hora <= fin:
+                    heatmap[parada][j] += 1
+    paradas = sorted(list(paradas))
+    datos = [heatmap[parada] for parada in paradas]
+    return jsonify({'paradas': paradas, 'horas': horas, 'datos': datos})
 
 
 if __name__ == '__main__':
