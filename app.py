@@ -362,7 +362,22 @@ def dashboard_concurrencia():
     concurrencia = []
     for ruta in rutas:
         asistentes = ruta.get('asistentes', {})
-        total = len(asistentes.get('ida', [])) + len(asistentes.get('vuelta', []))
+        ida = asistentes.get('ida', [])
+        vuelta = asistentes.get('vuelta', [])
+        # Si es lista, cuenta la longitud; si es int, usa el valor; si no, 0
+        if isinstance(ida, list):
+            ida_count = len(ida)
+        elif isinstance(ida, int):
+            ida_count = ida
+        else:
+            ida_count = 0
+        if isinstance(vuelta, list):
+            vuelta_count = len(vuelta)
+        elif isinstance(vuelta, int):
+            vuelta_count = vuelta
+        else:
+            vuelta_count = 0
+        total = ida_count + vuelta_count
         concurrencia.append({'nombre': ruta.get('nombre', 'Sin nombre'), 'total': total})
     concurrencia.sort(key=lambda x: x['total'], reverse=True)
     return jsonify(concurrencia)
