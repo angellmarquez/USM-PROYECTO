@@ -8,7 +8,6 @@ import requests
 import os
 from bson import ObjectId
 from flask import send_from_directory
-from collections import defaultdict
 
 app = Flask(__name__)
 app.secret_key = 'TU_SECRETO_AQUI'  # Cambia esto por una clave secreta segura
@@ -356,66 +355,39 @@ def confirmar_asistencia():
 
     return jsonify({'success': True, 'nuevo_total': nuevo_valor})
 
-@app.route('/dashboard/concurrencia', methods=['GET'])
-def dashboard_concurrencia():
-    rutas = list(db.rutas.find({}))
-    concurrencia = []
-    for ruta in rutas:
-        asistentes = ruta.get('asistentes', {})
-        ida = asistentes.get('ida', [])
-        vuelta = asistentes.get('vuelta', [])
-        # Si es lista, cuenta la longitud; si es int, usa el valor; si no, 0
-        if isinstance(ida, list):
-            ida_count = len(ida)
-        elif isinstance(ida, int):
-            ida_count = ida
-        else:
-            ida_count = 0
-        if isinstance(vuelta, list):
-            vuelta_count = len(vuelta)
-        elif isinstance(vuelta, int):
-            vuelta_count = vuelta
-        else:
-            vuelta_count = 0
-        total = ida_count + vuelta_count
-        concurrencia.append({'nombre': ruta.get('nombre', 'Sin nombre'), 'total': total})
-    concurrencia.sort(key=lambda x: x['total'], reverse=True)
-    return jsonify(concurrencia)
+@app.route('/api/conteo-paradas', methods=['GET'])
+def conteo_paradas():
+    pipeline = [
+        {"$group": {"_id": "$parada_bus", "total": {"$sum": 1}}},
+        {"$sort": {"total": -1}}
+    ]
+    resultado = list(users_collection.aggregate(pipeline))
+    # Renombra _id a parada_bus para claridad
+    for r in resultado:
+        r['parada_bus'] = r.pop('_id')
+    return jsonify(resultado)
 
-@app.route('/dashboard/esperados', methods=['GET'])
-def dashboard_esperados():
-    usuarios = list(db.usuarios.find({}))
-    dias = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes']
-    paradas_dias = defaultdict(lambda: [0]*5)
+@app.route('/api/horarios-parada', methods=['GET'])
+def horarios_por_parada():
+    usuarios = list(users_collection.find({}, {'_id': 0, 'parada_bus': 1, 'horario_resumido': 1}))
+    resultado = {}
     for u in usuarios:
-        parada = u.get('parada_bus', '').strip().upper()
+        parada = u.get('parada_bus')
         horario = u.get('horario_resumido', {})
-        for i, dia in enumerate(dias):
-            if dia in horario and horario[dia]:
-                paradas_dias[parada][i] += 1
-    return jsonify({'paradas': list(paradas_dias.keys()), 'dias': dias, 'datos': list(paradas_dias.values())})
-
-@app.route('/dashboard/horas_pico', methods=['GET'])
-def dashboard_horas_pico():
-    usuarios = list(db.usuarios.find({}))
-    horas = [f"{h:02d}:00" for h in range(7, 15)]  # 07:00 a 14:00
-    paradas = set()
-    heatmap = defaultdict(lambda: [0 for _ in horas])
-    for u in usuarios:
-        parada = u.get('parada_bus', '').strip().upper()
-        if not parada:
+        if not parada or not horario:
             continue
-        paradas.add(parada)
-        horario = u.get('horario_resumido', {})
-        for dia in horario.values():
-            inicio = dia.get('inicio', '')
-            fin = dia.get('fin', '')
-            for j, hora in enumerate(horas):
-                if inicio <= hora <= fin:
-                    heatmap[parada][j] += 1
-    paradas = sorted(list(paradas))
-    datos = [heatmap[parada] for parada in paradas]
-    return jsonify({'paradas': paradas, 'horas': horas, 'datos': datos})
+        if parada not in resultado:
+            resultado[parada] = {}
+        for dia, horas in horario.items():
+            if dia not in resultado[parada]:
+                resultado[parada][dia] = {}
+            # horas puede ser una lista o un solo valor
+            if isinstance(horas, list):
+                for h in horas:
+                    resultado[parada][dia][h] = resultado[parada][dia].get(h, 0) + 1
+            else:
+                resultado[parada][dia][horas] = resultado[parada][dia].get(horas, 0) + 1
+    return jsonify(resultado)
 
 
 if __name__ == '__main__':

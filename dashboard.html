@@ -140,6 +140,7 @@
             <div class="chart-card">
                 <h2>Paradas más concurridas</h2>
                 <canvas id="barChart"></canvas>
+                <div class="chart-legend" id="barLegend"></div>
             </div>
             <div class="chart-card">
                 <h2>Personas esperadas por parada y día</h2>
@@ -152,125 +153,317 @@
                 <div class="chart-legend" id="heatmapLegend"></div>
             </div>
         </div>
+        <!-- Agrega esto donde quieras el selector y la gráfica -->
+        <div style="margin:30px 0;">
+            <label>Selecciona parada: 
+                <select id="select-parada"></select>
+            </label>
+            <label style="margin-left:20px;">Día: 
+                <select id="select-dia"></select>
+            </label>
+            <canvas id="horarioChart" height="80"></canvas>
+        </div>
     </div>
     <script>
-async function cargarDashboard() {
-    // Colores para las gráficas
-    const colores = ['#2563eb', '#22a06b', '#f59e42', '#e53935', '#a259e4', '#10b981', '#f43f5e', '#a21caf', '#f97316', '#0ea5e9', '#64748b'];
+        // Datos de ejemplo
+        const paradas = ['Central', 'Norte', 'Sur', 'Este', 'Oeste'];
+        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const horas = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+        // Colores para las barras (puedes agregar más si tienes más rutas)
+        const colores = ['#2563eb', '#22a06b', '#f59e42', '#e53935', '#a259e4', '#ffb300', '#00bcd4', '#8bc34a', '#ff4081', '#7c4dff'];
 
-    // 1. Paradas más concurridas
-    const concurrenciaResp = await fetch('/dashboard/concurrencia');
-    const concurrenciaData = await concurrenciaResp.json();
-    const paradas = concurrenciaData.map(d => d.nombre);
-    const concurrencia = concurrenciaData.map(d => d.total);
-
-    new Chart(document.getElementById('barChart'), {
-        type: 'bar',
-        data: {
-            labels: paradas,
-            datasets: [{
-                label: 'Personas por día',
-                data: concurrencia,
-                backgroundColor: colores,
-                borderRadius: 8,
-                borderSkipped: false
+        // Inicializa el gráfico de barras vacío
+        const barChart = new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Personas por día',
+                    data: [],
+                    backgroundColor: [],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1200,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#2563eb',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e3eafc' } },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            display: false // Oculta las etiquetas del eje X
+                        }
+                    }
+                }
+            },
+            plugins: [{
+                // Plugin para dibujar el círculo de color debajo de cada etiqueta
+                afterDraw: chart => {
+                    const ctx = chart.ctx;
+                    const xAxis = chart.scales.x;
+                    if (!xAxis) return;
+                    // Si quieres círculos debajo de las barras, puedes dejar este bloque.
+                    // Si no quieres nada debajo, comenta o elimina este bloque.
+                }
             }]
-        },
-        options: {
-            responsive: true,
-            animation: { duration: 1200, easing: 'easeOutQuart' },
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { beginAtZero: true, grid: { color: '#e3eafc' } },
-                x: { grid: { display: false } }
+        });
+
+        // 2. Gráfica de líneas: Personas esperadas por parada y día
+        const lineData = [
+            [30, 25, 28, 22, 15], // Central
+            [20, 18, 22, 19, 16], // Norte
+            [15, 14, 13, 12, 10], // Sur
+            [10, 12, 11, 10, 9],  // Este
+            [8, 7, 9, 8, 7]       // Oeste
+        ];
+
+        const lineChart = new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: dias,
+                datasets: paradas.map((parada, i) => ({
+                    label: parada,
+                    data: lineData[i],
+                    borderColor: colores[i],
+                    backgroundColor: colores[i] + '33',
+                    pointBackgroundColor: colores[i],
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    borderWidth: 3,
+                    tension: 0.35
+                }))
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1400,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#2563eb',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#e3eafc' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Leyenda personalizada para lineChart
+        const lineLegend = document.getElementById('lineLegend');
+        paradas.forEach((parada, i) => {
+            const item = document.createElement('span');
+            item.className = 'legend-item';
+            item.innerHTML = `<span class="legend-color" style="background:${colores[i]}"></span>${parada}`;
+            lineLegend.appendChild(item);
+        });
+
+        // 3. Heatmap simulado: Horas pico por parada y día
+        // (usamos un gráfico de barras apiladas para simular el heatmap)
+        const heatmapData = [
+            // Central
+            [10, 15, 20, 25, 18, 12, 10, 10],
+            // Norte
+            [8, 12, 15, 18, 14, 10, 8, 10],
+            // Sur
+            [5, 8, 10, 12, 10, 8, 6, 7],
+            // Este
+            [4, 6, 8, 10, 8, 6, 5, 5],
+            // Oeste
+            [3, 5, 7, 8, 7, 5, 4, 4]
+        ];
+
+        new Chart(document.getElementById('heatmapChart'), {
+            type: 'bar',
+            data: {
+                labels: horas,
+                datasets: paradas.map((parada, i) => ({
+                    label: parada,
+                    data: heatmapData[i],
+                    backgroundColor: colores[i],
+                    stack: 'Stack 0',
+                    borderRadius: 7,
+                    borderSkipped: false
+                }))
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1600,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#2563eb',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    x: { stacked: true, grid: { color: '#e3eafc' } },
+                    y: { stacked: true, beginAtZero: true, grid: { color: '#e3eafc' } }
+                }
+            }
+        });
+
+        // Leyenda personalizada para heatmapChart
+        const heatmapLegend = document.getElementById('heatmapLegend');
+        paradas.forEach((parada, i) => {
+            const item = document.createElement('span');
+            item.className = 'legend-item';
+            item.innerHTML = `<span class="legend-color" style="background:${colores[i]}"></span>${parada}`;
+            heatmapLegend.appendChild(item);
+        });
+
+        // Función para cargar rutas y actualizar gráfica y leyenda
+        async function mostrarNombresRutasYActualizarGrafica() {
+            try {
+                const res = await fetch('https://usm-proyecto.onrender.com/api/rutas');
+                const rutas = await res.json();
+
+                // Prepara datos para la gráfica
+                const nombres = [];
+                const asistentesArr = [];
+                rutas.forEach((ruta, idx) => {
+                    let asistentes = 0;
+                    if (typeof ruta.asistentes === 'number') {
+                        asistentes = ruta.asistentes;
+                    } else if (typeof ruta.asistentes === 'object' && ruta.asistentes !== null) {
+                        asistentes = (ruta.asistentes.ida || 0) + (ruta.asistentes.vuelta || 0);
+                    }
+                    nombres.push(ruta.nombre);
+                    asistentesArr.push(asistentes);
+                });
+
+                // Actualiza la gráfica de barras
+                barChart.data.labels = nombres;
+                barChart.data.datasets[0].data = asistentesArr;
+                barChart.data.datasets[0].backgroundColor = nombres.map((_, i) => colores[i % colores.length]);
+                barChart.update();
+
+                // Actualiza la leyenda personalizada de la gráfica de barras
+                const barLegend = document.getElementById('barLegend');
+                barLegend.innerHTML = '';
+                nombres.forEach((nombre, i) => {
+                    const item = document.createElement('span');
+                    item.className = 'legend-item';
+                    item.innerHTML = `<span class="legend-color" style="background:${colores[i % colores.length]}"></span><span style="font-weight:700;">${nombre}</span>`;
+                    barLegend.appendChild(item);
+                });
+
+            } catch (e) {
+                // Si falla la carga, la leyenda queda vacía
+                document.getElementById('barLegend').innerHTML = '<span style="color:red;">No se pudieron cargar las rutas</span>';
             }
         }
-    });
+        mostrarNombresRutasYActualizarGrafica();
 
-    // 2. Personas esperadas por parada y día
-    const esperadosResp = await fetch('/dashboard/esperados');
-    const esperadosData = await esperadosResp.json();
-    const paradasEsperadas = esperadosData.paradas;
-    const dias = esperadosData.dias.map(d => d.charAt(0).toUpperCase() + d.slice(1));
-    const datosEsperados = esperadosData.datos;
+        async function graficarConteoParadas() {
+            const res = await fetch('https://usm-proyecto.onrender.com/api/conteo-paradas');
+            const data = await res.json();
+            const labels = data.map(d => d.parada_bus);
+            const valores = data.map(d => d.total);
 
-    const lineChart = new Chart(document.getElementById('lineChart'), {
-        type: 'line',
-        data: {
-            labels: dias,
-            datasets: paradasEsperadas.map((parada, i) => ({
-                label: parada,
-                data: datosEsperados[i],
-                borderColor: colores[i % colores.length],
-                backgroundColor: colores[i % colores.length] + '33',
-                pointBackgroundColor: colores[i % colores.length],
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                borderWidth: 3,
-                tension: 0.35
-            }))
-        },
-        options: {
-            responsive: true,
-            animation: { duration: 1400, easing: 'easeOutQuart' },
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { beginAtZero: true, grid: { color: '#e3eafc' } },
-                x: { grid: { display: false } }
-            }
+            barChart.data.labels = labels;
+            barChart.data.datasets[0].data = valores;
+            barChart.data.datasets[0].backgroundColor = labels.map((_, i) => colores[i % colores.length]);
+            barChart.update();
+
+            // Leyenda personalizada
+            const barLegend = document.getElementById('barLegend');
+            barLegend.innerHTML = '';
+            labels.forEach((nombre, i) => {
+                const item = document.createElement('span');
+                item.className = 'legend-item';
+                item.innerHTML = `<span class="legend-color" style="background:${colores[i % colores.length]}"></span><span style="font-weight:700;">${nombre}</span>`;
+                barLegend.appendChild(item);
+            });
         }
-    });
+        graficarConteoParadas();
 
-    // Leyenda personalizada para lineChart
-    const lineLegend = document.getElementById('lineLegend');
-    lineLegend.innerHTML = '';
-    paradasEsperadas.forEach((parada, i) => {
-        const item = document.createElement('span');
-        item.className = 'legend-item';
-        item.innerHTML = `<span class="legend-color" style="background:${colores[i % colores.length]}"></span>${parada}`;
-        lineLegend.appendChild(item);
-    });
+        let horariosData = {};
+        let horarioChart;
 
-    // 3. Horas pico por parada y día
-    const horasPicoResp = await fetch('/dashboard/horas_pico');
-    const horasPico = await horasPicoResp.json();
+        async function cargarHorariosParada() {
+            const res = await fetch('https://usm-proyecto.onrender.com/api/horarios-parada');
+            horariosData = await res.json();
 
-    new Chart(document.getElementById('heatmapChart'), {
-        type: 'bar',
-        data: {
-            labels: horasPico.horas,
-            datasets: horasPico.paradas.map((parada, i) => ({
-                label: parada,
-                data: horasPico.datos[i],
-                backgroundColor: colores[i % colores.length],
-                stack: 'Stack 0',
-                borderRadius: 7,
-                borderSkipped: false
-            }))
-        },
-        options: {
-            responsive: true,
-            animation: { duration: 1600, easing: 'easeOutQuart' },
-            plugins: { legend: { display: false } },
-            scales: {
-                x: { stacked: true, grid: { color: '#e3eafc' } },
-                y: { stacked: true, beginAtZero: true, grid: { color: '#e3eafc' } }
-            }
+            // Llena el selector de paradas
+            const selectParada = document.getElementById('select-parada');
+            selectParada.innerHTML = Object.keys(horariosData).map(p => `<option value="${p}">${p}</option>`).join('');
+            selectParada.onchange = actualizarHorarioChart;
+
+            // Llena el selector de días
+            actualizarDias();
+
+            // Inicializa la gráfica
+            actualizarHorarioChart();
         }
-    });
 
-    // Leyenda personalizada para heatmapChart
-    const heatmapLegend = document.getElementById('heatmapLegend');
-    heatmapLegend.innerHTML = '';
-    horasPico.paradas.forEach((parada, i) => {
-        const item = document.createElement('span');
-        item.className = 'legend-item';
-        item.innerHTML = `<span class="legend-color" style="background:${colores[i % colores.length]}"></span>${parada}`;
-        heatmapLegend.appendChild(item);
-    });
-}
+        function actualizarDias() {
+            const parada = document.getElementById('select-parada').value;
+            const dias = parada ? Object.keys(horariosData[parada]) : [];
+            const selectDia = document.getElementById('select-dia');
+            selectDia.innerHTML = dias.map(d => `<option value="${d}">${d}</option>`).join('');
+            selectDia.onchange = actualizarHorarioChart;
+        }
 
-cargarDashboard();
-</script>
+        function actualizarHorarioChart() {
+            actualizarDias();
+            const parada = document.getElementById('select-parada').value;
+            const dia = document.getElementById('select-dia').value;
+            const horasObj = (horariosData[parada] && horariosData[parada][dia]) || {};
+            const horas = Object.keys(horasObj).sort();
+            const valores = horas.map(h => horasObj[h]);
+
+            if (horarioChart) horarioChart.destroy();
+            horarioChart = new Chart(document.getElementById('horarioChart'), {
+                type: 'bar',
+                data: {
+                    labels: horas,
+                    datasets: [{
+                        label: `Usuarios en ${parada} (${dia})`,
+                        data: valores,
+                        backgroundColor: '#2563eb'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        cargarHorariosParada();
+    </script>
 </body>
 </html>
