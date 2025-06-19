@@ -153,7 +153,7 @@
                 <div class="chart-legend" id="heatmapLegend"></div>
             </div>
         </div>
-        <!-- Agrega esto donde quieras el selector y la gráfica -->
+        <!-- Selector y gráfica dinámica de horarios por parada -->
         <div style="margin:30px 0;">
             <label>Selecciona parada: 
                 <select id="select-parada"></select>
@@ -164,11 +164,24 @@
             <canvas id="horarioChart" height="80"></canvas>
         </div>
     </div>
+
+    <!-- Tabla de conteo de usuarios por parada (solo usuarios, no rutas) -->
+    <div style="margin: 50px auto 0 auto; max-width: 600px;">
+        <h2 style="color:#2563eb; text-align:center;">Conteo de usuarios por parada</h2>
+        <table id="tabla-conteo-paradas" style="width:100%; border-collapse:collapse; background:#fafdff; border-radius:12px; box-shadow:0 2px 12px #2563eb11;">
+            <thead>
+                <tr style="background:#e3eafc;">
+                    <th style="padding:10px 0; color:#1746a0;">Parada</th>
+                    <th style="padding:10px 0; color:#1746a0;">Cantidad de usuarios</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="resumen-horarios-paradas" style="margin: 60px auto 40px auto; max-width: 98vw;"></div>
+
     <script>
-        // Datos de ejemplo
-        const paradas = ['Central', 'Norte', 'Sur', 'Este', 'Oeste'];
-        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        const horas = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
         // Colores para las barras (puedes agregar más si tienes más rutas)
         const colores = ['#2563eb', '#22a06b', '#f59e42', '#e53935', '#a259e4', '#ffb300', '#00bcd4', '#8bc34a', '#ff4081', '#7c4dff'];
 
@@ -225,6 +238,10 @@
         });
 
         // 2. Gráfica de líneas: Personas esperadas por parada y día
+        const paradas = ['Central', 'Norte', 'Sur', 'Este', 'Oeste'];
+        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const horas = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+
         const lineData = [
             [30, 25, 28, 22, 15], // Central
             [20, 18, 22, 19, 16], // Norte
@@ -343,7 +360,7 @@
             heatmapLegend.appendChild(item);
         });
 
-        // Función para cargar rutas y actualizar gráfica y leyenda
+        // Gráfica de paradas más concurridas (NO tocar, usa solo rutas)
         async function mostrarNombresRutasYActualizarGrafica() {
             try {
                 const res = await fetch('https://usm-proyecto.onrender.com/api/rutas');
@@ -380,35 +397,12 @@
                 });
 
             } catch (e) {
-                // Si falla la carga, la leyenda queda vacía
                 document.getElementById('barLegend').innerHTML = '<span style="color:red;">No se pudieron cargar las rutas</span>';
             }
         }
         mostrarNombresRutasYActualizarGrafica();
 
-        async function graficarConteoParadas() {
-            const res = await fetch('https://usm-proyecto.onrender.com/api/conteo-paradas');
-            const data = await res.json();
-            const labels = data.map(d => d.parada_bus);
-            const valores = data.map(d => d.total);
-
-            barChart.data.labels = labels;
-            barChart.data.datasets[0].data = valores;
-            barChart.data.datasets[0].backgroundColor = labels.map((_, i) => colores[i % colores.length]);
-            barChart.update();
-
-            // Leyenda personalizada
-            const barLegend = document.getElementById('barLegend');
-            barLegend.innerHTML = '';
-            labels.forEach((nombre, i) => {
-                const item = document.createElement('span');
-                item.className = 'legend-item';
-                item.innerHTML = `<span class="legend-color" style="background:${colores[i % colores.length]}"></span><span style="font-weight:700;">${nombre}</span>`;
-                barLegend.appendChild(item);
-            });
-        }
-        graficarConteoParadas();
-
+        // Selector y gráfica dinámica de horarios por parada
         let horariosData = {};
         let horarioChart;
 
@@ -464,6 +458,68 @@
         }
 
         cargarHorariosParada();
+
+        // Tabla de conteo de usuarios por parada (solo usuarios, no rutas)
+        async function mostrarConteoUsuariosPorParada() {
+            const rutasRes = await fetch('https://usm-proyecto.onrender.com/api/rutas');
+            const rutas = await rutasRes.json();
+            const nombresRutas = rutas.map(r => r.nombre);
+
+            const conteoRes = await fetch('https://usm-proyecto.onrender.com/api/conteo-paradas');
+            const conteo = await conteoRes.json();
+
+            // Solo muestra paradas que existen en rutas
+            const tbody = document.querySelector('#tabla-conteo-paradas tbody');
+            tbody.innerHTML = '';
+            nombresRutas.forEach(nombre => {
+                const found = conteo.find(c => c.parada_bus === nombre);
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="padding:8px 0; border-bottom:1px solid #e3eafc;">${nombre}</td>
+                        <td style="padding:8px 0; border-bottom:1px solid #e3eafc; text-align:center;">${found ? found.total : 0}</td>
+                    </tr>
+                `;
+            });
+        }
+        mostrarConteoUsuariosPorParada();
+
+        // Resumen de horarios por parada
+        async function mostrarResumenHorariosParadas() {
+            const res = await fetch('https://usm-proyecto.onrender.com/api/horarios-parada');
+            const data = await res.json();
+
+            // Usa los horarios exactos de tu imagen
+            const todasLasHoras = [
+                "07:00", "07:45", "08:30", "09:15", "10:00", "10:45", "11:30", "12:15",
+                "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00"
+            ];
+            const diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+            let html = '';
+
+            Object.keys(data).forEach(parada => {
+                html += `<h3 style="color:#2563eb; margin-top:40px;">${parada}</h3>`;
+                html += `<div style="overflow-x:auto;"><table style="border-collapse:collapse; margin-bottom:30px; min-width:700px; background:#fafdff; border-radius:10px; box-shadow:0 2px 12px #2563eb11;">`;
+                html += `<thead><tr style="background:#e3eafc;"><th style="padding:6px 10px;">Hora</th>`;
+                diasSemana.forEach(dia => {
+                    html += `<th style="padding:6px 10px;">${dia.charAt(0).toUpperCase() + dia.slice(1)}</th>`;
+                });
+                html += `</tr></thead><tbody>`;
+                todasLasHoras.forEach(hora => {
+                    html += `<tr>`;
+                    html += `<td style="padding:6px 10px; color:#2563eb; font-weight:bold;">${hora}</td>`;
+                    diasSemana.forEach(dia => {
+                        const conteo = (data[parada][dia] && data[parada][dia][hora]) ? data[parada][dia][hora] : 0;
+                        html += `<td style="padding:6px 10px; text-align:center;">${conteo > 0 ? `<span style="color:#2563eb; font-weight:bold;">${conteo}</span>` : ''}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody></table></div>`;
+            });
+
+            document.getElementById('resumen-horarios-paradas').innerHTML = html;
+        }
+        mostrarResumenHorariosParadas();
     </script>
 </body>
 </html>

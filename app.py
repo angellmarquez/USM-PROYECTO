@@ -378,16 +378,31 @@ def horarios_por_parada():
             continue
         if parada not in resultado:
             resultado[parada] = {}
-        for dia, horas in horario.items():
+        for dia, valor in horario.items():
             if dia not in resultado[parada]:
                 resultado[parada][dia] = {}
-            # horas puede ser una lista o un solo valor
-            if isinstance(horas, list):
-                for h in horas:
-                    resultado[parada][dia][h] = resultado[parada][dia].get(h, 0) + 1
-            else:
-                resultado[parada][dia][horas] = resultado[parada][dia].get(horas, 0) + 1
+            # Si es un dict con inicio/fin
+            if isinstance(valor, dict):
+                inicio = valor.get('inicio')
+                fin = valor.get('fin')
+                if isinstance(inicio, str) and inicio.strip():
+                    resultado[parada][dia][inicio] = resultado[parada][dia].get(inicio, 0) + 1
+                if isinstance(fin, str) and fin.strip():
+                    resultado[parada][dia][fin] = resultado[parada][dia].get(fin, 0) + 1
+            # Si es una lista de horas
+            elif isinstance(valor, list):
+                for h in valor:
+                    if isinstance(h, str) and h.strip():
+                        resultado[parada][dia][h] = resultado[parada][dia].get(h, 0) + 1
+            # Si es un string directo
+            elif isinstance(valor, str) and valor.strip():
+                resultado[parada][dia][valor] = resultado[parada][dia].get(valor, 0) + 1
     return jsonify(resultado)
+
+@app.route('/api/usuarios', methods=['GET'])
+def get_usuarios():
+    usuarios = list(users_collection.find({}, {'_id': 0, 'parada_bus': 1}))
+    return jsonify(usuarios)
 
 
 if __name__ == '__main__':
