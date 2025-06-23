@@ -281,25 +281,23 @@ const laCaliforniaPopup = new mapboxgl.Popup({ offset: 25 })
   .setHTML(popupContent)
   .addClassName('animated-popup');
 
-// Crear un elemento HTML personalizado para el marcador con la imagen subida
+// Crear un marcador solo con el número 1 (sin imagen)
 const laCaliforniaEl = document.createElement('div');
 laCaliforniaEl.style.width = '48px';
 laCaliforniaEl.style.height = '48px';
 laCaliforniaEl.style.borderRadius = '50%';
-laCaliforniaEl.style.overflow = 'hidden';
+laCaliforniaEl.style.background = '#2563eb';
+laCaliforniaEl.style.display = 'flex';
+laCaliforniaEl.style.alignItems = 'center';
+laCaliforniaEl.style.justifyContent = 'center';
+laCaliforniaEl.style.color = '#fff';
+laCaliforniaEl.style.fontWeight = 'bold';
+laCaliforniaEl.style.fontSize = '1.5em';
 laCaliforniaEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
 laCaliforniaEl.style.border = '2px solid #fff';
+laCaliforniaEl.textContent = '1';
 
-const img = document.createElement('img');
-img.src = 'brand/California.jpg'; // Usa aquí el nombre real del archivo si es diferente
-img.alt = 'La California';
-img.style.width = '100%';
-img.style.height = '100%';
-img.style.objectFit = 'cover';
-
-laCaliforniaEl.appendChild(img);
-
-// Crear el marcador personalizado con la imagen
+// Crear el marcador personalizado solo con el número
 const laCaliforniaMarker = new mapboxgl.Marker(laCaliforniaEl)
   .setLngLat([laCaliforniaLng, laCaliforniaLat])
   .setPopup(laCaliforniaPopup)
@@ -309,10 +307,9 @@ const laCaliforniaMarker = new mapboxgl.Marker(laCaliforniaEl)
 fetch('https://usm-proyecto.onrender.com/api/rutas')
   .then(res => res.json())
   .then(rutas => {
-    rutas.forEach(ruta => {
-      // Solo crear marcador si tiene lat y lng
+    rutas.forEach((ruta, idx) => {
       if (ruta.lat && ruta.lng) {
-        // Crear el contenido del popup dinámicamente
+        // Popup con imagen y datos
         const popupContent = `
           <div style="text-align:center;">
             <img src="${ruta.imagen}" alt="Estación ${ruta.nombre}" style="width:180px;max-width:90vw;border-radius:12px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
@@ -330,36 +327,30 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
           </div>
         `;
 
-        // Crear el popup
         const popup = new mapboxgl.Popup({ offset: 25 })
           .setHTML(popupContent)
           .addClassName('animated-popup');
 
-        // Crear el marcador personalizado con la imagen
+        // Crear marcador solo con el número
         const markerEl = document.createElement('div');
-        markerEl.style.width = '48px';
-        markerEl.style.height = '48px';
+        markerEl.style.width = '38px';
+        markerEl.style.height = '38px';
         markerEl.style.borderRadius = '50%';
-        markerEl.style.overflow = 'hidden';
-        markerEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-        markerEl.style.border = '2px solid #fff';
+        markerEl.style.background = '#2563eb';
+        markerEl.style.display = 'flex';
+        markerEl.style.alignItems = 'center';
+        markerEl.style.justifyContent = 'center';
+        markerEl.style.color = '#fff';
+        markerEl.style.fontWeight = 'bold';
+        markerEl.style.fontSize = '1.2em';
+        markerEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.18)';
+        markerEl.textContent = (idx + 1);
 
-        const img = document.createElement('img');
-        img.src = ruta.imagen;
-        img.alt = ruta.nombre;
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'cover';
-
-        markerEl.appendChild(img);
-
-        // Crear el marcador en el mapa
         new mapboxgl.Marker(markerEl)
           .setLngLat([parseFloat(ruta.lng), parseFloat(ruta.lat)])
           .setPopup(popup)
           .addTo(map)
           .getElement().addEventListener('click', function () {
-            // Espera a que el popup esté abierto
             setTimeout(() => {
               const btn = document.querySelector('.confirmar-asistencia-popup-btn[data-estacion="' + ruta.nombre + '"]');
               if (btn) {
@@ -372,7 +363,6 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
                     leida: false
                   });
                   localStorage.setItem('notificaciones', JSON.stringify(notificaciones));
-                  
                 };
               }
             }, 200);
