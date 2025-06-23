@@ -404,34 +404,7 @@
                 <div class="chart-legend" id="heatmapLegend"></div>
             </div>
         </div>
-        <!-- Selector y gráfica dinámica de horarios por parada -->
-        <div style="margin:30px 0;">
-            <label>Selecciona parada: 
-                <select id="select-parada"></select>
-            </label>
-            <label style="margin-left:20px;">Día: 
-                <select id="select-dia"></select>
-            </label>
-            <canvas id="horarioChart" height="80"></canvas>
-        </div>
     </div>
-
-    <!-- Tabla de conteo de usuarios por parada (solo usuarios, no rutas) -->
-    <div style="margin: 50px auto 0 auto; max-width: 600px;">
-        <h2 style="color:#2563eb; text-align:center;">Conteo de usuarios por parada</h2>
-        <table id="tabla-conteo-paradas" style="width:100%; border-collapse:collapse; background:#fafdff; border-radius:12px; box-shadow:0 2px 12px #2563eb11;">
-            <thead>
-                <tr style="background:#e3eafc;">
-                    <th style="padding:10px 0; color:#1746a0;">Parada</th>
-                    <th style="padding:10px 0; color:#1746a0;">Cantidad de usuarios</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <div id="resumen-horarios-paradas" style="margin: 60px auto 40px auto; max-width: 98vw;"></div>
-
     <script>
         // Colores para las rutas
         const colores = [
@@ -781,63 +754,6 @@
             await cargarRutasNavbarConActivador();
             if (paradaSeleccionada) renderHeatmapChartCustom();
         })();
-
-        // Selector y gráfica dinámica de horarios por parada
-        let horariosData = {};
-        let horarioChart;
-
-        async function cargarHorariosParada() {
-            const res = await fetch('https://usm-proyecto.onrender.com/api/horarios-parada');
-            horariosData = await res.json();
-
-            // Llena el selector de paradas
-            const selectParada = document.getElementById('select-parada');
-            selectParada.innerHTML = Object.keys(horariosData).map(p => `<option value="${p}">${p}</option>`).join('');
-            selectParada.onchange = actualizarHorarioChart;
-
-            // Llena el selector de días
-            actualizarDias();
-
-            // Inicializa la gráfica
-            actualizarHorarioChart();
-        }
-
-        function actualizarDias() {
-            const parada = document.getElementById('select-parada').value;
-            const dias = parada ? Object.keys(horariosData[parada]) : [];
-            const selectDia = document.getElementById('select-dia');
-            selectDia.innerHTML = dias.map(d => `<option value="${d}">${d}</option>`).join('');
-            selectDia.onchange = actualizarHorarioChart;
-        }
-
-        function actualizarHorarioChart() {
-            actualizarDias();
-            const parada = document.getElementById('select-parada').value;
-            const dia = document.getElementById('select-dia').value;
-            const horasObj = (horariosData[parada] && horariosData[parada][dia]) || {};
-            const horas = Object.keys(horasObj).sort();
-            const valores = horas.map(h => horasObj[h]);
-
-            if (horarioChart) horarioChart.destroy();
-            horarioChart = new Chart(document.getElementById('horarioChart'), {
-                type: 'bar',
-                data: {
-                    labels: horas,
-                    datasets: [{
-                        label: `Usuarios en ${parada} (${dia})`,
-                        data: valores,
-                        backgroundColor: '#2563eb'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-        }
-
-        cargarHorariosParada();
 
         // Tabla de conteo de usuarios por parada (solo usuarios, no rutas)
         async function mostrarConteoUsuariosPorParada() {
