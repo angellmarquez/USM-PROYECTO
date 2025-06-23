@@ -567,3 +567,31 @@ body {
     margin-left: 210px;
   }
 }
+
+.search-results {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #e3eafc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #2563eb11;
+  width: 90%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  margin-top: 5px;
+  left: 5%;
+  display: none;
+}
+.search-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #1746a0;
+  font-size: 1em;
+}
+.search-item:hover {
+  background: #e3eafc;
+  color: #2563eb;
+}
+.search {
+  position: relative;
+}
