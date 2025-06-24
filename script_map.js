@@ -41,10 +41,25 @@ function toggleInfoPanel() {
 let currentMarker = null;
 let trackingInterval = null;
 let userMarker = null;
+let driverMarkers = {}; // Para almacenar los marcadores de los conductores
 
 // Activar automáticamente la geolocalización al cargar el mapa
 map.on('load', () => {
   geolocateControl.trigger();
+
+  // Comprobar el rol del usuario y actuar en consecuencia
+  fetch('https://usm-proyecto.onrender.com/user-info', { credentials: 'include' })
+    .then(res => res.json())
+    .then(userInfo => {
+      if (userInfo.rol === 'conductor') {
+        startSendingLocation();
+      }
+    })
+    .catch(err => console.error("Error obteniendo información del usuario:", err));
+
+  // Empezar a obtener la ubicación de los conductores para todos los usuarios
+  setInterval(fetchAndDisplayDrivers, 5000); // Actualizar cada 5 segundos
+
 
   // --- BLOQUE PARA TRAZAR LA RUTA DESDE LA UBICACIÓN DEL USUARIO ---
   const destinoNombre = localStorage.getItem('showRouteTo');
@@ -98,67 +113,68 @@ function addCustomMarker(longitude, latitude, color = 'blue') {
     .addTo(map);
 }
 
-// Función para iniciar el seguimiento en tiempo real del otro usuario
-function startRealTimeTracking() {
-  const searchUserId = document.getElementById('search-user-id').value;
-  if (!searchUserId) {
-    document.getElementById('search-result').innerHTML = 'Por favor, introduce una ID válida.';
-    return;
-  }
-
-  // Limpiar cualquier intervalo previo
-  if (trackingInterval) {
-    clearInterval(trackingInterval);
-  }
-
-  // Iniciar un intervalo para actualizar la ubicación cada 5 segundos
-  trackingInterval = setInterval(() => {
-    fetch(`https://proyecto-usm.onrender.com/get-location/${searchUserId}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Usuario no encontrado');
-        }
-        return response.json();
-      })
-      .then((location) => {
-        const { latitude, longitude } = location;
-
-        // Centrar el mapa en la ubicación del usuario buscado
-        map.flyTo({
-          center: [longitude, latitude],
-          zoom: 2,
-        });
-
-        // Eliminar el marcador current si existe
-        if (currentMarker) {
-          currentMarker.remove();
-        }
-
-        // Agregar un marcador naranja para el otro usuario
-        currentMarker = addCustomMarker(longitude, latitude, 'orange');
-
-        // Mostrar la ubicación del usuario buscado en el panel de información
-        document.getElementById('search-result').innerHTML =
-          `<strong>Ubicación del usuario ${searchUserId}:</strong><br>` +
-          `<strong>Latitud:</strong> ${latitude.toFixed(6)}<br>` +
-          `<strong>Longitud:</strong> ${longitude.toFixed(6)}`;
-
-        // Obtener la dirección del usuario buscado
-        fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxgl.accessToken}`)
-          .then(response => response.json())
-          .then(data => {
-            const address = data.features[0]?.place_name || 'Dirección no disponible';
-            document.getElementById('search-result').innerHTML += `<br><strong>Dirección:</strong> ${address}`;
-          })
-          .catch(err => console.error('Error al obtener la dirección:', err));
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById('search-result').innerHTML =
-          `<strong>Error:</strong> No se pudo localizar al usuario.`;
-      });
-  }, 5000); // Actualizar cada 5 segundos
+// Función para que los conductores envíen su ubicación periódicamente
+function startSendingLocation() {
+  navigator.geolocation.watchPosition(position => {
+    const { longitude, latitude } = position.coords;
+    fetch('https://usm-proyecto.onrender.com/update-location', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ longitude, latitude }),
+      credentials: 'include'
+    }).catch(err => console.error("Error al enviar la ubicación:", err));
+  }, err => {
+    console.error("Error de geolocalización:", err);
+  }, {
+    enableHighAccuracy: true
+  });
 }
+
+// Función para obtener y mostrar la ubicación de todos los conductores
+function fetchAndDisplayDrivers() {
+  fetch('https://usm-proyecto.onrender.com/get-drivers-locations', { credentials: 'include' })
+    .then(res => res.json())
+    .then(drivers => {
+      drivers.forEach(driver => {
+        const driverId = driver.id;
+        const location = driver.location.coordinates; // [longitude, latitude]
+
+        if (driverMarkers[driverId]) {
+          // Si el marcador ya existe, actualiza su posición
+          driverMarkers[driverId].setLngLat(location);
+        } else {
+          // Si es un nuevo conductor, crea un nuevo marcador
+          const el = document.createElement('div');
+          el.className = 'driver-marker';
+          // Aquí puedes personalizar el ícono del conductor, por ejemplo, con una imagen de un carro
+          el.style.backgroundImage = 'url("https://cdn-icons-png.flaticon.com/512/3448/3448609.png")';
+          el.style.width = '40px';
+          el.style.height = '40px';
+          el.style.backgroundSize = '100%';
+
+          const marker = new mapboxgl.Marker(el)
+            .setLngLat(location)
+            .setPopup(new mapboxgl.Popup().setText(`${driver.nombre} ${driver.apellido}`))
+            .addTo(map);
+          
+          driverMarkers[driverId] = marker;
+        }
+      });
+    })
+    .catch(err => console.error("Error al obtener la ubicación de los conductores:", err));
+}
+
+
+// Función para iniciar el seguimiento en tiempo real del otro usuario
+/*
+ * Se elimina la función startRealTimeTracking porque la nueva funcionalidad
+ * muestra a todos los conductores a la vez, en lugar de seguir a uno solo.
+function startRealTimeTracking() {
+...
+}
+*/
 
 // Coordenadas de la estación La California
 const laCaliforniaLat = 10.482470;

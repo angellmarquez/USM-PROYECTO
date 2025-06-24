@@ -166,9 +166,42 @@ def register():
         'email': email,
         'telefono': telefono,
         'nombre': nombre,
-        'apellido': apellido
+        'apellido': apellido,
+        'rol': 'pasajero'  # Rol por defecto
     })
     return jsonify({'message': 'Usuario registrado correctamente'}), 201
+
+@app.route('/update-location', methods=['POST'])
+def update_location():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'No autenticado'}), 401
+
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+    if not user or user.get('rol') != 'conductor':
+        return jsonify({'error': 'No autorizado'}), 403
+
+    data = request.json
+    location = {
+        'type': 'Point',
+        'coordinates': [data['longitude'], data['latitude']]
+    }
+    users_collection.update_one({'_id': ObjectId(user_id)}, {'$set': {'location': location}})
+    return jsonify({'success': True})
+
+@app.route('/get-drivers-locations', methods=['GET'])
+def get_drivers_locations():
+    drivers = users_collection.find({'rol': 'conductor'})
+    locations = []
+    for driver in drivers:
+        if 'location' in driver:
+            locations.append({
+                'id': str(driver['_id']),
+                'nombre': driver.get('nombre'),
+                'apellido': driver.get('apellido'),
+                'location': driver['location']
+            })
+    return jsonify(locations)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -214,7 +247,8 @@ def user_info():
         'hora_entrada': user.get('hora_entrada', ''),
         'ampm_entrada': user.get('ampm_entrada', ''),
         'hora_salida': user.get('hora_salida', ''),
-        'ampm_salida': user.get('ampm_salida', '')
+        'ampm_salida': user.get('ampm_salida', ''),
+        'rol': user.get('rol', 'pasajero')
     })
 
 @app.route('/check-password', methods=['POST'])
