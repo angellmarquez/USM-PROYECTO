@@ -324,6 +324,14 @@ const laCaliforniaMarker = new mapboxgl.Marker(laCaliforniaEl)
 fetch('https://usm-proyecto.onrender.com/api/rutas')
   .then(res => res.json())
   .then(rutas => {
+    const colorMap = {
+        'LA CALIFORNIA': '#2563eb',
+        'PLAZA-VENEZUELA': '#22a06b',
+        'LOS TEQUES': '#f59e42',
+        'CONCRESA': '#e53935',
+        'LA GUAIRA': '#a259e4',
+        'GUARENAS GUATIRE': '#ffb300'
+    };
     rutas.forEach((ruta, idx) => {
       if (ruta.lat && ruta.lng) {
         // Popup con imagen y datos
@@ -353,7 +361,7 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
         markerEl.style.width = '38px';
         markerEl.style.height = '38px';
         markerEl.style.borderRadius = '50%';
-        markerEl.style.background = '#2563eb'; // Azul para todas las paradas
+        markerEl.style.background = colorMap[ruta.nombre] || '#2563eb'; // Azul para todas las paradas
         markerEl.style.display = 'flex';
         markerEl.style.alignItems = 'center';
         markerEl.style.justifyContent = 'center';
