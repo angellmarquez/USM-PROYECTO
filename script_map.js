@@ -148,11 +148,12 @@ function fetchAndDisplayDrivers() {
           // Si es un nuevo conductor, crea un nuevo marcador
           const el = document.createElement('div');
           el.className = 'driver-marker';
-          // Aquí puedes personalizar el ícono del conductor, por ejemplo, con una imagen de un carro
-          el.style.backgroundImage = 'url("https://cdn-icons-png.flaticon.com/512/3448/3448609.png")';
-          el.style.width = '40px';
-          el.style.height = '40px';
-          el.style.backgroundSize = '100%';
+          // Usar la imagen personalizada del autobús
+          el.style.backgroundImage = 'url(brand/bus.png)';
+          el.style.width = '80px'; // Ancho del ícono del bus
+          el.style.height = '35px'; // Alto del ícono del bus
+          el.style.backgroundSize = 'contain';
+          el.style.backgroundRepeat = 'no-repeat';
 
           const marker = new mapboxgl.Marker(el)
             .setLngLat(location)
@@ -352,7 +353,7 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
         markerEl.style.width = '38px';
         markerEl.style.height = '38px';
         markerEl.style.borderRadius = '50%';
-        markerEl.style.background = '#2563eb';
+        markerEl.style.background = '#2563eb'; // Azul para todas las paradas
         markerEl.style.display = 'flex';
         markerEl.style.alignItems = 'center';
         markerEl.style.justifyContent = 'center';
