@@ -34,7 +34,6 @@
       overflow-x: hidden;
     }
     body {
-      background: linear-gradient(120deg, #eaf1ff 0%, #f6f8fb 100%);
       overflow-x: hidden;
     }
     .barra-superior {
@@ -141,18 +140,18 @@
       padding: 0 12px;
     }
     .config-panel {
-      background: #fff;
+      width: 100%;
+      background: var(--panel-bg);
       border-radius: var(--panel-radius);
-      box-shadow: 0 8px 32px 0 rgba(37,99,235,0.13), 0 2px 12px 0 rgba(0,0,0,0.10);
-      border: 2px solid #2563eb22;
-      transition: box-shadow 0.25s, background 0.25s, transform 0.18s, border 0.18s;
-      margin-bottom: 12px;
-    }
-    .config-panel.active, .config-panel:hover {
-      background: #eaf1ff;
-      border: 2px solid #2563eb;
-      box-shadow: 0 12px 36px 0 rgba(37,99,235,0.18), 0 4px 16px 0 rgba(0,0,0,0.13);
-      transform: translateY(-2px) scale(1.012);
+      box-shadow: var(--panel-shadow);
+      border: none;
+      padding: 0;
+      transition: box-shadow 0.25s, background 0.25s, transform 0.18s;
+      cursor: pointer;
+      user-select: none;
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
     }
     .config-panel:not(:last-child) {
       margin-bottom: 0;
@@ -257,6 +256,8 @@
     }
     .como-llegar-btn, .confirmar-asistencia-btn {
       padding: 10px 22px;
+      background: var(--btn-bg);
+      color: var(--btn-text);
       border: none;
       border-radius: var(--btn-radius);
       font-size: 1em;
@@ -268,25 +269,18 @@
       outline: none;
       letter-spacing: 1px;
     }
-    .como-llegar-btn {
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      box-shadow: 0 2px 8px #2563eb22;
-    }
     .como-llegar-btn:hover {
-      background: #1746a0;
-      color: #fff;
+      background: var(--btn-bg-hover);
+      transform: scale(1.04);
     }
     .confirmar-asistencia-btn {
-      background: #eab308;
-      color: #23223a;
-      border: none;
-      box-shadow: 0 2px 8px #eab30833;
+      background: #e5eaf2;
+      color: var(--main-blue-dark);
     }
     .confirmar-asistencia-btn:hover {
-      background: #facc15;
-      color: #23223a;
+      background: #c7d7f7;
+      color: var(--main-blue);
+      transform: scale(1.04);
     }
     @media (max-width: 900px) {
       .contenedor-panel {
