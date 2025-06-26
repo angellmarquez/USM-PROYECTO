@@ -254,22 +254,67 @@
         }
         .selector-parada-heatmap {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 18px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 32px;
+            margin-bottom: 24px;
             margin-top: 10px;
             width: 100%;
             position: relative;
-            height: 80px;
+            flex-wrap: wrap;
         }
-        .selector-parada-heatmap select {
-            padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid #e3eafc;
-            font-size: 1em;
+        .selector-parada-heatmap > * {
+            min-width: 0;
+        }
+        #btn-dia-prev {
+            justify-self: start;
+            margin-left: 0;
+        }
+        #btn-dia-next {
+            justify-self: end;
+            margin-right: 0;
+        }
+        #select-parada-heatmap {
+            width: 270px;
+            font-size: 1.25em;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 800;
+            color: #1746a0;
+            background: #fafdff;
+            border: 2.5px solid #2563eb;
+            border-radius: 32px;
+            padding: 14px 28px;
+            box-shadow: 0 4px 16px #2563eb11;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            margin-bottom: 0;
+            margin-top: 0;
+            margin-right: 0;
+            margin-left: 0;
+        }
+        #select-parada-heatmap:focus {
+            border: 2.5px solid #1746a0;
+            box-shadow: 0 6px 24px #2563eb22;
+        }
+        #nombre-dia {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: #2563eb;
+            text-align: center;
+            background: none;
+            border-radius: 12px;
+            padding: 0 20px;
+            user-select: none;
+            font-family: 'Montserrat', Arial, sans-serif;
+            letter-spacing: 1px;
+            flex: 1 1 auto;
+            margin: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         #btn-dia-prev, #btn-dia-next {
-            font-size: 2.5em;
+            font-size: 2.2em;
             background: none;
             border: none;
             color: #2563eb;
@@ -281,47 +326,58 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            margin: 0 8px;
+            position: static;
+            top: auto;
+            left: auto;
+            right: auto;
+            transform: none;
             z-index: 2;
         }
-
-        #btn-dia-prev {
-            left: 0;
-        }
-
-        #btn-dia-next {
-            right: 0;
-        }
-
-        #nombre-dia {
-            font-size: 2.5em;
-            font-weight: 900;
-            color: #2563eb;
-            text-align: center;
-            flex: 1;
-            z-index: 1;
-            letter-spacing: 1px;
-            background: none;
-            border-radius: 12px;
-            padding: 0 80px;
-            user-select: none;
-        }
         @media (max-width: 900px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
+            .selector-parada-heatmap {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            #select-parada-heatmap {
+                width: 100%;
+                font-size: 1em;
+                padding: 8px 12px;
+            }
+            #nombre-dia {
+                font-size: 1.3em;
+                padding: 0 6px;
+                margin: 0 0 8px 0;
+            }
+            #btn-dia-prev, #btn-dia-next {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3em;
+                margin: 0 4px;
             }
         }
         @media (max-width: 600px) {
-            .dashboard-container {
-                padding: 10px 2vw 20px 2vw;
+            .selector-parada-heatmap {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
             }
-            h1 {
-                font-size: 1.3em;
+            #select-parada-heatmap {
+                width: 100%;
+                font-size: 0.95em;
+                padding: 4px 8px;
             }
-            .chart-card {
-                padding: 12px 4vw 8px 4vw;
+            #nombre-dia {
+                font-size: 1.1em;
+                padding: 0 6px;
+                margin: 0 0 8px 0;
+            }
+            #btn-dia-prev, #btn-dia-next {
+                width: 36px;
+                height: 36px;
+                font-size: 1em;
+                margin: 0 2px;
             }
         }
         .chart-legend {
@@ -395,10 +451,11 @@
             </div>
             <div class="chart-card" style="grid-column: span 2;">
                 <h2>Horas pico por parada y día</h2>
-                <div class="selector-parada-heatmap" style="justify-content: center;">
-                    <button id="btn-dia-prev" style="font-size:1.3em; background:none; border:none; color:#2563eb; cursor:pointer; margin-right:10px;">&#8592;</button>
-                    <span id="nombre-dia" style="font-weight:700; color:#2563eb; font-size:1.1em; min-width:90px; display:inline-block; text-align:center;"></span>
-                    <button id="btn-dia-next" style="font-size:1.3em; background:none; border:none; color:#2563eb; cursor:pointer; margin-left:10px;">&#8594;</button>
+                <div class="selector-parada-heatmap">
+                    <select id="select-parada-heatmap"></select>
+                    <span id="nombre-dia"></span>
+                    <button id="btn-dia-prev">&#8592;</button>
+                    <button id="btn-dia-next">&#8594;</button>
                 </div>
                 <canvas id="heatmapChart"></canvas>
                 <div class="chart-legend" id="heatmapLegend"></div>
@@ -594,10 +651,13 @@
         }
 
         function renderHeatmapChartCustom() {
-            if (!paradaSeleccionada || !horariosPicoData[paradaSeleccionada]) return;
+            // Siempre debe haber una parada seleccionada
+            if (!paradaSeleccionada) return;
 
             const dia = diasSemana[diaSeleccionadoIdx];
-            const datosDia = horariosPicoData[paradaSeleccionada][dia] || {};
+            // Si no hay datos, usar objeto vacío
+            const datosDia = (horariosPicoData[paradaSeleccionada] && horariosPicoData[paradaSeleccionada][dia]) ? horariosPicoData[paradaSeleccionada][dia] : {};
+            // Rellenar con ceros si no hay datos
             const valores = horasFijas.map(h => datosDia[h] || 0);
 
             document.getElementById('nombre-dia').textContent = dia.charAt(0).toUpperCase() + dia.slice(1);
@@ -616,7 +676,7 @@
                     datasets: [{
                         label: `${paradaSeleccionada} (${dia})`,
                         data: valores,
-                        backgroundColor: colores[paradaSeleccionadaIdx % colores.length], // <--- Color dinámico
+                        backgroundColor: colores[paradaSeleccionadaIdx % colores.length],
                         borderRadius: 10,
                         borderSkipped: false,
                         barPercentage: 0.7,
@@ -701,11 +761,14 @@
                 div.onclick = function() {
                     const nombre = div.querySelector('.ruta-nombre').textContent;
                     paradaSeleccionada = nombre;
-                    paradaSeleccionadaIdx = idx % colores.length; // <--- Guarda el índice
+                    paradaSeleccionadaIdx = idx % colores.length;
                     diaSeleccionadoIdx = 0;
                     renderHeatmapChartCustom();
                     document.querySelectorAll('.ruta-nombre').forEach(el => el.classList.remove('active'));
                     div.querySelector('.ruta-nombre').classList.add('active');
+                    // Sincroniza el select
+                    const selectParada = document.getElementById('select-parada-heatmap');
+                    if (selectParada) selectParada.value = nombre;
                 };
             });
         }
@@ -720,8 +783,8 @@
                     const div = document.createElement('div');
                     div.className = 'ruta-marquee';
                     div.innerHTML = `
-    <span class="ruta-nombre">${ruta.nombre}</span>
-    <span class="color-bar" style="background:${colores[idx % colores.length]}"></span>
+<span class=\"ruta-nombre\">${ruta.nombre}</span>
+<span class=\"color-bar\" style=\"background:${colores[idx % colores.length]}\"></span>
 `;
                     marqueeInner.appendChild(div);
                 });
@@ -729,8 +792,8 @@
                     const div = document.createElement('div');
                     div.className = 'ruta-marquee';
                     div.innerHTML = `
-    <span class="ruta-nombre">${ruta.nombre}</span>
-    <span class="color-bar" style="background:${colores[idx % colores.length]}"></span>
+<span class=\"ruta-nombre\">${ruta.nombre}</span>
+<span class=\"color-bar\" style=\"background:${colores[idx % colores.length]}\"></span>
 `;
                     marqueeInner.appendChild(div);
                 });
@@ -740,12 +803,35 @@
                     activarParadaNavbar();
                 }, 100);
 
+                // Llenar el select de paradas
+                const selectParada = document.getElementById('select-parada-heatmap');
+                selectParada.innerHTML = '';
+                rutas.forEach((ruta, idx) => {
+                    const option = document.createElement('option');
+                    option.value = ruta.nombre;
+                    option.textContent = ruta.nombre;
+                    selectParada.appendChild(option);
+                });
                 // Selecciona la primera parada por defecto
                 if (rutas.length > 0) {
                     paradaSeleccionada = rutas[0].nombre;
-                    paradaSeleccionadaIdx = 0; // <--- Añade esto
+                    paradaSeleccionadaIdx = 0;
+                    selectParada.value = rutas[0].nombre;
                     renderHeatmapChartCustom();
                 }
+                // Evento para cambiar parada desde el select
+                selectParada.onchange = function() {
+                    const idx = rutas.findIndex(r => r.nombre === selectParada.value);
+                    if (idx !== -1) {
+                        paradaSeleccionada = rutas[idx].nombre;
+                        paradaSeleccionadaIdx = idx;
+                        renderHeatmapChartCustom();
+                        // Actualiza la navbar visualmente
+                        document.querySelectorAll('.ruta-nombre').forEach(el => el.classList.remove('active'));
+                        const navs = document.querySelectorAll('.ruta-nombre');
+                        if (navs[idx]) navs[idx].classList.add('active');
+                    }
+                };
             } catch (e) {}
         }
 
