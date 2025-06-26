@@ -785,10 +785,8 @@
             <div>
                 <div class="preview-card">
                     <img class="preview-avatar" id="miniAvatar" src="user_img.png" alt="Avatar">
-                    <button class="avatar-upload-btn" id="changeAvatarBtn" title="Cambiar avatar">&#9998;</button>
                     <div class="preview-name" id="miniNombre"></div>
                     <div class="preview-about" id="miniAbout"></div>
-                    <button class="btn btn-secondary" id="removeAvatarBtn" style="margin-top:10px;">Eliminar avatar</button>
                 </div>
                 <!-- AQUÍ PEGA LA ENCUESTA -->
                 <div class="encuesta-parada">
@@ -856,7 +854,6 @@
                         <textarea id="aboutMe" maxlength="60" rows="3" placeholder="Cuéntanos sobre ti..." style="flex:2;"></textarea>
                         <button class="btn btn-secondary" style="padding:4px 12px;font-size:0.95em;align-self:flex-start;" onclick="editarCampo(this)">Editar</button>
                     </div>
-                    <div class="about-desc">Puedes usar Markdown y los enlaces que quieras.</div>
                 </div>
             </div>
         </div>
@@ -1033,25 +1030,6 @@
               });
         }
     }
-
-    // Avatar: cambiar y eliminar
-    document.getElementById('changeAvatarBtn').onclick = function() {
-        document.getElementById('avatarInput').click();
-    };
-    document.getElementById('avatarInput').onchange = function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-            document.getElementById('miniAvatar').src = ev.target.result;
-        };
-        reader.readAsDataURL(file);
-        // Aquí puedes agregar la lógica para subir el avatar al servidor si lo deseas
-    };
-    document.getElementById('removeAvatarBtn').onclick = function() {
-        document.getElementById('miniAvatar').src = 'user_img.png';
-        // Aquí puedes agregar la lógica para eliminar el avatar en el servidor si lo deseas
-    };
 
     const INTERVALO_MIN = 45; // minutos
 
