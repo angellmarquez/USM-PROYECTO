@@ -330,10 +330,7 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
         'LOS TEQUES': '#f59e42',
         'CONCRESA': '#e53935',
         'LA GUAIRA': '#a259e4',
-        'GUARENAS GUATIRE': '#ffb300',
-        'La Hoyada': '#d946ef',
-        'Parque Central': '#14b8a6',
-        'El Silencio': '#f97316'
+        'GUARENAS GUATIRE': '#ffb300'
     };
     rutas.forEach((ruta, idx) => {
       if (ruta.lat && ruta.lng) {
@@ -454,3 +451,41 @@ if (destinoNombre) {
       }
     });
 }
+
+// Coordenadas de la Universidad Santa María
+const usmLat = 10.491334238871417;
+const usmLng = -66.78062603687161;
+
+// Crear popup para la USM con la nueva imagen
+const usmPopupContent = `
+  <div style="text-align:center;">
+    <img src="usm.jpg" alt="Universidad Santa María" style="width:180px;max-width:90vw;border-radius:12px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+    <div>
+      <strong>Universidad Santa María</strong><br>
+      <span>Dirección: Caracas, Venezuela</span>
+    </div>
+  </div>
+`;
+const usmPopup = new mapboxgl.Popup({ offset: 25 })
+  .setHTML(usmPopupContent)
+  .addClassName('animated-popup');
+
+const usmEl = document.createElement('div');
+usmEl.style.width = '48px';
+usmEl.style.height = '48px';
+usmEl.style.borderRadius = '50%';
+usmEl.style.background = '#1746a0';
+usmEl.style.display = 'flex';
+usmEl.style.alignItems = 'center';
+usmEl.style.justifyContent = 'center';
+usmEl.style.color = '#fff';
+usmEl.style.fontWeight = 'bold';
+usmEl.style.fontSize = '1.5em';
+usmEl.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+usmEl.style.border = '2px solid #fff';
+usmEl.textContent = 'USM';
+
+new mapboxgl.Marker(usmEl)
+  .setLngLat([usmLng, usmLat])
+  .setPopup(usmPopup)
+  .addTo(map);
