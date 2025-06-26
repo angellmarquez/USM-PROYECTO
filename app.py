@@ -438,6 +438,23 @@ def get_usuarios():
     usuarios = list(users_collection.find({}, {'_id': 0, 'parada_bus': 1}))
     return jsonify(usuarios)
 
+@app.route('/api/usuarios-detalle', methods=['GET'])
+def usuarios_detalle():
+    usuarios = list(users_collection.find({}, {'usuario': 1, 'nombre': 1, 'apellido': 1, 'email': 1, 'telefono': 1, 'rol': 1}))
+    for u in usuarios:
+        u['_id'] = str(u['_id'])
+    return jsonify(usuarios)
+
+@app.route('/api/cambiar-rol', methods=['POST'])
+def cambiar_rol():
+    data = request.json
+    user_id = data.get('id')
+    nuevo_rol = data.get('rol')
+    if not user_id or nuevo_rol not in ['conductor', 'pasajero']:
+        return jsonify({'error': 'Datos inválidos'}), 400
+    users_collection.update_one({'_id': ObjectId(user_id)}, {'$set': {'rol': nuevo_rol}})
+    return jsonify({'success': True})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
