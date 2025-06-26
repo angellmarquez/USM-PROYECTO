@@ -27,7 +27,7 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'usmtransportess@gmail.com'  # Cambia esto por tu correo
-app.config['MAIL_PASSWORD'] = 'pixr anlq acej pyqq'  # Cambia esto por tu contraseña o App Password
+app.config['MAIL_PASSWORD'] = 'pixranlqacejpyqq'  # Cambia esto por tu contraseña o App Password
 app.config['MAIL_DEFAULT_SENDER'] = 'tu_correo@gmail.com'
 
 mail = Mail(app)
