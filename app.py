@@ -455,6 +455,18 @@ def cambiar_rol():
     users_collection.update_one({'_id': ObjectId(user_id)}, {'$set': {'rol': nuevo_rol}})
     return jsonify({'success': True})
 
+@app.route('/api/eliminar-usuario', methods=['DELETE'])
+def eliminar_usuario():
+    data = request.get_json()
+    user_id = data.get('id')
+    if not user_id:
+        return jsonify({'error': 'ID de usuario requerido'}), 400
+    result = users_collection.delete_one({'_id': ObjectId(user_id)})
+    if result.deleted_count == 1:
+        return jsonify({'success': True})
+    else:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)
