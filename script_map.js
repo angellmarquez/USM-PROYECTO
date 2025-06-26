@@ -334,6 +334,11 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
     };
     rutas.forEach((ruta, idx) => {
       if (ruta.lat && ruta.lng) {
+        // Asignar color especial para paradas 7, 8 y 9
+        let color = colorMap[ruta.nombre] || '#2563eb';
+        if (idx + 1 === 7) color = '#0ea5e9'; // Celeste
+        if (idx + 1 === 8) color = '#f43f5e'; // Rosado
+        if (idx + 1 === 9) color = '#22d3ee'; // Turquesa
         // Popup con imagen y datos
         const popupContent = `
           <div style="text-align:center;">
@@ -361,7 +366,7 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
         markerEl.style.width = '38px';
         markerEl.style.height = '38px';
         markerEl.style.borderRadius = '50%';
-        markerEl.style.background = colorMap[ruta.nombre] || '#2563eb'; // Azul para todas las paradas
+        markerEl.style.background = color;
         markerEl.style.display = 'flex';
         markerEl.style.alignItems = 'center';
         markerEl.style.justifyContent = 'center';
