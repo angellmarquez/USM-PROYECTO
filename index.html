@@ -91,10 +91,12 @@
         }
         .options {
             display: flex;
-            justify-content: center;
-            gap: 48px;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 0;
             background: #fff;
             padding: 56px 0 56px 0;
+            margin-left: 0;
         }
         .option {
             text-align: left;
@@ -104,7 +106,8 @@
             flex: 1;
             max-width: 440px;
             border-bottom: 2.5px solid #111;
-            margin: 0 18px;
+            margin-left: 32px;
+            margin-right: 0;
             padding-bottom: 28px;
             transition: border-color 0.2s;
             display: flex;
@@ -220,10 +223,12 @@
             .options {
                 flex-direction: column;
                 gap: 24px;
-                align-items: center;
+                align-items: flex-start;
+                margin-left: 0;
             }
             .option {
                 max-width: 90vw;
+                margin-left: 16px;
             }
             .footer-content {
                 flex-direction: column;
@@ -244,7 +249,7 @@
             <!-- Enlaces eliminados: Viaja, Reservar, Quiénes somos, ES, Ayuda -->
         </nav>
         <div class="actions">
-            <button type="button" onclick="window.location.href='login.html'">Iniciar</button>
+            <!-- Botón de iniciar eliminado -->
         </div>
     </div>
     <div class="hero">
@@ -258,16 +263,7 @@
         </div>
     </div>
     <div class="options">
-        <div class="option">
-            Socio conductor
-            <span class="option-arrow">
-                <svg viewBox="0 0 48 48" fill="none">
-                    <path d="M16 24h16" stroke="#111" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M28 16l8 8-8 8" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-        </div>
-        <div class="option">
+        <div class="option" onclick="window.location.href='login.html'">
             Usuario
             <span class="option-arrow">
                 <svg viewBox="0 0 48 48" fill="none">
