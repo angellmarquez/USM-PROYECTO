@@ -330,7 +330,10 @@ fetch('https://usm-proyecto.onrender.com/api/rutas')
         'LOS TEQUES': '#f59e42',
         'CONCRESA': '#e53935',
         'LA GUAIRA': '#a259e4',
-        'GUARENAS GUATIRE': '#ffb300'
+        'GUARENAS GUATIRE': '#ffb300',
+        'La Hoyada': '#d946ef',
+        'Parque Central': '#14b8a6',
+        'El Silencio': '#f97316'
     };
     rutas.forEach((ruta, idx) => {
       if (ruta.lat && ruta.lng) {
